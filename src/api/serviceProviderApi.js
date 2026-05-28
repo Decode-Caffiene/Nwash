@@ -1,8 +1,8 @@
 import axiosInstance from "./axiosInstance";
 
 export const getServiceProviders = async () => {
-  const response = await axiosInstance.get("/service-providers");
-  return response.data;
+  const response = await axiosInstance.get("/data/getData");
+  return response.data?.data || [];
 };
 
 export const getServiceProviderDashboard = async () => {
