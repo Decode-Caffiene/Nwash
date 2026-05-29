@@ -7,7 +7,10 @@ export const getServiceProviders = async () => {
 
 export const getServiceProviderDashboard = async () => {
   const response = await axiosInstance.get("/service-providers/dashboard");
-  return response.data;
+  // Normalize possible backend shapes:
+  // - response.data
+  // - response.data.data
+  return response.data?.data ?? response.data;
 };
 
 export const getProviderPerformance = async () => {
