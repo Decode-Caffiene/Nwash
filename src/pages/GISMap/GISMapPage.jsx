@@ -8,11 +8,8 @@ import {
   useMap,
 } from "react-leaflet";
 import L from "leaflet";
+import { filterWards, getMapData, getMuniGeojson } from "../../api/mapService";
 
-const PROJECTS_API_URL =
-  "https://dashboardbackend-6v2p.onrender.com/data/getData";
-const WARD_FILTER_URL =
-  "https://dashboardbackend-6v2p.onrender.com/ward/filter";
 const MUNI_DATA_URL = new URL(
   "../../data/nepal_municipalities.json",
   import.meta.url,
@@ -308,31 +305,21 @@ function GISMapPage() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const [apiResponse, muniResponse] = await Promise.all([
-          fetch(PROJECTS_API_URL),
-          fetch(MUNI_DATA_URL),
+
+        const [projects, muniPayload] = await Promise.all([
+          getMapData(),
+          getMuniGeojson(),
         ]);
 
-        const payload = await apiResponse.json();
-        if (!apiResponse.ok) {
-          throw new Error(payload?.message || "Unable to fetch project data.");
-        }
-
-        const muniPayload = await muniResponse.json();
-        if (!muniResponse.ok) {
-          throw new Error("Unable to load municipality data.");
-        }
-
-        const data = Array.isArray(payload?.data) ? payload.data : [];
-        setProjects(data);
+        setProjects(projects);
         setMuniGeojson(muniPayload);
 
-        if (data[0]) {
-          setSelectedProject(data[0]);
-          setSelectedProjectId(data[0]._id);
+        if (projects[0]) {
+          setSelectedProject(projects[0]);
+          setSelectedProjectId(projects[0]._id);
         }
       } catch (err) {
-        setError(err.message || "Failed to load the GIS dataset.");
+        setError(err.message || "Failed to load data.");
       } finally {
         setLoading(false);
       }
@@ -340,7 +327,6 @@ function GISMapPage() {
 
     fetchData();
   }, []);
-
   // Index built from nepal_municipalities.json:
   //   normalizedDistrict → [{canonical, normalized, lat, lng}]
   // Used for both canonical name resolution (API call) and centroid (fly-to).
@@ -412,16 +398,7 @@ function GISMapPage() {
           ...(province != null && { province }),
         };
 
-        const res = await fetch(WARD_FILTER_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
-
-        const data = await res.json();
-        if (!res.ok)
-          throw new Error(data?.message || "Failed to load ward boundaries.");
-
+        const data = await filterWards(body);
         setWardFeatures(data?.features || []);
       } catch (err) {
         setWardError(err.message);

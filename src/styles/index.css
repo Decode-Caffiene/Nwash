@@ -4,9 +4,9 @@
 @tailwind utilities;
 
 :root {
-  --color-sidebar: #2563eb;
-  --color-brand: #10b981;
-  --color-surface: #f3f4f6;
+  --color-sidebar: #0f172a;
+  --color-brand: #2563eb;
+  --color-surface: #f8fafc;
 }
 
 @layer base {

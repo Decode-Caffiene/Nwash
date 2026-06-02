@@ -5,30 +5,30 @@ export default {
     extend: {
       colors: {
         sidebar: {
-          DEFAULT: "#1B3A34",
-          light: "#234840",
-          active: "#2D5F55",
+          DEFAULT: "#0F172A",
+          light: "#1E293B",
+          active: "#2563EB",
         },
         brand: {
-          primary: "#10B981",
-          secondary: "#059669",
-          light: "#D1FAE5",
+          primary: "#2563EB",
+          secondary: "#1D4ED8",
+          light: "#DBEAFE",
         },
         surface: {
-          DEFAULT: "#F3F4F6",
+          DEFAULT: "#F8FAFC",
           card: "#FFFFFF",
-          border: "#E5E7EB",
+          border: "#CBD5E1",
         },
         text: {
-          primary: "#111827",
-          secondary: "#6B7280",
+          primary: "#0F172A",
+          secondary: "#475569",
           inverse: "#FFFFFF",
         },
         status: {
-          success: "#10B981",
+          success: "#16A34A",
           warning: "#F59E0B",
-          error: "#EF4444",
-          info: "#3B82F6",
+          error: "#DC2626",
+          info: "#2563EB",
         },
       },
       fontFamily: {
