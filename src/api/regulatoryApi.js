@@ -12,5 +12,9 @@ export const getRoadmapSummary = async () => {
 
 export const getMilestones = async () => {
   const response = await axiosInstance.get("/regulatory-roadmap/milestones");
-  return response.data;
+  // Normalize possible backend shapes:
+  // - response.data
+  // - response.data.data
+  // - response.data.milestones
+  return response.data?.data ?? response.data?.milestones ?? response.data;
 };

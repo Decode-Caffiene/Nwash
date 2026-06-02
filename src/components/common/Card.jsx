@@ -1,11 +1,15 @@
+import { forwardRef } from "react";
 import { cn } from "../../utils/helpers";
 
-function Card({ children, className = "", ...props }) {
+const Card = forwardRef(function Card(
+  { children, className = "", ...props },
+  ref,
+) {
   return (
-    <div className={cn("stat-card", className)} {...props}>
+    <div ref={ref} className={cn("stat-card", className)} {...props}>
       {children}
     </div>
   );
-}
+});
 
 export default Card;
