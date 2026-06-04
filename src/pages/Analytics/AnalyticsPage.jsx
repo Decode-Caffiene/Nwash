@@ -145,8 +145,6 @@
 
 // export default AnalyticsPage;
 
-
-
 import React, { useState, useRef, useEffect } from "react";
 import gsap from "gsap";
 
@@ -169,26 +167,45 @@ function AnalyticsPage() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const [draftFilters, setDraftFilters] = useState({
-    province: "", district: "", municipality: "",
+    province: "",
+    district: "",
+    municipality: "",
   });
 
   const [appliedFilters, setAppliedFilters] = useState({
-    province: "", district: "", municipality: "",
+    province: "",
+    district: "",
+    municipality: "",
   });
 
-  const { chartData } = useAnalyticsData(providers, searchQuery, appliedFilters);
+  const { chartData } = useAnalyticsData(
+    providers,
+    searchQuery,
+    appliedFilters,
+  );
 
   const headerRef = useRef(null);
   const summaryRef = useRef(null);
   const chartRef = useRef(null);
 
-  const activeFilterCount = Object.values(appliedFilters).filter(Boolean).length;
+  const activeFilterCount =
+    Object.values(appliedFilters).filter(Boolean).length;
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(headerRef.current, { opacity: 0, y: 20, duration: 0.6 });
-      gsap.from(summaryRef.current, { opacity: 0, y: 20, delay: 0.1, duration: 0.6 });
-      gsap.from(chartRef.current, { opacity: 0, scale: 0.98, delay: 0.2, duration: 0.6 });
+      gsap.from(summaryRef.current, {
+        opacity: 0,
+        y: 20,
+        delay: 0.1,
+        duration: 0.6,
+      });
+      gsap.from(chartRef.current, {
+        opacity: 0,
+        scale: 0.98,
+        delay: 0.2,
+        duration: 0.6,
+      });
     });
     return () => ctx.revert();
   }, []);
