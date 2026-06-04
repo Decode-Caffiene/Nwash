@@ -9,6 +9,8 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 import { filterWards, getMapData, getMuniGeojson } from "../../api/mapService";
+import nepalBoundary from "../../data/boundary.json";
+import nepalProvinces from "../../data/nepal_provinces.json";
 
 const MUNI_DATA_URL = new URL(
   "../../data/nepal_municipalities.json",
@@ -463,6 +465,25 @@ function GISMapPage() {
                 />
 
                 <MapController center={selectedCentroid} />
+
+                <GeoJSON
+                  data={nepalBoundary}
+                  style={{
+                    color: "#0f172a",
+                    weight: 2,
+                    fillColor: "#dbeafe",
+                    fillOpacity: 0.08,
+                  }}
+                />
+
+                <GeoJSON
+                  data={nepalProvinces}
+                  style={{
+                    color: "#64748b",
+                    weight: 1.5,
+                    fillOpacity: 0,
+                  }}
+                />
 
                 {projects.map((project) => {
                   const { lat, lng } = projectLocations[project._id] || {};
