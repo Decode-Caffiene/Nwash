@@ -3,7 +3,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 import AppRouter from "./router/AppRouter";
 
 function App() {
-  console.log("API BASE URL:", import.meta.env.VITE_API_BASE_URL);
+  console.log("All Env", import.meta.env);
   return (
     <ThemeProvider>
       <BrowserRouter>
