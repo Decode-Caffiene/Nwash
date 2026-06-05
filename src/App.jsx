@@ -3,7 +3,6 @@ import { ThemeProvider } from "./context/ThemeContext";
 import AppRouter from "./router/AppRouter";
 
 function App() {
-  console.log("All Env", import.meta.env);
   return (
     <ThemeProvider>
       <BrowserRouter>

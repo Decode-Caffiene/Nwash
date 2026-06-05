@@ -9,6 +9,7 @@ import ResearchPage from "../pages/Research/ResearchPage";
 import AnalyticsPage from "../pages/Analytics/AnalyticsPage";
 import DownloadsPage from "../pages/Downloads/DownloadsPage";
 import AdminPage from "../pages/Admin/AdminPage";
+import DataEntryPage from "../pages/DataEntry/DataEntryPage";
 import NotFoundPage from "../pages/NotFound/NotFoundPage";
 
 function AppRouter() {
@@ -28,6 +29,7 @@ function AppRouter() {
         <Route path="analytics" element={<AnalyticsPage />} />
         <Route path="downloads" element={<DownloadsPage />} />
         <Route path="admin" element={<AdminPage />} />
+        <Route path="data-entry" element={<DataEntryPage />} />
       </Route>
 
       <Route path="*" element={<NotFoundPage />} />

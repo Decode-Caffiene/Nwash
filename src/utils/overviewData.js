@@ -1,9 +1,33 @@
 export const districtData = [
-  { name: "Kathmandu", Operators: 145 },
-  { name: "Lalitpur", Operators: 78 },
-  { name: "Bhaktapur", Operators: 52 },
-  { name: "Pokhara", Operators: 98 },
-  { name: "Chitwan", Operators: 67 },
+  // Bagmati Pradesh
+  { name: "Kathmandu", Province: "Bagmati", Operators: 145 },
+  { name: "Lalitpur", Province: "Bagmati", Operators: 78 },
+  { name: "Bhaktapur", Province: "Bagmati", Operators: 52 },
+  { name: "Chitwan", Province: "Bagmati", Operators: 67 },
+  // Gandaki Pradesh
+  { name: "Kaski", Province: "Gandaki", Operators: 98 },
+  { name: "Pokhara", Province: "Gandaki", Operators: 34 },
+  { name: "Lamjung", Province: "Gandaki", Operators: 28 },
+  // Madhesh Pradesh
+  { name: "Morang", Province: "Madhesh", Operators: 45 },
+  { name: "Sunsari", Province: "Madhesh", Operators: 38 },
+  { name: "Dhanusha", Province: "Madhesh", Operators: 32 },
+  // Koshi Pradesh
+  { name: "Illam", Province: "Koshi", Operators: 25 },
+  { name: "Dhankuta", Province: "Koshi", Operators: 22 },
+  { name: "Sankhuwasabha", Province: "Koshi", Operators: 18 },
+  // Lumbini Pradesh
+  { name: "Rupandehi", Province: "Lumbini", Operators: 56 },
+  { name: "Gulmi", Province: "Lumbini", Operators: 41 },
+  { name: "Kapilvastu", Province: "Lumbini", Operators: 35 },
+  // Sudurpaschim Pradesh
+  { name: "Kailali", Province: "Sudurpaschim", Operators: 42 },
+  { name: "Dadeldhura", Province: "Sudurpaschim", Operators: 28 },
+  { name: "Baitadi", Province: "Sudurpaschim", Operators: 19 },
+  // Karnali Pradesh
+  { name: "Jumla", Province: "Karnali", Operators: 12 },
+  { name: "Dailekh", Province: "Karnali", Operators: 15 },
+  { name: "Surkhet", Province: "Karnali", Operators: 21 },
 ];
 
 export const growthData = [

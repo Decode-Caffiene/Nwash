@@ -35,9 +35,7 @@ export default function OverviewPage() {
   const complianceRate = useMemo(() => {
     if (!list.length) return 0;
 
-    const valid = list.filter(
-      (p) => p?.Summary_Index?.SPI != null
-    ).length;
+    const valid = list.filter((p) => p?.Summary_Index?.SPI != null).length;
 
     return (valid / list.length) * 100;
   }, [list]);
