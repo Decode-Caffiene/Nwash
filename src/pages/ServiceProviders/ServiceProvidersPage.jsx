@@ -99,77 +99,92 @@ function ServiceProvidersPage() {
               <Badge variant="info">{providers.length} records</Badge>
             </div>
 
-            <div className="mt-6 overflow-x-auto">
-              <table className="min-w-[1100px] w-full border-collapse text-left text-sm">
-                <thead>
-                  <tr className="border-b border-surface-border bg-surface text-xs uppercase tracking-wide text-text-secondary">
-                    <th className="px-4 py-3 font-semibold">ID</th>
-                    <th className="px-4 py-3 font-semibold">WSUC Name</th>
-                    <th className="px-4 py-3 font-semibold">Province</th>
-                    <th className="px-4 py-3 font-semibold">District</th>
-                    <th className="px-4 py-3 font-semibold">Municipality</th>
-                    <th className="px-4 py-3 font-semibold">Water Quality</th>
-                    <th className="px-4 py-3 font-semibold">Reliability</th>
-                    <th className="px-4 py-3 font-semibold">SPI</th>
-                    <th className="px-4 py-3 font-semibold">OEI</th>
-                    <th className="px-4 py-3 font-semibold">Coverage</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {providers.map((provider) => {
-                    const location = provider.Location || {};
-                    const summary = provider.Summary_Index || {};
+            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {providers.map((provider) => {
+                const location = provider.Location || {};
+                const summary = provider.Summary_Index || {};
+                const coverageReady =
+                  provider.Service_Coverage_Prerequisite === "Yes";
+                const metrics = [
+                  {
+                    label: "Water Quality",
+                    value: formatScore(summary.Water_Quality_Score),
+                  },
+                  {
+                    label: "Reliability",
+                    value: formatScore(summary.Reliability_Score),
+                  },
+                  { label: "SPI", value: displayValue(summary.SPI) },
+                  { label: "OEI", value: displayValue(summary.OEI) },
+                ];
 
-                    return (
-                      <tr
-                        key={provider._id || provider.WSUC_ID}
-                        className="border-b border-surface-border last:border-0 hover:bg-surface"
-                      >
-                        <td className="px-4 py-3 font-medium text-text-primary">
+                return (
+                  <article
+                    key={provider._id || provider.WSUC_ID}
+                    className="rounded-lg border border-surface-border bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-text-secondary">
                           {displayValue(provider.WSUC_ID)}
-                        </td>
-                        <td className="max-w-[260px] px-4 py-3 font-medium text-text-primary">
+                        </p>
+                        <h3 className="mt-1 line-clamp-2 text-lg font-semibold text-text-primary">
                           {displayValue(provider.WSUC_Name)}
-                        </td>
-                        <td className="px-4 py-3 text-text-secondary">
+                        </h3>
+                      </div>
+                      <Badge variant={coverageReady ? "success" : "default"}>
+                        {displayValue(provider.Service_Coverage_Prerequisite)}
+                      </Badge>
+                    </div>
+
+                    <div className="mt-4 grid gap-3 border-t border-surface-border pt-4 text-sm">
+                      <div>
+                        <p className="text-xs font-medium uppercase tracking-wide text-text-secondary">
+                          Province
+                        </p>
+                        <p className="mt-1 font-medium text-text-primary">
                           {displayValue(location.Province_Name)}
-                        </td>
-                        <td className="px-4 py-3 text-text-secondary">
-                          {displayValue(location.District_Name)}
-                        </td>
-                        <td className="px-4 py-3 text-text-secondary">
-                          {displayValue(location.Municipality_Name)}
-                        </td>
-                        <td className="px-4 py-3 text-text-secondary">
-                          {formatScore(summary.Water_Quality_Score)}
-                        </td>
-                        <td className="px-4 py-3 text-text-secondary">
-                          {formatScore(summary.Reliability_Score)}
-                        </td>
-                        <td className="px-4 py-3 text-text-secondary">
-                          {displayValue(summary.SPI)}
-                        </td>
-                        <td className="px-4 py-3 text-text-secondary">
-                          {displayValue(summary.OEI)}
-                        </td>
-                        <td className="px-4 py-3">
-                          <Badge
-                            variant={
-                              provider.Service_Coverage_Prerequisite === "Yes"
-                                ? "success"
-                                : "default"
-                            }
-                          >
-                            {displayValue(
-                              provider.Service_Coverage_Prerequisite,
-                            )}
-                          </Badge>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <p className="text-xs font-medium uppercase tracking-wide text-text-secondary">
+                            District
+                          </p>
+                          <p className="mt-1 font-medium text-text-primary">
+                            {displayValue(location.District_Name)}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-xs font-medium uppercase tracking-wide text-text-secondary">
+                            Municipality
+                          </p>
+                          <p className="mt-1 font-medium text-text-primary">
+                            {displayValue(location.Municipality_Name)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 grid grid-cols-2 gap-3">
+                      {metrics.map((metric) => (
+                        <div
+                          key={metric.label}
+                          className="rounded-lg bg-surface px-3 py-2"
+                        >
+                          <p className="text-xs font-medium text-text-secondary">
+                            {metric.label}
+                          </p>
+                          <p className="mt-1 text-base font-semibold text-text-primary">
+                            {metric.value}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           </section>
         </>

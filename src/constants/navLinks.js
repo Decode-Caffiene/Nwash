@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   Sparkles,
   Users,
+  FileText,
 } from "lucide-react";
 
 const navLinks = [
@@ -26,6 +27,7 @@ const navLinks = [
   { label: "Analytics & Charts", path: "/analytics", icon: BarChart3 },
   { label: "Downloads & Reports", path: "/downloads", icon: Download },
   { label: "Admin Panel", path: "/admin", icon: ShieldCheck },
+  { label: "Data Entry Forms", path: "/data-entry", icon:   FileText },
 ];
 
 export default navLinks;
