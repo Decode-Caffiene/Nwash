@@ -1,11 +1,26 @@
 import { Bell, Search, ShieldCheck, Sparkles } from "lucide-react";
 import Badge from "../common/Badge";
 import { getInitials } from "../../utils/helpers";
+import governmentLogo from "../../assets/govern.svg";
 
 function Navbar() {
   return (
     <header className="flex flex-wrap items-center justify-between gap-4 border-b border-surface-border bg-white px-6 py-4">
-      <div className="flex flex-1 items-center gap-3">
+      {/* Left: Nepal Government Logo */}
+      <div className="flex items-center">
+        <img
+          src={governmentLogo}
+          alt="Nepal Government Logo"
+          className="h-12 w-12 object-contain"
+        />
+        <div className="ml-3 hidden sm:block">
+          <p className="text-xs font-semibold uppercase tracking-widest text-text-secondary">Ministry of Water Supply</p>
+          <p className="text-sm font-bold text-text-primary">DWSSM Dashboard</p>
+        </div>
+      </div>
+
+      {/* Right: Search Bar + Controls */}
+      <div className="flex flex-1 flex-wrap items-center justify-end gap-4">
         <label className="flex w-full max-w-xl items-center gap-3 rounded-xl border border-surface-border bg-surface px-4 py-2.5">
           <Search size={18} className="text-text-secondary" />
           <input

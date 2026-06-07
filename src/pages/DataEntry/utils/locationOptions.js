@@ -1,4 +1,4 @@
-import wardsGeojson from "../../data/nepal_wards.min.geojson?raw";
+import wardsGeojson from "../../../data/nepal_wards.min.geojson?raw";
 
 const wards = JSON.parse(wardsGeojson);
 
@@ -179,3 +179,15 @@ export const getWardFeatures = (district, municipalityName, municipalityType) =>
       (!municipalityType || wardType === municipalityType)
     );
   });
+
+export const getProvinceAndDistrictByMunicipality = (municipalityName) => {
+  const record = municipalityRecords.find((m) => m.name === municipalityName);
+  if (!record) return { province: null, district: null };
+
+  const district = record.district;
+  const province = Object.entries(DISTRICTS_BY_PROVINCE).find(([_, districts]) =>
+    districts.includes(district)
+  )?.[0] || null;
+
+  return { province, district };
+};

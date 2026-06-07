@@ -10,8 +10,8 @@ import {
 } from "react-leaflet";
 import { Check, X } from "lucide-react";
 
-import Button from "../../../components/common/Button";
-import { getWardFeatures } from "../locationOptions";
+import Button from "../../../../components/common/Button";
+import { getWardFeatures } from "../../utils/locationOptions";
 
 const selectedStyle = {
   color: "#047857",

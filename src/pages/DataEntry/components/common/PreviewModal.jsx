@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
-import Modal from "../../../components/common/Modal";
-import { formatNumber } from "../../../utils/formatNumber";
+import Modal from "../../../../components/common/Modal";
+import { formatNumber } from "../../../../utils/formatNumber";
 
 function flattenValues(values) {
   // values is an object keyed by formId + section + question slug.

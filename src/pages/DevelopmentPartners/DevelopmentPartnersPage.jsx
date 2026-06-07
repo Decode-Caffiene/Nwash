@@ -1,3 +1,5 @@
+import PartnerInvestmentMap from "./PartnerInvestmentMap";
+
 function DevelopmentPartnersPage() {
   return (
     <div className="space-y-6">
@@ -14,9 +16,7 @@ function DevelopmentPartnersPage() {
         </p>
       </div>
 
-      <div className="stat-card">
-        <p className="text-sm text-text-secondary">Placeholder content</p>
-      </div>
+      <PartnerInvestmentMap />
     </div>
   );
 }

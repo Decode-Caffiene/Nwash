@@ -1,4 +1,4 @@
-import { getFieldType } from "./formUtils";
+import { getFieldType } from "../../utils/formUtils";
 
 const inputClass =
   "mt-2 w-full rounded-lg border border-surface-border bg-white px-3 py-2 text-sm text-text-primary outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-light";
@@ -11,6 +11,7 @@ function FormControl({
   options,
   placeholder = "Select option",
   disabled = false,
+  required = false,
 }) {
   const type = getFieldType(label);
 
@@ -93,6 +94,7 @@ function FormControl({
       onChange={(event) => onChange(event.target.value)}
       className={inputClass}
       disabled={disabled}
+      required={required}
     />
   );
 }

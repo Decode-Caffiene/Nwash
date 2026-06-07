@@ -17,3 +17,8 @@ export const getProviderPerformance = async () => {
   const response = await axiosInstance.get("/service-providers/performance");
   return response.data;
 };
+
+export const saveServiceProviderForm = async (formData) => {
+  const response = await axiosInstance.post("/data/saveData", formData);
+  return response.data;
+};

@@ -1,17 +1,23 @@
 import { useMemo, useState } from "react";
-import { Send } from "lucide-react";
+import { Send, Loader, AlertCircle, CheckCircle } from "lucide-react";
 
 import Button from "../../components/common/Button";
-import DataEntryHeader from "./components/DataEntryHeader";
-import KpiFormSection from "./components/KpiFormSection";
-import PreviewModal from "./components/PreviewModal";
-import ServiceProviderSection from "./components/ServiceProviderSection";
-import { dataEntryForms } from "./dataEntryForms";
+import DataEntryHeader from "./components/common/DataEntryHeader";
+import KpiFormSection from "./components/common/KpiFormSection";
+import PreviewModal from "./components/common/PreviewModal";
+import ServiceProviderSection from "./components/service-provider/ServiceProviderSection";
+import CoverageAreaForm from "./components/coverage/CoverageAreaForm";
+import { dataEntryForms } from "./data/dataEntryForms";
+import { saveServiceProviderForm } from "../../api/serviceProviderApi";
 
 function DataEntryPage() {
   const [activeFormId, setActiveFormId] = useState(dataEntryForms[0].id);
   const [formValues, setFormValues] = useState({});
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [language, setLanguage] = useState("eng");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // null, 'success', 'error'
+  const [submitMessage, setSubmitMessage] = useState("");
 
   const activeForm = useMemo(
     () =>
@@ -32,15 +38,41 @@ function DataEntryPage() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setSubmitting(true);
+    setSubmitStatus(null);
+    setSubmitMessage("");
 
-    const payload = {
-      formType: activeForm.id,
-      ...currentValues,
-    };
+    try {
+      const payload = {
+        formType: activeForm.id,
+        ...currentValues,
+      };
 
-    console.log("Data entry form submitted", payload);
+      const response = await saveServiceProviderForm(payload);
+
+      setSubmitStatus("success");
+      setSubmitMessage(
+        response?.message || "Form submitted successfully!"
+      );
+
+      // Reset form after success
+      setTimeout(() => {
+        setFormValues({});
+        setSubmitStatus(null);
+        setSubmitMessage("");
+      }, 2000);
+    } catch (error) {
+      setSubmitStatus("error");
+      setSubmitMessage(
+        error?.response?.data?.message ||
+        error?.message ||
+        "Failed to submit form. Please try again."
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const openPreview = () => {
@@ -53,31 +85,96 @@ function DataEntryPage() {
         forms={dataEntryForms}
         activeFormId={activeForm.id}
         onFormChange={setActiveFormId}
+        language={language}
+        setLanguage={setLanguage}
       />
 
+      {submitStatus && (
+        <div
+          className={`rounded-lg p-4 flex items-start gap-3 ${
+            submitStatus === "success"
+              ? "bg-emerald-50 border border-emerald-200"
+              : "bg-red-50 border border-red-200"
+          }`}
+        >
+          {submitStatus === "success" ? (
+            <CheckCircle className="text-emerald-600 flex-shrink-0 mt-0.5" size={20} />
+          ) : (
+            <AlertCircle className="text-red-600 flex-shrink-0 mt-0.5" size={20} />
+          )}
+          <div>
+            <p
+              className={`font-semibold ${
+                submitStatus === "success"
+                  ? "text-emerald-900"
+                  : "text-red-900"
+              }`}
+            >
+              {submitStatus === "success" ? "Success" : "Error"}
+            </p>
+            <p
+              className={`text-sm mt-1 ${
+                submitStatus === "success"
+                  ? "text-emerald-800"
+                  : "text-red-800"
+              }`}
+            >
+              {submitMessage}
+            </p>
+          </div>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="space-y-6">
-        <ServiceProviderSection
-          title={activeForm.detailsTitle}
-          subtitle={activeForm.detailsSubtitle}
-          fields={activeForm.detailFields}
-          values={currentValues}
-          onFieldChange={updateField}
-        />
+        {activeForm.useMapSection ? (
+          <CoverageAreaForm
+            title={activeForm.detailsTitle}
+            subtitle={activeForm.detailsSubtitle}
+            fields={activeForm.detailFields}
+            values={currentValues}
+            onFieldChange={updateField}
+            language={language}
+          />
+        ) : (
+          <ServiceProviderSection
+            title={activeForm.detailsTitle}
+            subtitle={activeForm.detailsSubtitle}
+            fields={activeForm.detailFields}
+            values={currentValues}
+            onFieldChange={updateField}
+            language={language}
+          />
+        )}
 
         <KpiFormSection
           form={activeForm}
           values={currentValues}
           onFieldChange={updateField}
+          language={language}
         />
 
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-          <Button variant="secondary" type="button" onClick={openPreview}>
+          <Button
+            variant="secondary"
+            type="button"
+            onClick={openPreview}
+            disabled={submitting}
+          >
             Preview
           </Button>
 
-          <Button type="submit">
-            <Send size={16} className="mr-2" />
-            Submit Form
+          <Button type="submit" disabled={submitting}>
+            {submitting ? (
+              <>
+                <Loader size={16} className="mr-2 animate-spin" />
+                Submitting...
+              </>
+            ) : (
+              <>
+                <Send size={16} className="mr-2" />
+                Submit Form
+              </>
+            )}
           </Button>
         </div>
       </form>

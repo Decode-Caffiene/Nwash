@@ -1,5 +1,9 @@
+import { questionTranslations, fieldTranslations } from "../../utils/translations";
 import FormControl, { inputClass } from "./FormControl";
-import { slugify } from "./formUtils";
+import { slugify } from "../../utils/formUtils";
+
+const YES_NO_OPTIONS_ENG = ["Yes", "No"];
+const YES_NO_OPTIONS_NEP = ["हो", "होइन"];
 
 function KpiQuestionCard({
   formId,
@@ -9,34 +13,59 @@ function KpiQuestionCard({
   values,
   onFieldChange,
   isGateKeepingQuestion,
+  language = "eng",
 }) {
   const key = `${formId}.${slugify(sectionTitle)}.${slugify(question)}`;
   const descriptionKey = `${key}.description`;
   const remarksKey = `${key}.remarks`;
+
+  // Detect if this is a yes/no question
+  const isYesNoQuestion =
+    question.includes("(Y/N)") ||
+    question.includes("(Yes/No)") ||
+    question.includes("exist?") ||
+    question.includes("report?") ||
+    question.includes("conducted") ||
+    question.includes("within limits?") ||
+    question.includes("tested") ||
+    question.includes("maintained") ||
+    question.includes("exists?") ||
+    question.includes("mechanism");
+
+  // Get yes/no options based on language
+  const yesNoOptions = language === "nep" ? YES_NO_OPTIONS_NEP : YES_NO_OPTIONS_ENG;
 
   return (
     <div className="rounded-lg border border-surface-border bg-white p-4">
       <label htmlFor={key} className="block">
         <span className="text-xs font-semibold uppercase tracking-wide text-text-secondary">
           {isGateKeepingQuestion
-            ? `Gate Keeping Question ${index + 1}`
-            : `KPI ${index + 1}`}
+            ? language === "nep"
+              ? `गेट कीपिङ प्रश्न ${index + 1}`
+              : `Gate Keeping Question ${index + 1}`
+            : language === "nep"
+              ? `KPI ${index + 1}`
+              : `KPI ${index + 1}`}
         </span>
         <span className="mt-1 block text-sm font-medium text-text-primary">
-          {question}
+          {questionTranslations[language][question] || question}
         </span>
         <FormControl
           id={key}
-          label={question}
+          label={questionTranslations[language][question] || question}
           value={values[key] || ""}
           onChange={(value) => onFieldChange(key, value)}
+          {...(isYesNoQuestion && {
+            options: yesNoOptions,
+            placeholder: language === "nep" ? "छनोट गरनुहोस्" : "Select Yes or No",
+          })}
         />
       </label>
 
       <div className="mt-3 grid gap-3 sm:grid-cols-2">
         <label htmlFor={descriptionKey} className="block">
           <span className="text-xs font-medium text-text-secondary">
-            Source / explanation
+            {fieldTranslations[language]["Source / explanation"] || "Source / explanation"}
           </span>
           <input
             id={descriptionKey}
@@ -53,7 +82,7 @@ function KpiQuestionCard({
 
         <label htmlFor={remarksKey} className="block">
           <span className="text-xs font-medium text-text-secondary">
-            Remarks
+            {fieldTranslations[language]["Remarks"] || "Remarks"}
           </span>
           <textarea
             id={remarksKey}
