@@ -17,7 +17,7 @@ const navLinks = [
   { label: "Overview", path: "/overview", icon: LayoutDashboard },
   { label: "Regulatory Roadmap", path: "/regulatory-roadmap", icon: BookOpen },
   { label: "Service Providers", path: "/service-providers", icon: Users },
-  { label: "GIS Intelligence Map", path: "/gis-map", icon: Globe2 },
+  { label: "Map", path: "/gis-map", icon: Globe2 },
   {
     label: "Development Partners",
     path: "/development-partners",
@@ -27,7 +27,7 @@ const navLinks = [
   { label: "Analytics & Charts", path: "/analytics", icon: BarChart3 },
   { label: "Downloads & Reports", path: "/downloads", icon: Download },
   { label: "Admin Panel", path: "/admin", icon: ShieldCheck },
-  { label: "Data Entry Forms", path: "/data-entry", icon:   FileText },
+  { label: "Data Entry Forms", path: "/data-entry", icon: FileText },
 ];
 
 export default navLinks;
