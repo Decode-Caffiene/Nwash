@@ -135,6 +135,7 @@ function DataEntryPage() {
             onFieldChange={updateField}
             language={language}
           />
+
         ) : (
           <ServiceProviderSection
             title={activeForm.detailsTitle}

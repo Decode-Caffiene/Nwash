@@ -45,7 +45,7 @@ export default function CoverageAreaForm({
   const [drawModeEnabled, setDrawModeEnabled] = useState(false);
   const [drawingComplete, setDrawingComplete] = useState(false);
   const [coverageAreaInfo, setCoverageAreaInfo] = useState(
-    coverageAreaGeoJson ? "✓ Coverage area selected" : null
+    coverageAreaGeoJson ? "✓ Coverage area selected" : null,
   );
   const [isGpsLoading, setIsGpsLoading] = useState(false);
   const [gpsError, setGpsError] = useState(null);
@@ -103,7 +103,7 @@ export default function CoverageAreaForm({
           drawnItems,
           currentPixels,
           setDrawingStats,
-          setMapError
+          setMapError,
         );
         cleanupCanvasListeners = result?.cleanup;
         if (result?.canvas) canvas.current = result.canvas;
@@ -176,10 +176,9 @@ export default function CoverageAreaForm({
 
       onFieldChange(LOCATION_FIELD_KEYS.coverageArea, JSON.stringify(geoJson));
       setCoverageAreaInfo(
-        `✓ Coverage area saved for ${municipalityName} (${drawingStats.lines} area(s))`
+        `✓ Coverage area saved for ${municipalityName} (${drawingStats.lines} area(s))`,
       );
       setDrawingComplete(true);
-
       if (map.current && drawnItems.current.length > 0) {
         try {
           const group = new L.FeatureGroup(drawnItems.current);
@@ -209,7 +208,8 @@ export default function CoverageAreaForm({
         map.current = null;
       }
 
-      const drawingCanvas = mapContainer.current?.querySelector("#drawingCanvas");
+      const drawingCanvas =
+        mapContainer.current?.querySelector("#drawingCanvas");
       if (drawingCanvas) drawingCanvas.remove();
 
       drawnItems.current = [];
@@ -235,7 +235,12 @@ export default function CoverageAreaForm({
       drawnItems.current = [];
       setDrawingStats({ lines: 0, points: 0 });
       if (canvas.current && ctx.current) {
-        ctx.current.clearRect(0, 0, canvas.current.width, canvas.current.height);
+        ctx.current.clearRect(
+          0,
+          0,
+          canvas.current.width,
+          canvas.current.height,
+        );
       }
     } catch (error) {
       setMapError("Failed to clear drawings");
@@ -266,7 +271,7 @@ export default function CoverageAreaForm({
             : "Unable to retrieve location. Please try again.";
         setGpsError(errorMsg);
         setIsGpsLoading(false);
-      }
+      },
     );
   };
 
