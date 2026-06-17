@@ -1,4 +1,7 @@
-import { questionTranslations, fieldTranslations } from "../../utils/translations";
+import {
+  questionTranslations,
+  fieldTranslations,
+} from "../../utils/translations";
 import FormControl, { inputClass } from "./FormControl";
 import { slugify } from "../../utils/formUtils";
 
@@ -33,7 +36,8 @@ function KpiQuestionCard({
     question.includes("mechanism");
 
   // Get yes/no options based on language
-  const yesNoOptions = language === "nep" ? YES_NO_OPTIONS_NEP : YES_NO_OPTIONS_ENG;
+  const yesNoOptions =
+    language === "nep" ? YES_NO_OPTIONS_NEP : YES_NO_OPTIONS_ENG;
 
   return (
     <div className="rounded-lg border border-surface-border bg-white p-4">
@@ -57,28 +61,53 @@ function KpiQuestionCard({
           onChange={(value) => onFieldChange(key, value)}
           {...(isYesNoQuestion && {
             options: yesNoOptions,
-            placeholder: language === "nep" ? "छनोट गरनुहोस्" : "Select Yes or No",
+            placeholder:
+              language === "nep" ? "छनोट गरनुहोस्" : "Select Yes or No",
           })}
         />
       </label>
 
       <div className="mt-3 grid gap-3 sm:grid-cols-2">
-        <label htmlFor={descriptionKey} className="block">
-          <span className="text-xs font-medium text-text-secondary">
-            {fieldTranslations[language]["Source / explanation"] || "Source / explanation"}
-          </span>
-          <input
-            id={descriptionKey}
-            type="file"
-            onChange={(event) => {
-              const file = event.target.files?.[0];
-              if (file) {
-                onFieldChange(descriptionKey, file);
-              }
-            }}
-            className="mt-2 block w-full rounded-md border border-surface-border px-3 py-2 text-sm file:mr-4 file:rounded-md file:border-0 file:bg-brand-light file:px-3 file:py-1 file:text-sm file:font-medium file:text-brand-secondary hover:file:bg-brand-lighter"
-          />
-        </label>
+        {isGateKeepingQuestion &&
+          // Remove file upload for Gate Keeping Question #1 of specific sections
+          // (adequacy / reliability / metering)
+          (() => {
+            const q = question.toLowerCase();
+            const hasAdequacy =
+              q.includes("adequacy") ||
+              q.includes("adequate") ||
+              q.includes("adequate?");
+            const hasReliability =
+              q.includes("reliability") ||
+              q.includes("reliable") ||
+              q.includes("reliability?");
+            const hasMetering = q.includes("meter") || q.includes("metering");
+
+            const hideFileInput =
+              index === 0 && (hasAdequacy || hasReliability || hasMetering);
+
+            if (hideFileInput) return null;
+
+            return (
+              <label htmlFor={descriptionKey} className="block">
+                <span className="text-xs font-medium text-text-secondary">
+                  {fieldTranslations[language]["Source / explanation"] ||
+                    "Source / explanation"}
+                </span>
+                <input
+                  id={descriptionKey}
+                  type="file"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    if (file) {
+                      onFieldChange(descriptionKey, file);
+                    }
+                  }}
+                  className="mt-2 block w-full rounded-md border border-surface-border px-3 py-2 text-sm file:mr-4 file:rounded-md file:border-0 file:bg-brand-light file:px-3 file:py-1 file:text-sm file:font-medium file:text-brand-secondary hover:file:bg-brand-lighter"
+                />
+              </label>
+            );
+          })()}
 
         <label htmlFor={remarksKey} className="block">
           <span className="text-xs font-medium text-text-secondary">

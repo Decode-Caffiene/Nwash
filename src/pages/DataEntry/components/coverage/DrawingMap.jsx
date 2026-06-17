@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import { X, PenTool, CheckCircle, AlertCircle } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { X, PenTool, CheckCircle, AlertCircle, Trash2, Plus, Lock } from "lucide-react";
 import L from "leaflet";
 import Button from "../../../../components/common/Button";
 
@@ -19,36 +19,32 @@ export default function DrawingMap({
   currentPixels,
   drawModeRef,
   onDrawModeToggle,
+  onCompletePolygon,
   onFinishDrawing,
   onCancelDrawing,
   onDeleteAll,
   onSetupCanvas,
   onSetMapError,
   onSetDrawingStats,
+  polygonDrawingRef,
 }) {
-  useEffect(() => {
-    drawModeRef.current = drawModeEnabled;
+  const [currentPointCount, setCurrentPointCount] = useState(0);
 
-    if (!canvas.current || !map.current) return;
+  useEffect(() => {
+    if (!map.current || !polygonDrawingRef?.current) return;
 
     if (drawModeEnabled) {
-      canvas.current.style.cursor = "crosshair";
-      canvas.current.style.pointerEvents = "auto";
+      polygonDrawingRef.current.startDrawing();
       if (map.current.dragging) map.current.dragging.disable();
-      if (map.current.touchZoom) map.current.touchZoom.disable();
-      if (map.current.doubleClickZoom) map.current.doubleClickZoom.disable();
       if (map.current.scrollWheelZoom) map.current.scrollWheelZoom.disable();
-      console.log("✏️ Draw mode enabled");
+      console.log("📍 Polygon drawing enabled");
     } else {
-      canvas.current.style.cursor = "grab";
-      canvas.current.style.pointerEvents = "none";
+      polygonDrawingRef.current.stopDrawing();
       if (map.current.dragging) map.current.dragging.enable();
-      if (map.current.touchZoom) map.current.touchZoom.enable();
-      if (map.current.doubleClickZoom) map.current.doubleClickZoom.enable();
       if (map.current.scrollWheelZoom) map.current.scrollWheelZoom.enable();
       console.log("🖐️ Pan mode enabled");
     }
-  }, [drawModeEnabled, canvas, map, drawModeRef]);
+  }, [drawModeEnabled, map, polygonDrawingRef]);
 
   return (
     <section className="stat-card">
@@ -82,11 +78,19 @@ export default function DrawingMap({
         className="w-full h-96 rounded-lg overflow-hidden border-2 border-blue-400 bg-gray-100 relative"
         style={{ minHeight: "400px" }}
       >
+        {/* Instructions */}
+        {drawModeEnabled && (
+          <div className="absolute top-20 left-4 z-[999] bg-blue-50 border-l-4 border-blue-600 p-3 rounded shadow-md max-w-xs">
+            <p className="text-sm text-blue-900 font-medium">📍 Click points on the map to draw a polygon</p>
+            <p className="text-xs text-blue-700 mt-1">Distances and area will be calculated automatically</p>
+          </div>
+        )}
+
         {/* Mode Indicator */}
         <div className="absolute top-4 right-4 z-[999] px-4 py-2 rounded-lg text-sm font-bold bg-white border-2 border-gray-300 shadow-md">
           {drawModeEnabled ? (
             <span className="text-blue-600 flex items-center gap-2">
-              <span>✏️ Drawing Mode</span>
+              <span>📍 Polygon Drawing</span>
             </span>
           ) : (
             <span className="text-gray-600 flex items-center gap-2">
@@ -101,16 +105,16 @@ export default function DrawingMap({
           <div className="text-xs text-gray-600">
             {drawingStats.lines > 0 ? (
               <span>
-                <span className="font-semibold">{drawingStats.lines}</span> area(s) drawn,{" "}
+                <span className="font-semibold">{drawingStats.lines}</span> polygon(s) drawn,{" "}
                 <span className="font-semibold">{drawingStats.points}</span> points total
               </span>
             ) : (
-              <span className="text-gray-400">👉 Press Pencil button, then drag on map to draw</span>
+              <span className="text-gray-400">👉 Press "Start Drawing" button, then click on map to place points</span>
             )}
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-2">
+        <div className={`grid gap-2 ${drawModeEnabled ? "grid-cols-5" : "grid-cols-4"}`}>
           <Button variant="secondary" onClick={onCancelDrawing} className="gap-2">
             <X size={16} />
             Cancel
@@ -125,9 +129,20 @@ export default function DrawingMap({
             }`}
             title={drawModeEnabled ? "Drawing mode ON - Click to pan" : "Click to enable drawing mode"}
           >
-            <PenTool size={18} strokeWidth={2} />
-            {drawModeEnabled ? "Drawing" : "Draw"}
+            <Plus size={18} strokeWidth={2} />
+            {drawModeEnabled ? "Drawing" : "Start Drawing"}
           </button>
+
+          {drawModeEnabled && (
+            <button
+              onClick={onCompletePolygon}
+              className="px-4 py-2 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2 bg-purple-600 text-white hover:bg-purple-700 shadow-md"
+              title="Complete the current polygon and start a new one"
+            >
+              <Lock size={16} />
+              Complete
+            </button>
+          )}
 
           <Button
             variant="secondary"
@@ -135,7 +150,8 @@ export default function DrawingMap({
             disabled={drawnItems.current.length === 0}
             className="gap-2"
           >
-            🗑️ Delete All
+            <Trash2 size={16} />
+            Delete All
           </Button>
 
           <Button

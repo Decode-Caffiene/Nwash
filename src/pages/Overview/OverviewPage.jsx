@@ -1,10 +1,11 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Building2,
   CheckCircle2,
   Users2,
   Droplet,
   TrendingUp,
+  RefreshCw,
 } from "lucide-react";
 
 import useFetch from "../../hooks/useFetch";
@@ -22,8 +23,13 @@ import { recentActivities } from "../../utils/overviewData";
 import { categorizeProviders, calculateZoneStats } from "../../utils/zoneAnalytics";
 
 export default function OverviewPage() {
-  const { data, loading, error } = useFetch(getServiceProviders, []);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const { data, loading, error } = useFetch(getServiceProviders, [refreshKey]);
   const list = Array.isArray(data) ? data : [];
+
+  const handleRefresh = () => {
+    setRefreshKey((prev) => prev + 1);
+  };
 
   // 1. Total Operators - from backend
   const totalOperators = list.length;
@@ -87,12 +93,23 @@ export default function OverviewPage() {
   }, [list]);
 
   // 3. District Data - calculated from provider locations
-  const districtData = useMemo(() => {
+  const { districtData, excludedCount } = useMemo(() => {
     const districtMap = {};
+    let excluded = 0;
 
     list.forEach((provider) => {
-      const district = provider.Location?.District_Name;
-      const province = provider.Location?.Province_Name;
+      // Try to get district and province from multiple possible field names
+      const district =
+        provider.Location?.District_Name ||
+        provider.District ||
+        provider.district ||
+        null;
+
+      const province =
+        provider.Location?.Province_Name ||
+        provider.Province ||
+        provider.province ||
+        null;
 
       if (district && province) {
         const key = `${district}-${province}`;
@@ -104,10 +121,15 @@ export default function OverviewPage() {
           };
         }
         districtMap[key].Operators += 1;
+      } else {
+        excluded += 1;
       }
     });
 
-    return Object.values(districtMap).sort((a, b) => b.Operators - a.Operators);
+    return {
+      districtData: Object.values(districtMap).sort((a, b) => b.Operators - a.Operators),
+      excludedCount: excluded,
+    };
   }, [list]);
 
   // 4. Compliance Data - calculated from SPI ranges
@@ -178,11 +200,22 @@ export default function OverviewPage() {
 
   return (
     <div className="p-6 space-y-6 bg-[#f8fafc] min-h-screen">
-      <div>
-        <h1 className="text-2xl font-bold">Overview Dashboard</h1>
-        <p className="text-sm text-slate-500">
-          Water supply and sanitation regulatory system
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">Overview Dashboard</h1>
+          <p className="text-sm text-slate-500">
+            Water supply and sanitation regulatory system
+          </p>
+        </div>
+        <button
+          onClick={handleRefresh}
+          disabled={loading}
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+          title="Refresh real-time data"
+        >
+          <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
+          Refresh Data
+        </button>
       </div>
 
       {error && <ErrorMessage />}
@@ -274,7 +307,7 @@ export default function OverviewPage() {
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
-        <DistrictChart data={districtData} />
+        <DistrictChart data={districtData} excludedCount={excludedCount} totalOperators={totalOperators} />
         <ComplianceChart data={pieData} />
         <RecentActivity activities={recentActivities} />
       </div>

@@ -9,6 +9,17 @@ import {
   Tooltip,
 } from "recharts";
 
+// All 7 provinces in Nepal
+const ALL_PROVINCES = [
+  "Koshi",
+  "Madhesh",
+  "Bagmati",
+  "Gandaki",
+  "Lumbini",
+  "Karnali",
+  "Sudurpashchim",
+];
+
 function ProvinceTooltip({ active, payload }) {
   if (!active || !payload?.length) return null;
 
@@ -25,7 +36,11 @@ function ProvinceTooltip({ active, payload }) {
   );
 }
 
-export default function DistrictChart({ data }) {
+export default function DistrictChart({
+  data,
+  excludedCount = 0,
+  totalOperators: totalFromParent = 0,
+}) {
   // Expect `data` as array of district objects:
   // { name: "Kathmandu", Province: "Bagmati", Operators: 145 }
   // Fallback: if no Province field exists, show original behavior.
@@ -35,16 +50,23 @@ export default function DistrictChart({ data }) {
     [data],
   );
 
-
   const provinceBarData = useMemo(() => {
     if (!hasProvince) return data;
 
-    const aggregated = (data || []).reduce((acc, cur) => {
-      const province = cur?.Province;
-      if (!province) return acc;
-      acc[province] = (acc[province] || 0) + (cur?.Operators || 0);
+    // Initialize all provinces with 0 operators
+    const aggregated = ALL_PROVINCES.reduce((acc, province) => {
+      acc[province] = 0;
       return acc;
     }, {});
+
+    // Fill in actual data
+    (data || []).forEach((cur) => {
+      const province = cur?.Province;
+      if (province && aggregated.hasOwnProperty(province)) {
+        aggregated[province] =
+          (aggregated[province] || 0) + (cur?.Operators || 0);
+      }
+    });
 
     return Object.entries(aggregated)
       .map(([province, operators]) => ({
@@ -54,6 +76,11 @@ export default function DistrictChart({ data }) {
       .sort((a, b) => b.Operators - a.Operators);
   }, [data, hasProvince]);
 
+  // Calculate total operators - must be called before any conditional returns
+  const totalOperators = useMemo(() => {
+    if (!Array.isArray(provinceBarData)) return 0;
+    return provinceBarData.reduce((sum, p) => sum + (p.Operators || 0), 0);
+  }, [provinceBarData]);
 
   if (!hasProvince) {
     return (
@@ -82,28 +109,64 @@ export default function DistrictChart({ data }) {
   }
 
   return (
-    <div className="bg-white p-6 rounded-xl border shadow-sm lg:col-span-2">
-      <h3 className="text-base font-bold text-slate-900">
-        Province-wise Operator Distribution
-      </h3>
+    <div className="bg-white p-6 rounded-xl border shadow-sm lg:col-span-2 space-y-6">
+      <div>
+        <h3 className="text-base font-bold text-slate-900">
+          Province-wise Operator Distribution
+        </h3>
 
-      <p className="text-xs text-slate-500 mb-6">
-        Number of operators by province
-      </p>
+        <p className="text-xs text-slate-500 mb-6">
+          Real-time number of operators by province
+        </p>
 
-      <div className="h-64">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={provinceBarData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-            <XAxis dataKey="name" tickLine={false} />
-            <YAxis tickLine={false} />
-            <Tooltip
-              cursor={{ fill: "rgba(13,148,136,0.08)" }}
-              content={<ProvinceTooltip />}
-            />
-            <Bar dataKey="Operators" fill="#0d9488" barSize={34} />
-          </BarChart>
-        </ResponsiveContainer>
+        <div className="h-64">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={provinceBarData} margin={{ bottom: 40, right: 20 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+              <XAxis
+                dataKey="name"
+                tickLine={false}
+                angle={-45}
+                textAnchor="end"
+                height={80}
+                tick={{ fontSize: 12 }}
+              />
+              <YAxis tickLine={false} />
+              <Tooltip
+                cursor={{ fill: "rgba(13,148,136,0.08)" }}
+                content={<ProvinceTooltip />}
+              />
+              <Bar dataKey="Operators" fill="#0d9488" barSize={34} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Data Info Section */}
+      <div className="mt-4 space-y-3">
+        {excludedCount > 0 && (
+          <div className="p-3 bg-orange-50 border border-orange-200 rounded-lg">
+            <p className="text-xs text-orange-800">
+              <span className="font-semibold">⚠️ Data Note:</span>{" "}
+              {excludedCount} operator(s) excluded from regional breakdown due
+              to missing location data.
+              <br />
+              <span className="text-xs">
+                Total Operators: {totalFromParent} | Shown in Chart:{" "}
+                {totalOperators} | Not Shown: {excludedCount}
+              </span>
+            </p>
+          </div>
+        )}
+        <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-xs text-blue-800">
+            <span className="font-semibold">ℹ️ Note:</span> If Karnali or
+            Sudurpashchim show "No Data", it means there are currently no
+            service provider records in the database for those regions. This
+            could indicate that data collection is incomplete or service
+            providers haven't been registered yet.
+          </p>
+        </div>
       </div>
     </div>
   );

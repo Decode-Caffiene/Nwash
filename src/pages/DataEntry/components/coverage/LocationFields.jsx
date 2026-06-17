@@ -1,5 +1,5 @@
 import React from "react";
-import { ClipboardList, MapPinned, Loader, PenTool, AlertCircle, CheckCircle } from "lucide-react";
+import { ClipboardList, MapPinned, Loader, PenTool, AlertCircle, CheckCircle, Eye, Edit3, Trash2 } from "lucide-react";
 import Button from "../../../../components/common/Button";
 import FormControl, { inputClass } from "../../components/common/FormControl";
 import { slugify } from "../../utils/formUtils";
@@ -10,6 +10,7 @@ import {
   getMunicipalityTypeOptions,
   PROVINCES,
 } from "../../utils/locationOptions";
+import CoverageAreaPreview from "./CoverageAreaPreview";
 
 const LOCATION_FIELD_KEYS = {
   province: "spatial.province-name",
@@ -119,25 +120,82 @@ export default function LocationFields({
           const isGpsLongitudeField = key === LOCATION_FIELD_KEYS.gpsLongitude;
 
           if (isCoverageAreaField) {
+            const hasCoverageArea = !!values[key];
             return (
-              <div key={key} className="block md:col-span-2 xl:col-span-3">
-                <label className="text-sm font-medium text-text-primary">
-                  Coverage Area (Map-based)
-                </label>
-                {coverageAreaInfo && (
-                  <div className="mt-2 rounded bg-emerald-50 p-3 border border-emerald-200 flex gap-2">
-                    <CheckCircle size={16} className="text-emerald-600 flex-shrink-0 mt-0.5" />
-                    <p className="text-sm text-emerald-800">{coverageAreaInfo}</p>
-                  </div>
+              <div key={key} className="block md:col-span-2 xl:col-span-3 space-y-3">
+                <div>
+                  <label className="text-sm font-medium text-text-primary">
+                    Coverage Area (Map-based)
+                  </label>
+                  {coverageAreaInfo && (
+                    <div className="mt-2 space-y-2">
+                      <div className="rounded bg-emerald-50 p-3 border border-emerald-200 flex gap-2 items-center">
+                        <CheckCircle size={16} className="text-emerald-600 flex-shrink-0" />
+                        <p className="text-sm text-emerald-800 flex-1">{coverageAreaInfo}</p>
+                      </div>
+                      {hasCoverageArea && (
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onDrawClick();
+                            }}
+                            className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded bg-blue-50 text-blue-700 hover:bg-blue-100 transition border border-blue-200"
+                            title="View coverage area"
+                          >
+                            <Eye size={16} />
+                            View
+                          </button>
+                          <button
+                            type="button"
+                            onClick={onDrawClick}
+                            className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded bg-blue-50 text-blue-700 hover:bg-blue-100 transition border border-blue-200"
+                            title="Edit coverage area"
+                          >
+                            <Edit3 size={16} />
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              handleFieldChange(key, "");
+                            }}
+                            className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded bg-red-50 text-red-700 hover:bg-red-100 transition border border-red-200"
+                            title="Delete coverage area"
+                          >
+                            <Trash2 size={16} />
+                            Delete
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {hasCoverageArea && (
+                  <CoverageAreaPreview
+                    geojson={values[key]}
+                    district={values[LOCATION_FIELD_KEYS.district]}
+                    municipalityName={values[LOCATION_FIELD_KEYS.municipalityName]}
+                    onEdit={onDrawClick}
+                    onClear={() => {
+                      handleFieldChange(key, "");
+                    }}
+                  />
                 )}
+
                 <Button
                   type="button"
-                  className="mt-3 w-full gap-2"
+                  className="w-full gap-2"
                   onClick={onDrawClick}
                   disabled={!canOpenMap}
                 >
                   <PenTool size={16} />
-                  {canOpenMap ? "Draw Coverage Area on Map" : "Select municipality first"}
+                  {canOpenMap
+                    ? hasCoverageArea
+                      ? "Edit Coverage Area"
+                      : "Draw Coverage Area on Map"
+                    : "Select municipality first"}
                 </Button>
               </div>
             );

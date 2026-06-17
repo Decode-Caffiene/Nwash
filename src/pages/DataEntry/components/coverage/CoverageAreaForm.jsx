@@ -6,6 +6,8 @@ import DrawingMap from "./DrawingMap";
 import DrawingSuccess from "./DrawingSuccess";
 import LocationFields from "./LocationFields";
 import { setupCanvasDrawing } from "./drawingUtils";
+import { setupPolygonDrawing } from "./polygonDrawingUtils";
+import { getMunicipalityBoundary, displayBoundaryOnMap, fitMapToLayer } from "./boundaryUtils";
 
 // Fix Leaflet icons
 delete L.Icon.Default.prototype._getIconUrl;
@@ -61,6 +63,8 @@ export default function CoverageAreaForm({
   const isDrawingMode = useRef(false);
   const currentPixels = useRef([]);
   const drawModeRef = useRef(drawModeEnabled);
+  const boundaryLayer = useRef(null);
+  const polygonDrawingRef = useRef(null);
 
   const canOpenMap = province && district && municipalityName;
 
@@ -91,24 +95,89 @@ export default function CoverageAreaForm({
           attribution: "© OpenStreetMap",
         }).addTo(map.current);
 
+        // Load and display district boundary
+        const boundaryGeoJSON = getMunicipalityBoundary(district, municipalityName);
+        if (boundaryGeoJSON) {
+          boundaryLayer.current = displayBoundaryOnMap(map.current, boundaryGeoJSON);
+          fitMapToLayer(map.current, boundaryLayer.current);
+        }
+
+        // Load existing coverage area if available
+        if (coverageAreaGeoJson) {
+          try {
+            const existingGeometry = typeof coverageAreaGeoJson === "string"
+              ? JSON.parse(coverageAreaGeoJson)
+              : coverageAreaGeoJson;
+
+            if (existingGeometry && existingGeometry.features) {
+              existingGeometry.features.forEach((feature) => {
+                const layer = L.geoJSON(feature, {
+                  style: {
+                    color: "#0066cc",
+                    weight: 3,
+                    opacity: 0.8,
+                  },
+                });
+
+                layer.eachLayer((sublayer) => {
+                  sublayer.addTo(map.current);
+                  sublayer.on("click", () => {
+                    if (map.current && map.current.hasLayer(sublayer)) {
+                      map.current.removeLayer(sublayer);
+                      drawnItems.current = drawnItems.current.filter(
+                        (item) => item !== sublayer
+                      );
+                      setDrawingStats({
+                        lines: drawnItems.current.length,
+                        points: drawnItems.current.reduce((sum, item) => {
+                          try {
+                            const coords = item.toGeoJSON().geometry.coordinates;
+                            return sum + coords.length;
+                          } catch {
+                            return sum;
+                          }
+                        }, 0),
+                      });
+                    }
+                  });
+                  drawnItems.current.push(sublayer);
+                });
+              });
+
+              setDrawingStats({
+                lines: drawnItems.current.length,
+                points: drawnItems.current.reduce((sum, item) => {
+                  try {
+                    const coords = item.toGeoJSON().geometry.coordinates;
+                    return sum + coords.length;
+                  } catch {
+                    return sum;
+                  }
+                }, 0),
+              });
+            }
+          } catch (error) {
+            console.error("Error loading existing coverage area:", error);
+          }
+        }
+
         if (map.current.touchZoom) map.current.touchZoom.enable();
         if (map.current.doubleClickZoom) map.current.doubleClickZoom.enable();
         if (map.current.scrollWheelZoom) map.current.scrollWheelZoom.enable();
 
-        const result = setupCanvasDrawing(
+        const polygonDrawing = setupPolygonDrawing(
           mapContainer.current,
           map.current,
-          ctx.current,
-          drawModeRef,
           drawnItems,
-          currentPixels,
           setDrawingStats,
           setMapError,
         );
-        cleanupCanvasListeners = result?.cleanup;
-        if (result?.canvas) canvas.current = result.canvas;
-        if (result?.ctx) ctx.current = result.ctx;
-        setDrawingStats({ lines: 0, points: 0 });
+        polygonDrawingRef.current = polygonDrawing;
+
+        // Only reset stats if no existing coverage area was loaded
+        if (!coverageAreaGeoJson) {
+          setDrawingStats({ lines: 0, points: 0 });
+        }
       } catch (error) {
         console.error("Map initialization error:", error);
         setMapError("Failed to initialize map. Please try again.");
@@ -119,9 +188,11 @@ export default function CoverageAreaForm({
     const timer = setTimeout(initMap, 100);
     return () => {
       clearTimeout(timer);
-      if (cleanupCanvasListeners) cleanupCanvasListeners();
+      if (polygonDrawingRef.current?.cleanup) {
+        polygonDrawingRef.current.cleanup();
+      }
     };
-  }, [isDrawing]);
+  }, [isDrawing, district, municipalityName, coverageAreaGeoJson]);
 
   // Update canvas state when draw mode changes
   useEffect(() => {
@@ -148,8 +219,17 @@ export default function CoverageAreaForm({
 
   const finishDrawing = () => {
     try {
+      // Finish the current polygon if in drawing mode
+      if (drawModeEnabled && polygonDrawingRef.current) {
+        try {
+          polygonDrawingRef.current.finishPolygon();
+        } catch (error) {
+          console.error("Error finishing polygon:", error);
+        }
+      }
+
       if (drawnItems.current.length === 0) {
-        setMapError("Please draw at least one area on the map");
+        setMapError("Please draw at least one polygon on the map");
         return;
       }
 
@@ -202,7 +282,14 @@ export default function CoverageAreaForm({
 
   const cleanup = () => {
     try {
+      if (polygonDrawingRef.current?.cleanup) {
+        polygonDrawingRef.current.cleanup();
+      }
+
       if (map.current) {
+        if (boundaryLayer.current && map.current.hasLayer(boundaryLayer.current)) {
+          map.current.removeLayer(boundaryLayer.current);
+        }
         map.current.dragging.enable();
         map.current.remove();
         map.current = null;
@@ -212,6 +299,8 @@ export default function CoverageAreaForm({
         mapContainer.current?.querySelector("#drawingCanvas");
       if (drawingCanvas) drawingCanvas.remove();
 
+      polygonDrawingRef.current = null;
+      boundaryLayer.current = null;
       drawnItems.current = [];
       isDrawingMode.current = false;
       currentPixels.current = [];
@@ -244,6 +333,17 @@ export default function CoverageAreaForm({
       }
     } catch (error) {
       setMapError("Failed to clear drawings");
+    }
+  };
+
+  const handleCompletePolygon = () => {
+    try {
+      if (polygonDrawingRef.current) {
+        polygonDrawingRef.current.finishPolygon();
+      }
+    } catch (error) {
+      console.error("Error completing polygon:", error);
+      setMapError("Failed to complete polygon");
     }
   };
 
@@ -304,7 +404,9 @@ export default function CoverageAreaForm({
         isDrawingMode={isDrawingMode}
         currentPixels={currentPixels}
         drawModeRef={drawModeRef}
+        polygonDrawingRef={polygonDrawingRef}
         onDrawModeToggle={() => setDrawModeEnabled(!drawModeEnabled)}
+        onCompletePolygon={handleCompletePolygon}
         onFinishDrawing={finishDrawing}
         onCancelDrawing={cleanup}
         onDeleteAll={handleDeleteAll}
