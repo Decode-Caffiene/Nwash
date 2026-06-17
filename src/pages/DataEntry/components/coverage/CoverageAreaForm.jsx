@@ -7,7 +7,12 @@ import DrawingSuccess from "./DrawingSuccess";
 import LocationFields from "./LocationFields";
 import { setupCanvasDrawing } from "./drawingUtils";
 import { setupPolygonDrawing } from "./polygonDrawingUtils";
-import { getMunicipalityBoundary, displayBoundaryOnMap, fitMapToLayer } from "./boundaryUtils";
+import {
+  getMunicipalityBoundary,
+  getDistrictBoundary,
+  displayBoundaryOnMap,
+  fitMapToLayer,
+} from "./boundaryUtils";
 
 // Fix Leaflet icons
 delete L.Icon.Default.prototype._getIconUrl;
@@ -72,6 +77,12 @@ export default function CoverageAreaForm({
   useEffect(() => {
     if (!isDrawing) return;
 
+    // Always reset drawing state when opening the map for a new selection
+    // (prevents previously drawn items from disappearing/bleeding into a new municipality)
+    drawnItems.current = [];
+    setDrawingStats({ lines: 0, points: 0 });
+    setMapError(null);
+
     let cleanupCanvasListeners = null;
 
     const initMap = () => {
@@ -95,19 +106,39 @@ export default function CoverageAreaForm({
           attribution: "© OpenStreetMap",
         }).addTo(map.current);
 
-        // Load and display district boundary
-        const boundaryGeoJSON = getMunicipalityBoundary(district, municipalityName);
+        // Load and display selected boundary, then zoom to it
+        // Prefer municipality boundary (within selected district).
+        // If municipality match fails, fallback to district boundary.
+        const municipalityGeoJSON = getMunicipalityBoundary(
+          district,
+          municipalityName,
+        );
+        const boundaryGeoJSON =
+          municipalityGeoJSON || getDistrictBoundary(district);
+
         if (boundaryGeoJSON) {
-          boundaryLayer.current = displayBoundaryOnMap(map.current, boundaryGeoJSON);
+          boundaryLayer.current = displayBoundaryOnMap(
+            map.current,
+            boundaryGeoJSON,
+            {
+              color: "#0066cc",
+              weight: 3,
+              opacity: 0.9,
+              fillColor: "#0066cc",
+              fillOpacity: 0.12,
+              dashArray: "5, 3",
+            },
+          );
           fitMapToLayer(map.current, boundaryLayer.current);
         }
 
         // Load existing coverage area if available
         if (coverageAreaGeoJson) {
           try {
-            const existingGeometry = typeof coverageAreaGeoJson === "string"
-              ? JSON.parse(coverageAreaGeoJson)
-              : coverageAreaGeoJson;
+            const existingGeometry =
+              typeof coverageAreaGeoJson === "string"
+                ? JSON.parse(coverageAreaGeoJson)
+                : coverageAreaGeoJson;
 
             if (existingGeometry && existingGeometry.features) {
               existingGeometry.features.forEach((feature) => {
@@ -125,13 +156,14 @@ export default function CoverageAreaForm({
                     if (map.current && map.current.hasLayer(sublayer)) {
                       map.current.removeLayer(sublayer);
                       drawnItems.current = drawnItems.current.filter(
-                        (item) => item !== sublayer
+                        (item) => item !== sublayer,
                       );
                       setDrawingStats({
                         lines: drawnItems.current.length,
                         points: drawnItems.current.reduce((sum, item) => {
                           try {
-                            const coords = item.toGeoJSON().geometry.coordinates;
+                            const coords =
+                              item.toGeoJSON().geometry.coordinates;
                             return sum + coords.length;
                           } catch {
                             return sum;
@@ -254,7 +286,64 @@ export default function CoverageAreaForm({
         features: features,
       };
 
-      onFieldChange(LOCATION_FIELD_KEYS.coverageArea, JSON.stringify(geoJson));
+      // Normalize coverage geometry before sending to backend.
+      // Many backends expect MultiPolygon even if user drawn a Polygon.
+      const normalizeCoverageGeoJsonForBackend = (input) => {
+        if (!input || !Array.isArray(input.features)) {
+          return input;
+        }
+
+        const normalizedFeatures = input.features
+          .map((feature) => {
+            if (!feature || !feature.geometry) return null;
+
+            const { type, coordinates } = feature.geometry;
+
+            // Leaflet polygon -> GeoJSON Polygon.
+            if (type === "Polygon") {
+              // Polygon coordinates: [ [lng,lat], ... ]
+              // MultiPolygon coordinates: [ [ [lng,lat], ... ] ]
+              return {
+                ...feature,
+                geometry: {
+                  type: "MultiPolygon",
+                  coordinates: [coordinates],
+                },
+              };
+            }
+
+            // Already MultiPolygon
+            if (type === "MultiPolygon") {
+              return feature;
+            }
+
+            // Unsupported geometry types: drop to avoid backend crashes
+            return null;
+          })
+          .filter(Boolean);
+
+        return {
+          ...input,
+          features: normalizedFeatures,
+        };
+      };
+
+      const normalizedGeoJson = normalizeCoverageGeoJsonForBackend(geoJson);
+
+      if (
+        !normalizedGeoJson.features ||
+        normalizedGeoJson.features.length === 0
+      ) {
+        setMapError(
+          "Coverage area geometry is invalid or unsupported. Please redraw.",
+        );
+        return;
+      }
+
+      onFieldChange(
+        LOCATION_FIELD_KEYS.coverageArea,
+        JSON.stringify(normalizedGeoJson),
+      );
       setCoverageAreaInfo(
         `✓ Coverage area saved for ${municipalityName} (${drawingStats.lines} area(s))`,
       );
@@ -270,10 +359,6 @@ export default function CoverageAreaForm({
           console.error("Error fitting bounds:", error);
         }
       }
-
-      setTimeout(() => {
-        cleanup();
-      }, 3000);
     } catch (error) {
       console.error("Error finishing drawing:", error);
       setMapError("Failed to save coverage area. Please try again.");
@@ -287,7 +372,10 @@ export default function CoverageAreaForm({
       }
 
       if (map.current) {
-        if (boundaryLayer.current && map.current.hasLayer(boundaryLayer.current)) {
+        if (
+          boundaryLayer.current &&
+          map.current.hasLayer(boundaryLayer.current)
+        ) {
           map.current.removeLayer(boundaryLayer.current);
         }
         map.current.dragging.enable();

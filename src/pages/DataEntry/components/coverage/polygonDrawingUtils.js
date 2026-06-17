@@ -1,12 +1,21 @@
 import L from "leaflet";
+// Ensure the plugin is registered (side-effect import). Some bundlers may be sensitive
+// to pure side-effect imports, so we also attempt an explicit require.
 import "leaflet-geodesy";
+
+try {
+  // eslint-disable-next-line global-require
+  require("leaflet-geodesy");
+} catch {
+  // ignore - runtime may not support require depending on bundler
+}
 
 export const setupPolygonDrawing = (
   mapContainer,
   map,
   drawnItems,
   setDrawingStats,
-  setMapError
+  setMapError,
 ) => {
   if (!map || !mapContainer) return null;
 
@@ -21,8 +30,20 @@ export const setupPolygonDrawing = (
 
   const calculateArea = (points) => {
     if (points.length < 3) return 0;
-    const latlngs = points.map(p => [p.lat, p.lng]);
-    return L.GeometryUtil.geodesicArea(latlngs); // returns area in square meters
+
+    // Guard against cases where leaflet-geodesy failed to register.
+    const geodesicAreaFn =
+      L?.GeometryUtil?.geodesicArea ||
+      (L?.GeometryUtil && typeof L.GeometryUtil.geodesicArea === "function"
+        ? L.GeometryUtil.geodesicArea
+        : null);
+
+    if (typeof geodesicAreaFn !== "function") {
+      return 0;
+    }
+
+    const latlngs = points.map((p) => [p.lat, p.lng]);
+    return geodesicAreaFn(latlngs); // returns area in square meters
   };
 
   const formatDistance = (meters) => {
@@ -52,8 +73,14 @@ export const setupPolygonDrawing = (
 
     // Draw distances between points
     for (let i = 0; i < currentPoints.length - 1; i++) {
-      const distance = calculateDistance(currentPoints[i], currentPoints[i + 1]);
-      const midpoint = L.latLngBounds([currentPoints[i], currentPoints[i + 1]]).getCenter();
+      const distance = calculateDistance(
+        currentPoints[i],
+        currentPoints[i + 1],
+      );
+      const midpoint = L.latLngBounds([
+        currentPoints[i],
+        currentPoints[i + 1],
+      ]).getCenter();
 
       const tooltip = L.tooltip({
         permanent: true,
@@ -162,7 +189,9 @@ export const setupPolygonDrawing = (
     polygon.on("click", () => {
       if (map.hasLayer(polygon)) {
         map.removeLayer(polygon);
-        drawnItems.current = drawnItems.current.filter((item) => item !== polygon);
+        drawnItems.current = drawnItems.current.filter(
+          (item) => item !== polygon,
+        );
         updateStats();
       }
     });
