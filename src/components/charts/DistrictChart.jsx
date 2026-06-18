@@ -84,7 +84,7 @@ export default function DistrictChart({
 
   if (!hasProvince) {
     return (
-      <div className="bg-white p-6 rounded-xl border shadow-sm lg:col-span-2">
+      <div className="w-full bg-white p-6 rounded-xl border shadow-sm">
         <h3 className="text-base font-bold text-slate-900">
           District-wise Operator Distribution
         </h3>
@@ -93,7 +93,7 @@ export default function DistrictChart({
           Number of operators and compliance rates by district
         </p>
 
-        <div className="h-64">
+        <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={provinceBarData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
@@ -109,7 +109,7 @@ export default function DistrictChart({
   }
 
   return (
-    <div className="bg-white p-6 rounded-xl border shadow-sm lg:col-span-2 space-y-6">
+    <div className="w-full bg-white p-6 rounded-xl border shadow-sm space-y-6">
       <div>
         <h3 className="text-base font-bold text-slate-900">
           Province-wise Operator Distribution
@@ -119,7 +119,7 @@ export default function DistrictChart({
           Real-time number of operators by province
         </p>
 
-        <div className="h-64">
+        <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={provinceBarData} margin={{ bottom: 40, right: 20 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
@@ -139,33 +139,6 @@ export default function DistrictChart({
               <Bar dataKey="Operators" fill="#0d9488" barSize={34} />
             </BarChart>
           </ResponsiveContainer>
-        </div>
-      </div>
-
-      {/* Data Info Section */}
-      <div className="mt-4 space-y-3">
-        {excludedCount > 0 && (
-          <div className="p-3 bg-orange-50 border border-orange-200 rounded-lg">
-            <p className="text-xs text-orange-800">
-              <span className="font-semibold">⚠️ Data Note:</span>{" "}
-              {excludedCount} operator(s) excluded from regional breakdown due
-              to missing location data.
-              <br />
-              <span className="text-xs">
-                Total Operators: {totalFromParent} | Shown in Chart:{" "}
-                {totalOperators} | Not Shown: {excludedCount}
-              </span>
-            </p>
-          </div>
-        )}
-        <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-          <p className="text-xs text-blue-800">
-            <span className="font-semibold">ℹ️ Note:</span> If Karnali or
-            Sudurpashchim show "No Data", it means there are currently no
-            service provider records in the database for those regions. This
-            could indicate that data collection is incomplete or service
-            providers haven't been registered yet.
-          </p>
         </div>
       </div>
     </div>

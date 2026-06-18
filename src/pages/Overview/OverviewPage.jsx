@@ -1,53 +1,37 @@
-import React, { useMemo, useState } from "react";
-import {
-  Building2,
-  CheckCircle2,
-  Users2,
-  Droplet,
-  TrendingUp,
-  RefreshCw,
-} from "lucide-react";
+import React, { useMemo } from "react";
+import { Building2, Users2, Droplet, TrendingUp, Search } from "lucide-react";
 
 import useFetch from "../../hooks/useFetch";
 import { getServiceProviders } from "../../api/serviceProviderApi";
 
 import StatCard from "../../components/overview-components/StatCard";
 import DistrictChart from "../../components/charts/DistrictChart";
-import ComplianceChart from "../../components/charts/ComplianceChart";
 import RecentActivity from "../../components/overview-components/RecentActivity";
-import PartnerContributions from "../../components/overview-components/PartnerContributions";
 import ErrorMessage from "../../components/common/ErrorMessage";
+import PartnerContributions from "../../components/overview-components/PartnerContributions";
+import ComplianceChart from "../../components/charts/ComplianceChart";
+import Footer from "../../components/layout/Footer";
 
-import { PARTNERS } from "../../pages/DevelopmentPartners/data/partnersData";
-import { recentActivities } from "../../utils/overviewData";
-import { categorizeProviders, calculateZoneStats } from "../../utils/zoneAnalytics";
+import {
+  recentActivities,
+  pieData,
+  partnerContributions,
+} from "../../utils/overviewData";
+import { categorizeProviders } from "../../utils/zoneAnalytics";
 
 export default function OverviewPage() {
-  const [refreshKey, setRefreshKey] = useState(0);
-  const { data, loading, error } = useFetch(getServiceProviders, [refreshKey]);
+  const { data, loading, error } = useFetch(getServiceProviders, []);
   const list = Array.isArray(data) ? data : [];
-
-  const handleRefresh = () => {
-    setRefreshKey((prev) => prev + 1);
-  };
 
   // 1. Total Operators - from backend
   const totalOperators = list.length;
-
-  // 2. Compliance Rate - calculated from SPI data
-  const complianceRate = useMemo(() => {
-    if (!list.length) return 0;
-    const valid = list.filter((p) => p?.Summary_Index?.SPI != null).length;
-    return (valid / list.length) * 100;
-  }, [list]);
 
   // Transform data for zone analysis
   const chartDataForZones = useMemo(() => {
     return list
       .filter(
         (item) =>
-          item?.Summary_Index?.OEI != null &&
-          item?.Summary_Index?.SPI != null
+          item?.Summary_Index?.OEI != null && item?.Summary_Index?.SPI != null,
       )
       .map((item) => ({
         ...item,
@@ -127,44 +111,14 @@ export default function OverviewPage() {
     });
 
     return {
-      districtData: Object.values(districtMap).sort((a, b) => b.Operators - a.Operators),
+      districtData: Object.values(districtMap).sort(
+        (a, b) => b.Operators - a.Operators,
+      ),
       excludedCount: excluded,
     };
   }, [list]);
 
-  // 4. Compliance Data - calculated from SPI ranges
-  const pieData = useMemo(() => {
-    const compliant = list.filter((p) => p?.Summary_Index?.SPI >= 80).length;
-    const partial = list.filter(
-      (p) => p?.Summary_Index?.SPI >= 50 && p?.Summary_Index?.SPI < 80
-    ).length;
-    const nonCompliant = list.filter(
-      (p) => p?.Summary_Index?.SPI && p?.Summary_Index?.SPI < 50
-    ).length;
-
-    return [
-      { name: "Compliant (≥80%)", value: compliant, color: "#0d9488" },
-      { name: "Partial (50-79%)", value: partial, color: "#3b82f6" },
-      { name: "Non-Compliant (<50%)", value: nonCompliant, color: "#dc2626" },
-    ];
-  }, [list]);
-
   // 5. Active Partners - count unique regulatory partners in provinces where providers exist
-  const activepartnersCount = useMemo(() => {
-    const regulatoryPartners = ["wb", "adb", "unicef", "wateraid", "giz", "eu", "sdc", "usaid"];
-    const providerProvinces = new Set(
-      list.map((p) => p.Location?.Province_Name).filter(Boolean)
-    );
-
-    const mappedPartners = new Set();
-    PARTNERS.filter((p) => regulatoryPartners.includes(p.id)).forEach((partner) => {
-      if (partner.provinces.some((p) => providerProvinces.has(p))) {
-        mappedPartners.add(partner.id);
-      }
-    });
-
-    return mappedPartners.size;
-  }, [list]);
 
   // 6. Total Population Served - sum from all providers (if data available)
   const populationServed = useMemo(() => {
@@ -186,41 +140,20 @@ export default function OverviewPage() {
     return total.toString();
   }, [list]);
 
-  // 7. Partner Contributions - Only core regulatory roadmap partners
-  const partnerContributions = useMemo(() => {
-    const regulatoryPartners = ["wb", "adb", "unicef", "wateraid", "giz", "eu", "sdc", "usaid"];
-    return PARTNERS.filter((p) => regulatoryPartners.includes(p.id)).map(
-      (partner) => ({
-        name: partner.name,
-        projects: partner.activeProjects,
-        funding: partner.investment,
-      })
-    );
-  }, []);
-
   return (
-    <div className="p-6 space-y-6 bg-[#f8fafc] min-h-screen">
-      <div className="flex items-center justify-between">
+    <div className="w-full p-6 space-y-6 bg-[#f8fafc] min-h-screen">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">Overview Dashboard</h1>
           <p className="text-sm text-slate-500">
             Water supply and sanitation regulatory system
           </p>
         </div>
-        <button
-          onClick={handleRefresh}
-          disabled={loading}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
-          title="Refresh real-time data"
-        >
-          <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
-          Refresh Data
-        </button>
       </div>
 
       {error && <ErrorMessage />}
 
-      <div className="grid gap-4 lg:grid-cols-5">
+      <div className="grid gap-4 lg:grid-cols-4">
         <StatCard
           title="Total Operators"
           value={loading ? "—" : totalOperators}
@@ -229,17 +162,8 @@ export default function OverviewPage() {
         />
 
         <StatCard
-          title="Compliance Rate"
-          value={`${complianceRate.toFixed(1)}%`}
-          subtitle="Improving trend"
-          icon={CheckCircle2}
-          iconBg="bg-emerald-50"
-          iconColor="text-emerald-600"
-        />
-
-        <StatCard
           title="Partners"
-          value={loading ? "—" : activepartnersCount}
+          value={loading ? "—" : partnerContributions.length}
           subtitle="Active agencies"
           icon={Users2}
         />
@@ -259,7 +183,7 @@ export default function OverviewPage() {
         />
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-5">
+      <div className="grid gap-4 lg:grid-cols-4">
         <StatCard
           title="Improving Operators"
           value={loading ? "—" : improvingOperators}
@@ -295,24 +219,24 @@ export default function OverviewPage() {
           iconBg="bg-purple-50"
           iconColor="text-purple-600"
         />
+      </div>
 
-        <StatCard
-          title="Dev. Partners"
-          value={loading ? "—" : activepartnersCount}
-          subtitle="Active partners"
-          icon={Users2}
-          iconBg="bg-indigo-50"
-          iconColor="text-indigo-600"
+      <div className="space-y-6">
+        <DistrictChart
+          data={districtData}
+          excludedCount={excludedCount}
+          totalOperators={totalOperators}
         />
+
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(360px,0.85fr)]">
+          <ComplianceChart data={pieData} />
+          <RecentActivity activities={recentActivities} />
+        </div>
+
+        <PartnerContributions partners={partnerContributions} />
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-6">
-        <DistrictChart data={districtData} excludedCount={excludedCount} totalOperators={totalOperators} />
-        <ComplianceChart data={pieData} />
-        <RecentActivity activities={recentActivities} />
-      </div>
-
-      <PartnerContributions partners={partnerContributions} />
+      <Footer />
     </div>
   );
 }

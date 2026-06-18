@@ -16,7 +16,7 @@ import {
 const LOCATION_FIELD_KEYS = {
   province: "spatial.province-name",
   district: "spatial.district",
-
+  municipalityType: "spatial.municipality-type",
   municipalityName: "spatial.municipality-name",
   wardsCovered: "spatial.number-of-wards-covered",
   gpsLatitude: "spatial.gps-latitude",

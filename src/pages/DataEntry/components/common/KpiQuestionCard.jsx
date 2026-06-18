@@ -21,6 +21,17 @@ function KpiQuestionCard({
   const key = `${formId}.${slugify(sectionTitle)}.${slugify(question)}`;
   const descriptionKey = `${key}.description`;
   const remarksKey = `${key}.remarks`;
+  const normalizedQuestion = question.toLowerCase();
+  const isCoverageAreaForm = formId === "service-provider-map";
+  const isBusinessPlanQuestion =
+    normalizedQuestion.includes("business plan") &&
+    normalizedQuestion.includes("exist");
+  const usesFileSource =
+    normalizedQuestion.includes("report") ||
+    normalizedQuestion.includes("logbook") ||
+    normalizedQuestion.includes("log book") ||
+    (isCoverageAreaForm && isBusinessPlanQuestion);
+  const showSourceExplanation = isGateKeepingQuestion || usesFileSource;
 
   // Detect if this is a yes/no question
   const isYesNoQuestion =
@@ -68,46 +79,35 @@ function KpiQuestionCard({
       </label>
 
       <div className="mt-3 grid gap-3 sm:grid-cols-2">
-        {isGateKeepingQuestion &&
-          // Remove file upload for Gate Keeping Question #1 of specific sections
-          // (adequacy / reliability / metering)
-          (() => {
-            const q = question.toLowerCase();
-            const hasAdequacy =
-              q.includes("adequacy") ||
-              q.includes("adequate") ||
-              q.includes("adequate?");
-            const hasReliability =
-              q.includes("reliability") ||
-              q.includes("reliable") ||
-              q.includes("reliability?");
-            const hasMetering = q.includes("meter") || q.includes("metering");
-
-            const hideFileInput =
-              index === 0 && (hasAdequacy || hasReliability || hasMetering);
-
-            if (hideFileInput) return null;
-
-            return (
-              <label htmlFor={descriptionKey} className="block">
-                <span className="text-xs font-medium text-text-secondary">
-                  {fieldTranslations[language]["Source / explanation"] ||
-                    "Source / explanation"}
-                </span>
-                <input
-                  id={descriptionKey}
-                  type="file"
-                  onChange={(event) => {
-                    const file = event.target.files?.[0];
-                    if (file) {
-                      onFieldChange(descriptionKey, file);
-                    }
-                  }}
-                  className="mt-2 block w-full rounded-md border border-surface-border px-3 py-2 text-sm file:mr-4 file:rounded-md file:border-0 file:bg-brand-light file:px-3 file:py-1 file:text-sm file:font-medium file:text-brand-secondary hover:file:bg-brand-lighter"
-                />
-              </label>
-            );
-          })()}
+        {showSourceExplanation && (
+          <label htmlFor={descriptionKey} className="block">
+            <span className="text-xs font-medium text-text-secondary">
+              {fieldTranslations[language]["Source / explanation"] ||
+                "Source / explanation"}
+            </span>
+            {usesFileSource ? (
+              <input
+                id={descriptionKey}
+                type="file"
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+                  onFieldChange(descriptionKey, file || "");
+                }}
+                className="mt-2 block w-full rounded-md border border-surface-border px-3 py-2 text-sm file:mr-4 file:rounded-md file:border-0 file:bg-brand-light file:px-3 file:py-1 file:text-sm file:font-medium file:text-brand-secondary hover:file:bg-brand-lighter"
+              />
+            ) : (
+              <textarea
+                id={descriptionKey}
+                rows={2}
+                value={values[descriptionKey] || ""}
+                onChange={(event) =>
+                  onFieldChange(descriptionKey, event.target.value)
+                }
+                className={inputClass}
+              />
+            )}
+          </label>
+        )}
 
         <label htmlFor={remarksKey} className="block">
           <span className="text-xs font-medium text-text-secondary">

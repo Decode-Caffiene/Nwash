@@ -10,6 +10,31 @@ import CoverageAreaForm from "./components/coverage/CoverageAreaForm";
 import { dataEntryForms } from "./data/dataEntryForms";
 import { saveServiceProviderForm } from "../../api/serviceProviderApi";
 
+const COVERAGE_AREA_KEY = "spatial.coverage-area-geojson";
+
+const normalizeSubmitPayload = (formType, values) => {
+  const payload = {
+    formType,
+  };
+
+  Object.entries(values).forEach(([key, value]) => {
+    if (key === "undefined") return;
+
+    if (key === COVERAGE_AREA_KEY && typeof value === "string") {
+      try {
+        payload[key] = JSON.parse(value);
+      } catch {
+        payload[key] = value;
+      }
+      return;
+    }
+
+    payload[key] = value;
+  });
+
+  return payload;
+};
+
 function DataEntryPage() {
   const [activeFormId, setActiveFormId] = useState(dataEntryForms[0].id);
   const [formValues, setFormValues] = useState({});
@@ -45,10 +70,10 @@ function DataEntryPage() {
     setSubmitMessage("");
 
     try {
-      const payload = {
-        formType: activeForm.id,
-        ...currentValues,
-      };
+      const backendFormType = activeForm.useMapSection
+        ? "service-provider"
+        : activeForm.id;
+      const payload = normalizeSubmitPayload(backendFormType, currentValues);
 
       const response = await saveServiceProviderForm(payload);
 
@@ -67,6 +92,7 @@ function DataEntryPage() {
       setSubmitStatus("error");
       setSubmitMessage(
         error?.response?.data?.message ||
+        error?.response?.data?.error ||
         error?.message ||
         "Failed to submit form. Please try again."
       );

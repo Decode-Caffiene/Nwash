@@ -9,15 +9,13 @@ export default function StatCard({
   iconColor = "text-slate-500",
 }) {
   return (
-    <div className="bg-white p-5 rounded-xl border shadow-sm flex justify-between items-start">
+    <div className="w-full bg-white p-5 rounded-xl border shadow-sm flex justify-between items-start">
       <div className="space-y-1">
         <p className="text-xs text-slate-500 uppercase font-semibold">
           {title}
         </p>
 
-        <p className="text-3xl font-bold text-slate-900">
-          {value}
-        </p>
+        <p className="text-3xl font-bold text-slate-900">{value}</p>
 
         <p className="text-xs font-semibold text-emerald-600 pt-1">
           {subtitle}

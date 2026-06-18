@@ -40,22 +40,22 @@ export default function ComplianceChart({ data }) {
   const labels = useMemo(() => {
     return data.map((item) => {
       const percentage =
-        totalOperators > 0 ? ((item.value / totalOperators) * 100).toFixed(1) : 0;
+        totalOperators > 0
+          ? ((item.value / totalOperators) * 100).toFixed(1)
+          : 0;
       return `${item.name}: ${percentage}%`;
     });
   }, [data, totalOperators]);
 
   return (
-    <div className="bg-white p-6 rounded-xl border shadow-sm">
-      <h3 className="text-base font-bold text-slate-900">
-        Compliance Status
-      </h3>
+    <div className="bg-white p-6 rounded-xl border shadow-sm w-full">
+      <h3 className="text-base font-bold text-slate-900">Compliance Status</h3>
 
       <p className="text-xs text-slate-500 mb-4">
         Overall compliance distribution
       </p>
 
-      <div className="h-72">
+      <div className="h-72 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
@@ -63,7 +63,8 @@ export default function ComplianceChart({ data }) {
               dataKey="value"
               outerRadius={85}
               label={({ value, total, name }) => {
-                const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                const percentage =
+                  total > 0 ? ((value / total) * 100).toFixed(1) : 0;
                 return `${percentage}%`;
               }}
               labelLine={true}

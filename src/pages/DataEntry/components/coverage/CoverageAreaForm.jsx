@@ -28,6 +28,7 @@ L.Icon.Default.mergeOptions({
 const LOCATION_FIELD_KEYS = {
   province: "spatial.province-name",
   district: "spatial.district",
+  municipalityType: "spatial.municipality-type",
   municipalityName: "spatial.municipality-name",
   coverageArea: "spatial.coverage-area-geojson",
   gpsLatitude: "spatial.gps-latitude",
@@ -51,6 +52,10 @@ export default function CoverageAreaForm({
   const [isDrawing, setIsDrawing] = useState(false);
   const [drawModeEnabled, setDrawModeEnabled] = useState(false);
   const [drawingComplete, setDrawingComplete] = useState(false);
+  const [savedDrawingStats, setSavedDrawingStats] = useState({
+    lines: 0,
+    points: 0,
+  });
   const [coverageAreaInfo, setCoverageAreaInfo] = useState(
     coverageAreaGeoJson ? "✓ Coverage area selected" : null,
   );
@@ -281,54 +286,28 @@ export default function CoverageAreaForm({
         return;
       }
 
-      const geoJson = {
+      const normalizeCoverageGeoJson = (inputFeatures) => ({
         type: "FeatureCollection",
-        features: features,
-      };
-
-      // Normalize coverage geometry before sending to backend.
-      // Many backends expect MultiPolygon even if user drawn a Polygon.
-      const normalizeCoverageGeoJsonForBackend = (input) => {
-        if (!input || !Array.isArray(input.features)) {
-          return input;
-        }
-
-        const normalizedFeatures = input.features
+        features: inputFeatures
           .map((feature) => {
-            if (!feature || !feature.geometry) return null;
+            if (!feature?.geometry) return null;
 
             const { type, coordinates } = feature.geometry;
+            if (!["Polygon", "MultiPolygon"].includes(type)) return null;
 
-            // Leaflet polygon -> GeoJSON Polygon.
-            if (type === "Polygon") {
-              // Polygon coordinates: [ [lng,lat], ... ]
-              // MultiPolygon coordinates: [ [ [lng,lat], ... ] ]
-              return {
-                ...feature,
-                geometry: {
-                  type: "MultiPolygon",
-                  coordinates: [coordinates],
-                },
-              };
-            }
-
-            // Already MultiPolygon
-            if (type === "MultiPolygon") {
-              return feature;
-            }
-
-            // Unsupported geometry types: drop to avoid backend crashes
-            return null;
+            return {
+              type: "Feature",
+              properties: feature.properties || {},
+              geometry: {
+                type,
+                coordinates,
+              },
+            };
           })
-          .filter(Boolean);
+          .filter(Boolean),
+      });
 
-        return {
-          ...input,
-          features: normalizedFeatures,
-        };
-      };
-
-      const normalizedGeoJson = normalizeCoverageGeoJsonForBackend(geoJson);
+      const normalizedGeoJson = normalizeCoverageGeoJson(features);
 
       if (
         !normalizedGeoJson.features ||
@@ -342,10 +321,28 @@ export default function CoverageAreaForm({
 
       onFieldChange(
         LOCATION_FIELD_KEYS.coverageArea,
-        JSON.stringify(normalizedGeoJson),
+        normalizedGeoJson,
       );
+      const nextDrawingStats = {
+        lines: normalizedGeoJson.features.length,
+        points: normalizedGeoJson.features.reduce((total, feature) => {
+          const { type, coordinates } = feature.geometry;
+          if (type === "Polygon") {
+            return total + (coordinates[0]?.length || 0);
+          }
+          if (type === "MultiPolygon") {
+            return total + coordinates.reduce(
+              (polygonTotal, polygon) =>
+                polygonTotal + (polygon[0]?.length || 0),
+              0,
+            );
+          }
+          return total;
+        }, 0),
+      };
+      setSavedDrawingStats(nextDrawingStats);
       setCoverageAreaInfo(
-        `✓ Coverage area saved for ${municipalityName} (${drawingStats.lines} area(s))`,
+        `✓ Coverage area saved for ${municipalityName} (${nextDrawingStats.lines} area(s))`,
       );
       setDrawingComplete(true);
       if (map.current && drawnItems.current.length > 0) {
@@ -400,6 +397,10 @@ export default function CoverageAreaForm({
       console.error("Cleanup error:", error);
       setIsDrawing(false);
     }
+  };
+
+  const closeDrawingSuccess = () => {
+    cleanup();
   };
 
   const handleDeleteAll = () => {
@@ -471,7 +472,8 @@ export default function CoverageAreaForm({
           municipalityName={municipalityName}
           district={district}
           province={province}
-          drawingStats={drawingStats}
+          drawingStats={savedDrawingStats}
+          onClose={closeDrawingSuccess}
         />
       );
     }

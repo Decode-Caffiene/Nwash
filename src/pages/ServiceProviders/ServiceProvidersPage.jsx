@@ -1,6 +1,7 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Badge from "../../components/common/Badge";
 import Loader from "../../components/common/Loader";
+import Modal from "../../components/common/Modal";
 import { getServiceProviders } from "../../api/serviceProviderApi";
 import useFetch from "../../hooks/useFetch";
 
@@ -14,7 +15,136 @@ const formatScore = (value) => {
   return Number(value).toFixed(1);
 };
 
+const formatLabel = (label) =>
+  label
+    .replace(/_/g, " ")
+    .replace(/-/g, " ")
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const isPlainObject = (value) =>
+  value !== null && typeof value === "object" && !Array.isArray(value);
+
+const formatDetailValue = (value) => {
+  if (value === null || value === undefined || value === "") return "N/A";
+  if (typeof value === "boolean") return value ? "Yes" : "No";
+  if (Array.isArray(value)) {
+    if (value.length === 0) return "N/A";
+    return value
+      .map((item) => (isPlainObject(item) ? JSON.stringify(item) : item))
+      .join(", ");
+  }
+  return String(value);
+};
+
+const ProviderDetailGrid = ({ title, entries }) => {
+  const visibleEntries = entries.filter(
+    ([, value]) => !isPlainObject(value) && !Array.isArray(value),
+  );
+
+  if (visibleEntries.length === 0) return null;
+
+  return (
+    <section>
+      <h3 className="text-sm font-semibold uppercase tracking-wide text-brand-primary">
+        {title}
+      </h3>
+      <div className="mt-3 grid gap-3 sm:grid-cols-2">
+        {visibleEntries.map(([key, value]) => (
+          <div
+            key={key}
+            className="rounded-lg border border-surface-border bg-surface px-3 py-2"
+          >
+            <p className="text-xs font-medium uppercase tracking-wide text-text-secondary">
+              {formatLabel(key)}
+            </p>
+            <p className="mt-1 break-words text-sm font-semibold text-text-primary">
+              {formatDetailValue(value)}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+const ProviderDetailsModal = ({ provider, onClose }) => {
+  if (!provider) return null;
+
+  const topLevelEntries = Object.entries(provider).filter(
+    ([key]) => !key.startsWith("__"),
+  );
+  const primaryEntries = topLevelEntries.filter(
+    ([, value]) => !isPlainObject(value) && !Array.isArray(value),
+  );
+  const groupedEntries = topLevelEntries.filter(([, value]) =>
+    isPlainObject(value),
+  );
+  const arrayEntries = topLevelEntries.filter(([, value]) =>
+    Array.isArray(value),
+  );
+
+  return (
+    <Modal
+      isOpen={Boolean(provider)}
+      onClose={onClose}
+      title={displayValue(provider.WSUC_Name)}
+      className="max-w-4xl"
+    >
+      <div className="space-y-6">
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="info">ID: {displayValue(provider.WSUC_ID)}</Badge>
+          <Badge
+            variant={
+              provider.Service_Coverage_Prerequisite === "Yes"
+                ? "success"
+                : "default"
+            }
+          >
+            Coverage: {displayValue(provider.Service_Coverage_Prerequisite)}
+          </Badge>
+        </div>
+
+        <ProviderDetailGrid title="Provider Details" entries={primaryEntries} />
+
+        {groupedEntries.map(([groupName, groupValue]) => (
+          <ProviderDetailGrid
+            key={groupName}
+            title={formatLabel(groupName)}
+            entries={Object.entries(groupValue)}
+          />
+        ))}
+
+        {arrayEntries.length > 0 && (
+          <section>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-brand-primary">
+              Additional Records
+            </h3>
+            <div className="mt-3 space-y-3">
+              {arrayEntries.map(([key, value]) => (
+                <div
+                  key={key}
+                  className="rounded-lg border border-surface-border bg-surface px-3 py-2"
+                >
+                  <p className="text-xs font-medium uppercase tracking-wide text-text-secondary">
+                    {formatLabel(key)}
+                  </p>
+                  <p className="mt-1 break-words text-sm font-semibold text-text-primary">
+                    {formatDetailValue(value)}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+    </Modal>
+  );
+};
+
 function ServiceProvidersPage() {
+  const [selectedProvider, setSelectedProvider] = useState(null);
   const { data, loading, error } = useFetch(
     getServiceProviders,
     [],
@@ -121,7 +251,16 @@ function ServiceProvidersPage() {
                 return (
                   <article
                     key={provider._id || provider.WSUC_ID}
-                    className="rounded-lg border border-surface-border bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => setSelectedProvider(provider)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        setSelectedProvider(provider);
+                      }
+                    }}
+                    className="cursor-pointer rounded-lg border border-surface-border bg-white p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-brand-primary/40"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
@@ -187,6 +326,11 @@ function ServiceProvidersPage() {
               })}
             </div>
           </section>
+
+          <ProviderDetailsModal
+            provider={selectedProvider}
+            onClose={() => setSelectedProvider(null)}
+          />
         </>
       )}
     </div>

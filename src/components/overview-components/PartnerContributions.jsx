@@ -2,7 +2,7 @@ import React from "react";
 
 export default function PartnerContributions({ partners }) {
   return (
-    <div className="bg-white p-6 rounded-xl border shadow-sm">
+    <div className="bg-white p-6 rounded-xl border shadow-sm w-full">
       <h3 className="text-base font-bold text-slate-900">
         Development Partner Contributions
       </h3>
@@ -11,9 +11,9 @@ export default function PartnerContributions({ partners }) {
         Key supporting organizations
       </p>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 justify-items-stretch">
         {partners.map((p, i) => (
-          <div key={i} className="border rounded-xl p-4 space-y-2">
+          <div key={i} className="border rounded-xl p-4 space-y-2 h-full">
             <h4 className="text-sm font-bold">{p.name}</h4>
 
             <div className="text-xs flex justify-between">

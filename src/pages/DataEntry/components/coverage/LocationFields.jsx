@@ -15,6 +15,7 @@ import CoverageAreaPreview from "./CoverageAreaPreview";
 const LOCATION_FIELD_KEYS = {
   province: "spatial.province-name",
   district: "spatial.district",
+  municipalityType: "spatial.municipality-type",
   municipalityName: "spatial.municipality-name",
   coverageArea: "spatial.coverage-area-geojson",
   gpsLatitude: "spatial.gps-latitude",

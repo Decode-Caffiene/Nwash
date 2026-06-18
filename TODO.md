@@ -1,3 +1,6 @@
-# TODO
+- [ ] Inspect current OverviewPage and DevelopmentPartnersPage for footer usage.
+- [ ] Create an edit plan to move/add footer ONLY to OverviewPage.
+- [x] Update OverviewPage to render <Footer /> at the bottom.
+- [ ] Ensure DevelopmentPartnersPage does NOT render <Footer />.
 
-- [x] Normalize coverage GeoJSON before submitting to backend to reduce 500 errors.
+- [ ] Run lint/build (npm test/build) to verify compilation.

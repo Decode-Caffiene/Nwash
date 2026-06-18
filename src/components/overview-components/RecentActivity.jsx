@@ -2,14 +2,10 @@ import React from "react";
 
 export default function RecentActivity({ activities }) {
   return (
-    <div className="bg-white p-6 rounded-xl border shadow-sm">
-      <h3 className="text-base font-bold text-slate-900">
-        Recent Activity
-      </h3>
+    <div className="bg-white p-6 rounded-xl border shadow-sm w-full">
+      <h3 className="text-base font-bold text-slate-900">Recent Activity</h3>
 
-      <p className="text-xs text-slate-500 mb-5">
-        Latest updates
-      </p>
+      <p className="text-xs text-slate-500 mb-5">Latest updates</p>
 
       <div className="space-y-4">
         {activities.map((a) => (

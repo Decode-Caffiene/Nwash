@@ -1,7 +1,20 @@
-import React from "react";
+import { useEffect } from "react";
 import { CheckCircle } from "lucide-react";
 
-export default function DrawingSuccess({ municipalityName, district, province, drawingStats }) {
+import Button from "../../../../components/common/Button";
+
+export default function DrawingSuccess({
+  municipalityName,
+  district,
+  province,
+  drawingStats,
+  onClose,
+}) {
+  useEffect(() => {
+    const timer = window.setTimeout(onClose, 1200);
+    return () => window.clearTimeout(timer);
+  }, [onClose]);
+
   return (
     <section className="stat-card">
       <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
@@ -31,7 +44,12 @@ export default function DrawingSuccess({ municipalityName, district, province, d
             </div>
           </div>
         </div>
-        <p className="text-xs text-text-secondary">Closing in a moment...</p>
+        <Button type="button" onClick={onClose}>
+          Back to form
+        </Button>
+        <p className="mt-3 text-xs text-text-secondary">
+          Closing in a moment...
+        </p>
       </div>
     </section>
   );
