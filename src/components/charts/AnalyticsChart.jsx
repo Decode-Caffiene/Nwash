@@ -78,7 +78,7 @@ export default function AnalyticsChart({ chartData }) {
 
           {/* POOR (PINK - split into 2 non-overlapping blocks) */}
 
-          {/* top-right part */}
+          {/* bottom-right part (x 30-50, y 0-30) */}
           <ReferenceArea
             x1={30}
             x2={50}
@@ -88,19 +88,19 @@ export default function AnalyticsChart({ chartData }) {
             fillOpacity={0.9}
           />
 
-          {/* bottom-left part */}
+          {/* left-middle part (x 0-50, y 30-52) */}
           <ReferenceArea
             x1={0}
             x2={50}
             y1={30}
-            y2={50}
+            y2={52}
             fill="#ec4899"
             fillOpacity={0.9}
           />
           <ReferenceArea
             x1={0}
             x2={50}
-            y1={50}
+            y1={52}
             y2={100}
             fill="#475569"
             fillOpacity={0.85}
@@ -109,14 +109,14 @@ export default function AnalyticsChart({ chartData }) {
             x1={50}
             x2={100}
             y1={0}
-            y2={50}
+            y2={52}
             fill="#15803d"
             fillOpacity={0.85}
           />
           <ReferenceArea
             x1={50}
             x2={100}
-            y1={50}
+            y1={52}
             y2={100}
             fill="#d5d906"
             fillOpacity={0.85}
@@ -162,9 +162,9 @@ export default function AnalyticsChart({ chartData }) {
             strokeDasharray="3 3"
             opacity={0.9}
           />
-          {/* LAYER 4: MAIN 50% BREAK DIVISION LINES */}
+          {/* LAYER 4: MAIN DIVISION LINES */}
           <ReferenceLine x={50} stroke="#1f2937" strokeWidth={3} />
-          <ReferenceLine y={50} stroke="#1f2937" strokeWidth={3} />
+          <ReferenceLine y={52} stroke="#1f2937" strokeWidth={3} />
 
           {/* LAYER 5: TEXT LABELS OVERLAYS */}
           <ReferenceArea

@@ -2,7 +2,12 @@ import React, { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Edit3, X } from "lucide-react";
-import { getMunicipalityBoundary, displayBoundaryOnMap, fitMapToLayer } from "./boundaryUtils";
+import {
+  getMunicipalityBoundary,
+  getDistrictBoundary,
+  displayBoundaryOnMap,
+  fitMapToLayer,
+} from "./boundaryUtils";
 
 export default function CoverageAreaPreview({
   geojson,
@@ -17,7 +22,7 @@ export default function CoverageAreaPreview({
   const boundaryLayer = useRef(null);
 
   useEffect(() => {
-    if (!geojson || !mapContainer.current) return;
+    if (!mapContainer.current) return;
 
     try {
       if (map.current) {
@@ -31,35 +36,63 @@ export default function CoverageAreaPreview({
         attribution: "© OpenStreetMap",
       }).addTo(map.current);
 
-      // Display boundary
-      const boundaryGeoJSON = getMunicipalityBoundary(district, municipalityName);
+      // Display boundary (municipality preferred; fallback to district)
+      const municipalityBoundaryGeoJSON = getMunicipalityBoundary(
+        district,
+        municipalityName,
+      );
+      const boundaryGeoJSON =
+        municipalityBoundaryGeoJSON || getDistrictBoundary(district);
+
       if (boundaryGeoJSON) {
-        boundaryLayer.current = displayBoundaryOnMap(map.current, boundaryGeoJSON);
+        boundaryLayer.current = displayBoundaryOnMap(
+          map.current,
+          boundaryGeoJSON,
+        );
       }
 
-      // Display drawn coverage area
-      let coverage;
-      if (typeof geojson === "string") {
-        coverage = JSON.parse(geojson);
-      } else {
-        coverage = geojson;
+      // Display drawn coverage area (only if geojson exists and parses)
+      let coverage = null;
+      if (geojson) {
+        try {
+          coverage =
+            typeof geojson === "string" ? JSON.parse(geojson) : geojson;
+        } catch {
+          coverage = null;
+        }
       }
 
-      geoJsonLayer.current = L.geoJSON(coverage, {
-        style: {
-          color: "#0066cc",
-          weight: 3,
-          opacity: 0.8,
-          fillColor: "#0066cc",
-          fillOpacity: 0.2,
-        },
-      }).addTo(map.current);
+      if (coverage) {
+        geoJsonLayer.current = L.geoJSON(coverage, {
+          style: {
+            color: "#0066cc",
+            weight: 3,
+            opacity: 0.8,
+            fillColor: "#0066cc",
+            fillOpacity: 0.2,
+          },
+        }).addTo(map.current);
+      }
 
-      // Fit map to show both boundary and drawn area
-      const group = new L.FeatureGroup([boundaryLayer.current, geoJsonLayer.current].filter(Boolean));
-      const bounds = group.getBounds();
-      if (bounds.isValid()) {
-        map.current.fitBounds(bounds, { padding: [50, 50] });
+      // Fit map
+      // - If coverage exists: fit to both boundary + coverage
+      // - If coverage doesn't exist: fit only to boundary (so district/municipalities are visible)
+      const hasCoverage = Boolean(geoJsonLayer.current);
+      const hasBoundary = Boolean(boundaryLayer.current);
+
+      if (hasCoverage) {
+        const group = new L.FeatureGroup(
+          [boundaryLayer.current, geoJsonLayer.current].filter(Boolean),
+        );
+        const bounds = group.getBounds();
+        if (bounds && bounds.isValid()) {
+          map.current.fitBounds(bounds, { padding: [50, 50] });
+        }
+      } else if (hasBoundary) {
+        const bounds = boundaryLayer.current.getBounds?.();
+        if (bounds && bounds.isValid()) {
+          map.current.fitBounds(bounds, { padding: [50, 50] });
+        }
       }
     } catch (error) {
       console.error("Error displaying coverage area preview:", error);
@@ -76,7 +109,9 @@ export default function CoverageAreaPreview({
   return (
     <div className="rounded-lg border border-blue-300 overflow-hidden bg-white">
       <div className="flex items-center justify-between bg-blue-50 px-4 py-3 border-b border-blue-200">
-        <h3 className="font-semibold text-blue-900 text-sm">Coverage Area Preview</h3>
+        <h3 className="font-semibold text-blue-900 text-sm">
+          Coverage Area Preview
+        </h3>
         <div className="flex gap-2">
           <button
             onClick={onEdit}

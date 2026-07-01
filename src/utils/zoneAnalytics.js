@@ -11,46 +11,62 @@ export const ZONE_CATEGORIES = {
     bgColor: "bg-red-50",
     borderColor: "border-red-200",
     textColor: "text-red-700",
+    // Exclusive upper bounds: x < 30, y < 30
+    isInZone: (x, y) => x >= 0 && x < 30 && y >= 0 && y < 30,
   },
   POOR: {
     name: "POOR",
     xRange: [30, 50],
-    yRange: [0, 30],
+    yRange: [0, 31],
     color: "#ec4899",
     bgColor: "bg-pink-50",
     borderColor: "border-pink-200",
     textColor: "text-pink-700",
+    // POOR is an L-shape: part 1 (x 30-50, y 0-30) + part 2 (x 0-50, y 30-52)
+    // Exclusive upper bound y < 52 to avoid overlap with INACTIVE
+    isInZone: (x, y) =>
+      (x >= 30 && x < 50 && y >= 0 && y < 30) ||
+      (x >= 0 && x < 50 && y >= 30 && y < 52),
   },
   INACTIVE: {
     name: "INACTIVE",
     xRange: [0, 50],
-    yRange: [50, 100],
+    yRange: [52, 100],
     color: "#475569",
     bgColor: "bg-slate-50",
     borderColor: "border-slate-200",
     textColor: "text-slate-700",
+    // Exclusive upper bound x < 50 to match chart visual (ReferenceArea x2=50)
+    isInZone: (x, y) => x >= 0 && x < 50 && y >= 52 && y <= 100,
   },
   ACTIVE: {
     name: "ACTIVE",
     xRange: [50, 100],
-    yRange: [0, 50],
+    yRange: [0, 52],
     color: "#15803d",
     bgColor: "bg-green-50",
     borderColor: "border-green-200",
     textColor: "text-green-700",
+    // Inclusive bound: y <= 52 extends past the 50% SPI line
+    isInZone: (x, y) => x >= 50 && x <= 100 && y >= 0 && y <= 52,
   },
   IMPROVING: {
     name: "IMPROVING",
     xRange: [50, 100],
-    yRange: [50, 100],
+    yRange: [52, 100],
     color: "#d5d906",
     bgColor: "bg-yellow-50",
     borderColor: "border-yellow-200",
     textColor: "text-yellow-700",
+    // y >= 52 — extends past the 50% SPI line
+    isInZone: (x, y) => x >= 50 && x <= 100 && y >= 52 && y <= 100,
   },
 };
 
 export const isInZone = (x, y, zoneCategory) => {
+  if (zoneCategory.isInZone) {
+    return zoneCategory.isInZone(x, y);
+  }
   const [xMin, xMax] = zoneCategory.xRange;
   const [yMin, yMax] = zoneCategory.yRange;
   return x >= xMin && x <= xMax && y >= yMin && y <= yMax;
@@ -69,14 +85,9 @@ export const categorizeProviders = (chartData) => {
     const x = provider.x;
     const y = provider.y;
 
-    // Check in order of priority for overlapping zones
     if (isInZone(x, y, ZONE_CATEGORIES.VERY_POOR)) {
       categorized.VERY_POOR.push(provider);
     } else if (isInZone(x, y, ZONE_CATEGORIES.POOR)) {
-      // POOR part 1: x 30-50, y 0-30
-      categorized.POOR.push(provider);
-    } else if (x >= 0 && x <= 50 && y >= 30 && y <= 50) {
-      // POOR part 2: x 0-50, y 30-50
       categorized.POOR.push(provider);
     } else if (isInZone(x, y, ZONE_CATEGORIES.INACTIVE)) {
       categorized.INACTIVE.push(provider);

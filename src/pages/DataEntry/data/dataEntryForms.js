@@ -23,7 +23,7 @@ export const dataEntryForms = [
     ],
     sections: [
       {
-        title: "Service Coverage",
+        title: "Kpi 1",
         questions: [
           "Does a business plan exist? (Y/N)",
           "Number of households served by the WSUC (specify number)",
@@ -31,14 +31,14 @@ export const dataEntryForms = [
         ],
       },
       {
-        title: "Adequacy",
+        title: "Kpi 2",
         questions: [
           "Total volume of water billed to residential customers?",
           "Total number of population served?",
         ],
       },
       {
-        title: "Water Quality",
+        title: "Kpi 3",
         questions: [
           "Is there a Lab report? (Y/N)",
           "Water quality test conducted or not? (Y/N)",
@@ -48,14 +48,14 @@ export const dataEntryForms = [
         ],
       },
       {
-        title: "Reliability",
+        title: "Kpi 4",
         questions: [
           "Mode of water supply? (Continuous / Intermittent)",
           "Hours of water supply in a day?",
         ],
       },
       {
-        title: "Non-Revenue Water",
+        title: "Kpi 5",
         questions: [
           "Is the logbook maintained for pumping hours?",
           "Flow measurement via pump curve? (Information about power (HP) and Head)",
@@ -66,7 +66,7 @@ export const dataEntryForms = [
         ],
       },
       {
-        title: "Operating Ratio",
+        title: "Kpi 6",
         questions: [
           "Is there an annual audit report?",
           "Total annual operation and maintenance (O&M) costs?",
@@ -74,14 +74,14 @@ export const dataEntryForms = [
         ],
       },
       {
-        title: "Metering Ratio",
+        title: "Kpi 7",
         questions: [
           "Total functional metered connections?",
           "Total number of metered connections?",
         ],
       },
       {
-        title: "Grievances Addressal",
+        title: "Kpi 8",
         questions: [
           "Is a log book maintained to record consumer complaints and actions taken in response to them?",
           "Grievance addressal mechanism exists? (Y/N)",
@@ -113,7 +113,7 @@ export const dataEntryForms = [
     ],
     sections: [
       {
-        title: "Service Coverage",
+        title: "Kpi 1",
         questions: [
           "Does a business plan exist? (Y/N)",
           "Number of households served by the WSUC (specify number)",
@@ -121,14 +121,14 @@ export const dataEntryForms = [
         ],
       },
       {
-        title: "Adequacy",
+        title: "Kpi 2",
         questions: [
           "Total volume of water billed to residential customers?",
           "Total number of population served?",
         ],
       },
       {
-        title: "Water Quality",
+        title: "Kpi 3",
         questions: [
           "Is there a Lab report? (Y/N)",
           "Water quality test conducted or not? (Y/N)",
@@ -138,14 +138,14 @@ export const dataEntryForms = [
         ],
       },
       {
-        title: "Reliability",
+        title: "Kpi 4",
         questions: [
           "Mode of water supply? (Continuous / Intermittent)",
           "Hours of water supply in a day?",
         ],
       },
       {
-        title: "Non-Revenue Water",
+        title: "Kpi 5",
         questions: [
           "Is the logbook maintained for pumping hours?",
           "Flow measurement via pump curve? (Information about power (HP) and Head)",
@@ -156,7 +156,7 @@ export const dataEntryForms = [
         ],
       },
       {
-        title: "Operating Ratio",
+        title: "Kpi 6",
         questions: [
           "Is there an annual audit report?",
           "Total annual operation and maintenance (O&M) costs?",
@@ -164,14 +164,14 @@ export const dataEntryForms = [
         ],
       },
       {
-        title: "Metering Ratio",
+        title: "Kpi 7",
         questions: [
           "Total functional metered connections?",
           "Total number of metered connections?",
         ],
       },
       {
-        title: "Grievances Addressal",
+        title: "Kpi 8",
         questions: [
           "Is a log book maintained to record consumer complaints and actions taken in response to them?",
           "Grievance addressal mechanism exists? (Y/N)",

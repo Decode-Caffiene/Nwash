@@ -20,6 +20,41 @@ const ALL_PROVINCES = [
   "Sudurpashchim",
 ];
 
+// Some backends return the 7 provinces with slightly different spellings.
+// Normalize them so bars don't show up as 0.
+const PROVINCE_NAME_NORMALIZATION = {
+  Sudurpaschim: "Sudurpashchim",
+  Sudurpashchim: "Sudurpashchim",
+
+  // Karnali variants (common spellings/encodings across datasets)
+  Karnali: "Karnali",
+  "Karnali Province": "Karnali",
+  "Karnali प्रदेश": "Karnali",
+  कर्णाली: "Karnali",
+  "कर्णाली प्रदेश": "Karnali",
+  "कर्णाली प्रदेश्": "Karnali",
+};
+
+function normalizeProvinceName(raw) {
+  if (!raw) return raw;
+
+  // Keep Devanagari as-is, but normalize whitespace/case for latin script.
+  const trimmed = String(raw).trim().replace(/\s+/g, " ");
+
+  // If latin script: normalize casing
+  const latinNormalized = trimmed.replace(/\bprovince\b/i, "");
+
+  // Remove common suffixes like "Province" or "प्रदेश" (both scripts)
+  const deNormalized = latinNormalized.replace(/\bप्रदेश\b/gi, "");
+
+  // Try direct map first
+  return (
+    PROVINCE_NAME_NORMALIZATION[trimmed] ||
+    PROVINCE_NAME_NORMALIZATION[deNormalized] ||
+    trimmed
+  );
+}
+
 function ProvinceTooltip({ active, payload }) {
   if (!active || !payload?.length) return null;
 
@@ -61,7 +96,8 @@ export default function DistrictChart({
 
     // Fill in actual data
     (data || []).forEach((cur) => {
-      const province = cur?.Province;
+      const rawProvince = cur?.Province;
+      const province = PROVINCE_NAME_NORMALIZATION[rawProvince] || rawProvince;
       if (province && aggregated.hasOwnProperty(province)) {
         aggregated[province] =
           (aggregated[province] || 0) + (cur?.Operators || 0);

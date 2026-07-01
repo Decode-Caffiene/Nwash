@@ -8,8 +8,8 @@ import LocationFields from "./LocationFields";
 import { setupCanvasDrawing } from "./drawingUtils";
 import { setupPolygonDrawing } from "./polygonDrawingUtils";
 import {
-  getMunicipalityBoundary,
-  getDistrictBoundary,
+  getMunicipalityBoundaryAsync,
+  getDistrictBoundaryAsync,
   displayBoundaryOnMap,
   fitMapToLayer,
 } from "./boundaryUtils";
@@ -90,7 +90,7 @@ export default function CoverageAreaForm({
 
     let cleanupCanvasListeners = null;
 
-    const initMap = () => {
+    const initMap = async () => {
       try {
         setMapError(null);
 
@@ -114,12 +114,12 @@ export default function CoverageAreaForm({
         // Load and display selected boundary, then zoom to it
         // Prefer municipality boundary (within selected district).
         // If municipality match fails, fallback to district boundary.
-        const municipalityGeoJSON = getMunicipalityBoundary(
+        const municipalityGeoJSON = await getMunicipalityBoundaryAsync(
           district,
           municipalityName,
         );
         const boundaryGeoJSON =
-          municipalityGeoJSON || getDistrictBoundary(district);
+          municipalityGeoJSON || (await getDistrictBoundaryAsync(district));
 
         if (boundaryGeoJSON) {
           boundaryLayer.current = displayBoundaryOnMap(
@@ -319,10 +319,7 @@ export default function CoverageAreaForm({
         return;
       }
 
-      onFieldChange(
-        LOCATION_FIELD_KEYS.coverageArea,
-        normalizedGeoJson,
-      );
+      onFieldChange(LOCATION_FIELD_KEYS.coverageArea, normalizedGeoJson);
       const nextDrawingStats = {
         lines: normalizedGeoJson.features.length,
         points: normalizedGeoJson.features.reduce((total, feature) => {
@@ -331,10 +328,13 @@ export default function CoverageAreaForm({
             return total + (coordinates[0]?.length || 0);
           }
           if (type === "MultiPolygon") {
-            return total + coordinates.reduce(
-              (polygonTotal, polygon) =>
-                polygonTotal + (polygon[0]?.length || 0),
-              0,
+            return (
+              total +
+              coordinates.reduce(
+                (polygonTotal, polygon) =>
+                  polygonTotal + (polygon[0]?.length || 0),
+                0,
+              )
             );
           }
           return total;

@@ -1,80 +1,60 @@
+import { Youtube, Facebook } from "lucide-react";
 import agendaImg from "../../assets/agenda.jpeg";
-import governLogo from "../../assets/govern.svg";
+import wateraidLogo from "../../assets/wateraid.webp";
 
 export default function Footer() {
   return (
-    <footer className="w-full -mx-6 bg-[rgb(15,23,42)] text-white">
-      <div className="mx-auto max-w-6xl px-6 py-10">
-        <div className="grid gap-8 md:grid-cols-3 md:items-start">
-          {/* Left: Agenda */}
-          <div>
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-widest text-white/80">
-              Agenda
-            </h3>
-            <div className="overflow-hidden rounded-xl border border-white/10 bg-white/5">
-              <img
-                src={agendaImg}
-                alt="Agenda"
-                className="h-44 w-full object-cover"
-              />
-            </div>
+    <footer className="flex flex-wrap items-center justify-between gap-4 border-t border-surface-border bg-[rgb(15,23,42)] px-6 py-4">
+      <div className="flex flex-col">
+        <span className="text-xs font-semibold uppercase tracking-widest text-text-secondary">
+          Supported by
+        </span>
+        <div className="mt-2 flex items-center gap-6">
+          <div className="flex items-center gap-2">
+            <img
+              src={agendaImg}
+              alt="Agenda for Change"
+              className="h-8 w-auto object-contain"
+            />
+            <span className="whitespace-nowrap text-sm font-medium text-text-primary">
+              Agenda for Change
+            </span>
           </div>
-
-          {/* Middle: Government + Ministry */}
-          <div className="flex flex-col">
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-widest text-white/80">
-              Government of Nepal
-            </h3>
-            <div className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
-              <img
-                src={governLogo}
-                alt="Government"
-                className="h-12 w-12 flex-shrink-0 object-contain"
-              />
-              <div>
-                {/* Ministry text */}
-                <p className="text-base font-bold leading-tight">
-                  Ministry of Water Supply
-                </p>
-                <p className="mt-1 text-sm text-white/75">
-                  Department of Water Supply and Sewerage Management
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Right: Social links */}
-          <div className="flex flex-col">
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-widest text-white/80">
-              Social
-            </h3>
-            <div className="flex flex-col gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
-              <a
-                className="inline-flex items-center gap-2 text-sm font-semibold text-white/90 hover:text-white"
-                href="#"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span aria-hidden>▶</span>
-                YouTube
-              </a>
-              <a
-                className="inline-flex items-center gap-2 text-sm font-semibold text-white/90 hover:text-white"
-                href="#"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span aria-hidden>f</span>
-                Facebook
-              </a>
-            </div>
+          <div className="flex items-center gap-2">
+            <img
+              src={wateraidLogo}
+              alt="Water Aid"
+              className="h-8 w-auto object-contain"
+            />
+            <span className="whitespace-nowrap text-sm font-medium text-text-primary">
+              Water Aid
+            </span>
           </div>
         </div>
+      </div>
 
-        <div className="mt-10 border-t border-white/10 pt-6">
-          <p className="text-xs text-white/60">
-            © {new Date().getFullYear()} DWSSM Dashboard. All rights reserved.
-          </p>
+      <div className="flex flex-col items-end">
+        <span className="text-xs font-semibold uppercase tracking-widest text-text-secondary">
+          Contact Us
+        </span>
+        <p className="mt-1 text-sm text-text-primary">+977-1-1234567</p>
+        <div className="mt-1 flex items-center gap-3">
+          <a
+            href="#"
+            target="_blank"
+            rel="noreferrer"
+            className="text-text-secondary transition hover:text-brand-primary"
+          >
+            <Youtube size={18} />
+          </a>
+          <a
+            href="#"
+            target="_blank"
+            rel="noreferrer"
+            className="text-text-secondary transition hover:text-brand-primary"
+          >
+            <Facebook size={18} />
+          </a>
         </div>
       </div>
     </footer>

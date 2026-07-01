@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
+import Footer from "./Footer";
 
 function Layout() {
   return (
@@ -12,6 +13,7 @@ function Layout() {
           <main className="flex-1 overflow-y-auto bg-surface px-6 py-6">
             <Outlet />
           </main>
+          <Footer />
         </div>
       </div>
     </div>

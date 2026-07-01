@@ -35,24 +35,24 @@ export const fieldTranslations = {
 
 export const sectionTranslations = {
   eng: {
-    "Service Coverage": "Service Coverage",
-    "Adequacy": "Adequacy",
-    "Water Quality": "Water Quality",
-    "Reliability": "Reliability",
-    "Non-Revenue Water": "Non-Revenue Water",
-    "Operating Ratio": "Operating Ratio",
-    "Metering Ratio": "Metering Ratio",
-    "Grievances Addressal": "Grievances Addressal",
+    "Kpi 1": "Kpi 1",
+    "Kpi 2": "Kpi 2",
+    "Kpi 3": "Kpi 3",
+    "Kpi 4": "Kpi 4",
+    "Kpi 5": "Kpi 5",
+    "Kpi 6": "Kpi 6",
+    "Kpi 7": "Kpi 7",
+    "Kpi 8": "Kpi 8",
   },
   nep: {
-    "Service Coverage": "सेवा कभरेज",
-    "Adequacy": "पर्याप्तता",
-    "Water Quality": "पानीको गुणस्तर",
-    "Reliability": "विश्वसनीयता",
-    "Non-Revenue Water": "गैर-राजस्व पानी",
-    "Operating Ratio": "सञ्चालन अनुपात",
-    "Metering Ratio": "मीटरिङ अनुपात",
-    "Grievances Addressal": "शिकायत समाधान",
+    "Kpi 1": "Kpi 1",
+    "Kpi 2": "Kpi 2",
+    "Kpi 3": "Kpi 3",
+    "Kpi 4": "Kpi 4",
+    "Kpi 5": "Kpi 5",
+    "Kpi 6": "Kpi 6",
+    "Kpi 7": "Kpi 7",
+    "Kpi 8": "Kpi 8",
   }
 };
 

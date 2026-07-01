@@ -3,6 +3,11 @@ import { X, Save, Trash2 } from "lucide-react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import Button from "../../../../components/common/Button";
+import {
+  getDistrictBoundaryAsync,
+  getMunicipalityBoundaryAsync,
+} from "../../utils/locationOptions";
+
 
 // Fix Leaflet marker icons
 delete L.Icon.Default.prototype._getIconUrl;
@@ -20,6 +25,14 @@ export default function CoverageAreaMap({
   onClose,
   onSave,
   initialGeometry = null,
+  province = "",
+  district = "",
+  municipalityType = "",
+  municipalityName = "",
+  // overlays municipality boundary before user draws
+  overlayMunicipalityBoundaryBeforeDraw = true,
+  // backward compat: if provided, it takes precedence over overlayMunicipalityBoundaryBeforeDraw
+  showMunicipalityBoundary = true,
 }) {
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -56,10 +69,54 @@ export default function CoverageAreaMap({
         // Create canvas overlay
         createCanvasOverlay();
 
+        // Optionally show municipality boundary (resolved using geo utilities)
+        // before user draws (requested behavior)
+        const shouldOverlayMunicipalityBoundary =
+          overlayMunicipalityBoundaryBeforeDraw || showMunicipalityBoundary;
+
+        if (
+          shouldOverlayMunicipalityBoundary &&
+          district &&
+          municipalityName
+        ) {
+          try {
+            const municipalityBoundaryGeoJSON =
+              await getMunicipalityBoundaryAsync(district, municipalityName);
+
+            // fallback to district boundary if municipality lookup fails
+            const boundaryGeoJSON =
+              municipalityBoundaryGeoJSON ||
+              (await getDistrictBoundaryAsync(district));
+
+            if (boundaryGeoJSON?.features?.length) {
+              L.geoJSON(boundaryGeoJSON, {
+                style: {
+                  color: "#0066cc",
+                  weight: 3,
+                  opacity: 0.9,
+                  fillColor: "#0066cc",
+                  fillOpacity: 0.12,
+                  dashArray: "5, 3",
+                },
+              }).addTo(map.current);
+
+              // Fit only after boundary is rendered
+              const bounds = L.geoJSON(boundaryGeoJSON).getBounds?.();
+              if (bounds && bounds.isValid()) {
+                map.current.fitBounds(bounds, { padding: [24, 24] });
+              }
+            }
+          } catch (error) {
+            console.error("Error loading municipality boundary:", error);
+          }
+        }
+
+
         // Load initial geometry
         if (initialGeometry) {
           loadGeometry(initialGeometry);
         }
+
 
         setMapInitialized(true);
       } catch (error) {
@@ -70,12 +127,15 @@ export default function CoverageAreaMap({
     // Small delay to ensure DOM is ready
     const timer = setTimeout(setupMap, 100);
     return () => clearTimeout(timer);
-  }, [isOpen, initialGeometry]);
+  }, [isOpen, initialGeometry, district, municipalityName, showMunicipalityBoundary]);
+
 
   const createCanvasOverlay = () => {
     if (!map.current || !mapContainer.current) return;
 
-    const mapElement = mapContainer.current.querySelector(".leaflet-overlay-pane");
+    const mapElement = mapContainer.current.querySelector(
+      ".leaflet-overlay-pane",
+    );
     if (!mapElement) return;
 
     // Remove old canvas if exists
@@ -143,7 +203,8 @@ export default function CoverageAreaMap({
 
     // Handle window resize
     const resizeCanvas = () => {
-      const mapWrapper = mapContainer.current?.querySelector(".leaflet-container");
+      const mapWrapper =
+        mapContainer.current?.querySelector(".leaflet-container");
       if (mapWrapper) {
         newCanvas.width = mapWrapper.offsetWidth;
         newCanvas.height = mapWrapper.offsetHeight;
@@ -240,7 +301,7 @@ export default function CoverageAreaMap({
       0,
       0,
       canvas.current.width,
-      canvas.current.height
+      canvas.current.height,
     );
     const data = imageData.data;
 
@@ -276,7 +337,7 @@ export default function CoverageAreaMap({
         if (map.current.hasLayer(polyline)) {
           map.current.removeLayer(polyline);
           drawnItems.current = drawnItems.current.filter(
-            (item) => item !== polyline
+            (item) => item !== polyline,
           );
           setItemCount(drawnItems.current.length);
         }
@@ -309,7 +370,7 @@ export default function CoverageAreaMap({
           if (map.current && map.current.hasLayer(sublayer)) {
             map.current.removeLayer(sublayer);
             drawnItems.current = drawnItems.current.filter(
-              (item) => item !== sublayer
+              (item) => item !== sublayer,
             );
             setItemCount(drawnItems.current.length);
           }
@@ -378,7 +439,8 @@ export default function CoverageAreaMap({
               Draw Coverage Area
             </h2>
             <p className="text-sm text-gray-600 mt-1">
-              Click and drag on the map to draw the coverage area. Like painting in MS Paint!
+              Click and drag on the map to draw the coverage area. Like painting
+              in MS Paint!
             </p>
           </div>
           <button
@@ -401,8 +463,11 @@ export default function CoverageAreaMap({
           <div className="text-sm text-gray-600">
             {itemCount > 0 ? (
               <p>
-                ✓ <span className="font-semibold">{itemCount}</span> area(s) drawn -
-                <span className="text-blue-600 ml-1">Click on any line to delete</span>
+                ✓ <span className="font-semibold">{itemCount}</span> area(s)
+                drawn -
+                <span className="text-blue-600 ml-1">
+                  Click on any line to delete
+                </span>
               </p>
             ) : (
               <p className="text-gray-500">Draw on the map to start</p>

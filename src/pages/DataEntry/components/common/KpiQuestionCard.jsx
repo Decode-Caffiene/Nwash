@@ -59,8 +59,8 @@ function KpiQuestionCard({
               ? `गेट कीपिङ प्रश्न ${index + 1}`
               : `Gate Keeping Question ${index + 1}`
             : language === "nep"
-              ? `KPI ${index + 1}`
-              : `KPI ${index + 1}`}
+              ? `Question ${index+1}`
+              : `Question ${index+1}`}
         </span>
         <span className="mt-1 block text-sm font-medium text-text-primary">
           {questionTranslations[language][question] || question}
