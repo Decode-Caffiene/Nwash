@@ -1,16 +1,14 @@
 import { useMemo, useState } from "react";
 import { cleanDistrict } from "../utils/geoHelpers";
 
-const glassPanel = {
-  background: "rgba(15,23,42,0.82)",
-  backdropFilter: "blur(12px)",
+const panelStyle = {
+  background: "#1e293b",
 };
 
 const selectStyle = {
-  background: "rgba(15,23,42,0.82)",
+  background: "#1e293b",
   color: "#f1f5f9",
   borderColor: "rgba(255,255,255,0.18)",
-  backdropFilter: "blur(12px)",
 };
 
 const baseCls =
@@ -87,8 +85,8 @@ export default function FilterBar({ projects, muniGeojson, onZoom }) {
     <div className="absolute top-3 left-3 z-[1000] flex items-center gap-2 flex-wrap">
       {/* Label chip */}
       <div
-        className="flex items-center gap-1.5 rounded-lg px-3 py-2 shadow-lg border border-white/10"
-        style={glassPanel}
+        className="flex items-center gap-1.5 rounded-lg px-3 py-2 shadow border border-white/10"
+        style={panelStyle}
       >
         <svg
           className="w-3.5 h-3.5 text-emerald-400 shrink-0"
@@ -162,13 +160,10 @@ export default function FilterBar({ projects, muniGeojson, onZoom }) {
         type="button"
         onClick={handleZoom}
         disabled={!municipality}
-        className="flex items-center gap-1.5 h-9 rounded-lg px-4 text-sm font-bold shadow-lg border border-transparent transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+        className="flex items-center gap-1.5 h-9 rounded-lg px-4 text-sm font-bold shadow border border-transparent transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         style={{
-          background: municipality
-            ? "linear-gradient(135deg,#10b981,#059669)"
-            : "rgba(15,23,42,0.6)",
+          background: municipality ? "#10b981" : "#1e293b",
           color: "#fff",
-          boxShadow: municipality ? "0 4px 16px rgba(16,185,129,0.35)" : "none",
         }}
       >
         <svg

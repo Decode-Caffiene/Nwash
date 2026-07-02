@@ -1,16 +1,23 @@
 import { useCallback, useEffect, useState } from "react";
 import { filterWards } from "../../../api/mapService";
-import { PROVINCE_NAME_TO_NO } from "../utils/mapConstants";
-import { cleanDistrict, normalizeText, parseWardList } from "../utils/geoHelpers";
-import { resolveMuni } from "../utils/muniResolver";
+import {
+  DISTRICT_TO_WARD_KEY,
+  PROVINCE_NAME_TO_NO,
+} from "../utils/mapConstants";
+import {
+  cleanDistrict,
+  cleanMunicipality,
+  normalizeText,
+  parseWardList,
+} from "../utils/geoHelpers";
 
 // Fetches GeoJSON ward boundaries for the currently selected project.
 //
-// Re-runs whenever selectedProject, projectLocations, or muniIndex changes.
+// Re-runs whenever selectedProject or projectLocations changes.
 // Exposes clearWards so the parent can reset when the user dismisses a project.
 //
 // Returns { wardFeatures, wardLoading, wardError, clearWards }
-export function useWardData({ selectedProject, projectLocations, muniIndex }) {
+export function useWardData({ selectedProject, projectLocations }) {
   const [wardFeatures, setWardFeatures] = useState([]);
   const [wardLoading, setWardLoading] = useState(false);
   const [wardError, setWardError] = useState("");
@@ -25,19 +32,18 @@ export function useWardData({ selectedProject, projectLocations, muniIndex }) {
       }
 
       const loc = projectLocations[project._id];
-      const district =
+      const rawDistrict =
         loc?.district ?? cleanDistrict(project.Location?.District_Name);
 
-      // Use the canonical municipality name resolved via the spatial index.
-      // Falls back to raw project value (via resolveMuni) if projectLocations
-      // hasn't been hydrated yet.
-      const municipality =
-        loc?.canonicalMunicipality ??
-        resolveMuni(
-          project.Location?.Municipality_Name ?? "",
-          district,
-          muniIndex,
-        ).canonical;
+      // 8 districts have different spellings between the DB and the wards
+      // GeoJSON (e.g. "Makwanpur" in the DB vs "MAKAWANPUR" in the dataset).
+      const district = DISTRICT_TO_WARD_KEY[rawDistrict] ?? rawDistrict;
+
+      // cleanMunicipality trims and applies MUNI_CORRECTIONS, the same path
+      // used by resolveMuni() for marker placement — keeps both in sync.
+      const municipality = cleanMunicipality(
+        project.Location?.Municipality_Name ?? "",
+      );
 
       if (!municipality || !district) {
         setWardFeatures([]);
@@ -46,8 +52,9 @@ export function useWardData({ selectedProject, projectLocations, muniIndex }) {
 
       const wards = parseWardList(project.Location?.Wards_Covered);
       const province =
-        PROVINCE_NAME_TO_NO[normalizeText(project.Location?.Province_Name ?? "")] ??
-        null;
+        PROVINCE_NAME_TO_NO[
+          normalizeText(project.Location?.Province_Name ?? "")
+        ] ?? null;
 
       setWardLoading(true);
       setWardError("");
@@ -60,6 +67,8 @@ export function useWardData({ selectedProject, projectLocations, muniIndex }) {
           ...(wards.length && { wards }),
           ...(province != null && { province }),
         });
+
+        console.log("data feature leangth", data.features.length);
         setWardFeatures(data?.features || []);
       } catch (err) {
         setWardError(err.message);
@@ -68,7 +77,8 @@ export function useWardData({ selectedProject, projectLocations, muniIndex }) {
         setWardLoading(false);
       }
     },
-    [muniIndex, projectLocations],
+
+    [projectLocations],
   );
 
   useEffect(() => {

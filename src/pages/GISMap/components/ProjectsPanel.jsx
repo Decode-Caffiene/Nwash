@@ -17,11 +17,10 @@ export default function ProjectsPanel({ projects, selectedProject, onSelect }) {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-2 h-9 rounded-lg px-3 text-sm font-bold shadow-lg border border-white/10 transition-colors"
+        className="flex items-center gap-2 h-9 rounded-lg px-3 text-sm font-bold shadow border border-white/10 transition-colors"
         style={{
-          background: "rgba(15,23,42,0.82)",
+          background: "#1e293b",
           color: "#f1f5f9",
-          backdropFilter: "blur(12px)",
         }}
       >
         <svg
@@ -51,16 +50,15 @@ export default function ProjectsPanel({ projects, selectedProject, onSelect }) {
 
       {open && (
         <div
-          className="absolute right-0 mt-1.5 max-h-[360px] overflow-y-auto rounded-xl shadow-2xl border border-white/10"
+          className="absolute right-0 mt-1.5 max-h-[360px] overflow-y-auto rounded-xl shadow-xl border border-white/10"
           style={{
-            background: "rgba(15,23,42,0.95)",
-            backdropFilter: "blur(16px)",
+            background: "#0f172a",
             width: "300px",
           }}
         >
           <div
             className="sticky top-0 px-4 py-2.5 border-b border-white/10"
-            style={{ background: "rgba(15,23,42,0.95)" }}
+            style={{ background: "#0f172a" }}
           >
             <p className="text-xs font-bold uppercase tracking-widest text-white/40">
               Select Project

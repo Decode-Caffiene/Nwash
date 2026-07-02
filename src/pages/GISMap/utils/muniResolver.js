@@ -19,7 +19,7 @@ export const buildMuniIndex = (muniGeojson) => {
   (muniGeojson.features || []).forEach((feature) => {
     const props = feature.properties || {};
     const district = normalizeText(props.DISTRICT);
-    const canonical = (props.NAME || "").trim();
+    const canonical = (props.NAME || "").trim(); //muncipality name
     const normalized = normalizeText(canonical);
 
     if (!district || !canonical) return;
@@ -27,6 +27,7 @@ export const buildMuniIndex = (muniGeojson) => {
     const [lat, lng] = calculateCentroid([feature]);
 
     if (!index.has(district)) index.set(district, []);
+
     const arr = index.get(district);
 
     if (!arr.some((e) => e.canonical === canonical)) {
@@ -50,9 +51,15 @@ export const buildMuniIndex = (muniGeojson) => {
 // Returns { canonical, lat, lng }.
 export const resolveMuni = (rawMuni, rawDistrict, muniIndex) => {
   const cleaned = cleanMunicipality(rawMuni);
+
   const distKey = normalizeText(rawDistrict);
   const candidates = muniIndex.get(distKey);
-  const fallback = { canonical: cleaned, lat: NEPAL_CENTER[0], lng: NEPAL_CENTER[1] };
+
+  const fallback = {
+    canonical: cleaned,
+    lat: NEPAL_CENTER[0],
+    lng: NEPAL_CENTER[1],
+  };
 
   if (!candidates?.length) return fallback;
 
@@ -81,6 +88,12 @@ export const resolveMuni = (rawMuni, rawDistrict, muniIndex) => {
   // Threshold scales with name length: Kusma→Kushma (d=1), Kageswori→Kageshwori (d=3)
   const threshold = Math.min(3, Math.ceil(normalized.length / 4));
   if (bestDist <= threshold) return best;
+
+  console.log("FAILED:", {
+    municipality: cleaned,
+    district: rawDistrict,
+    candidates: candidates.map((c) => c.canonical),
+  });
 
   return fallback;
 };

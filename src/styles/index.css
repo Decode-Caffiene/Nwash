@@ -1,4 +1,6 @@
 @import "leaflet/dist/leaflet.css";
+@import "leaflet.markercluster/dist/MarkerCluster.css";
+@import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -27,4 +29,87 @@
   .stat-card {
     @apply bg-surface-card border border-surface-border rounded-xl p-5 shadow-sm;
   }
+}
+
+/* ── Selected project marker ─────────────────────────────────────────────── */
+
+.sel-marker {
+  position: relative;
+  width: 32px;
+  height: 32px;
+}
+
+.sel-marker-ring {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(37, 99, 235, 0.38);
+  animation: sel-pulse 1.8s ease-out infinite;
+}
+
+.sel-marker-dot {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #2563eb;
+  border: 2.5px solid #fff;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.55);
+  display: block;
+}
+
+@keyframes sel-pulse {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  70%  { transform: scale(2.5); opacity: 0;   }
+  100% { transform: scale(2.5); opacity: 0;   }
+}
+
+/* ── Ward polygon fade-in ────────────────────────────────────────────────── */
+
+.ward-polygon {
+  animation: ward-appear 0.35s ease-out forwards;
+}
+
+@keyframes ward-appear {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Leaflet popup overrides ─────────────────────────────────────────────── */
+
+.leaflet-popup-content-wrapper {
+  border-radius: 12px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  border: 1px solid #e2e8f0 !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  width: auto !important;
+}
+
+.leaflet-popup-close-button {
+  color: rgba(255, 255, 255, 0.7) !important;
+  top: 8px !important;
+  right: 10px !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.leaflet-popup-close-button:hover {
+  color: #fff !important;
+  background: transparent !important;
+}
+
+.leaflet-popup-tip {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08) !important;
 }
