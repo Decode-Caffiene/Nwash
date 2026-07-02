@@ -1,8 +1,9 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: " https://dashboardbackend-6v2p.onrender.com",
+  baseURL: "https://dashboardbackend-1-zbud.onrender.com",
   timeout: 80000,
+  withCredentials: true,
   headers: { "Content-Type": "application/json" },
 });
 

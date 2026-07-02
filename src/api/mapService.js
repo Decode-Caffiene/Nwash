@@ -13,6 +13,7 @@ export const getMuniGeojson = async () => {
 };
 
 export const filterWards = async (body) => {
+  console.log("wards covered body", body);
   const response = await axiosInstance.post("/ward/filter", body);
   return response.data;
 };

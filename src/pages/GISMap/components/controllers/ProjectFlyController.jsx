@@ -13,7 +13,7 @@ export default function ProjectFlyController({ center }) {
     const [lat, lng] = center;
     if (prevRef.current?.[0] === lat && prevRef.current?.[1] === lng) return;
     prevRef.current = center;
-    map.flyTo(center, 11, { duration: 1.2 });
+    map.flyTo(center, 12, { duration: 1.0 });
   }, [center, map]);
 
   return null;

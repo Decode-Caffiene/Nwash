@@ -6,5 +6,7 @@ export const ROUTES = {
   GIS_MAP: "/gis-map",
   ANALYTICS: "/analytics",
   DATA_ENTRY: "/data-entry",
+  ADMIN: "/admin",
+  VIEW_DATA: "/view-data",
   NOT_FOUND: "*",
 };

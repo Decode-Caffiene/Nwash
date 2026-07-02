@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Droplets, Menu } from "lucide-react";
-import navLinks from "../../constants/navLinks";
+import { adminNavLinks, dataEntryLink, publicNavLinks } from "../../constants/navLinks";
+import { useAuth } from "../../hooks/useAuth";
 import { cn } from "../../utils/helpers";
 
 function Sidebar() {
+  const { isAuthenticated } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
@@ -17,6 +19,15 @@ function Sidebar() {
   }, []);
 
   const labelWidth = useMemo(() => (collapsed ? "w-16" : "w-64"), [collapsed]);
+
+  // Admins see Admin Panel + View Uploaded Data instead of Data Entry
+  const links = useMemo(
+    () =>
+      isAuthenticated
+        ? [...publicNavLinks, ...adminNavLinks]
+        : [...publicNavLinks, dataEntryLink],
+    [isAuthenticated],
+  );
 
   return (
     <aside
@@ -38,7 +49,7 @@ function Sidebar() {
       </div>
 
       <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
-        {navLinks.map(({ label, path, icon: Icon }) => (
+        {links.map(({ label, path, icon: Icon }) => (
           <NavLink
             key={path}
             to={path}

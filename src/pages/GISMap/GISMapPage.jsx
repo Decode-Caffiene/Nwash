@@ -1,20 +1,18 @@
 import { useCallback, useMemo, useState } from "react";
 import { NEPAL_CENTER } from "./utils/mapConstants";
-import { parseWardList } from "./utils/geoHelpers";
 import { useMapData } from "./hooks/useMapData";
 import { useWardData } from "./hooks/useWardData";
 import MapCanvas from "./components/MapCanvas";
 import FilterBar from "./components/FilterBar";
 import ProjectsPanel from "./components/ProjectsPanel";
-import ProjectInfoCard from "./components/ProjectInfoCard";
-import MapLegend from "./components/MapLegend";
 import WardToast from "./components/WardToast";
+import MapTypeControl from "./components/MapTypeControl";
 
 function LoadingScreen() {
   return (
     <div
       className="flex h-full flex-col items-center justify-center gap-4"
-      style={{ background: "linear-gradient(160deg,#0f172a 0%,#1e293b 100%)" }}
+      style={{ background: "#0f172a" }}
     >
       <span className="inline-block w-10 h-10 rounded-full border-2 border-emerald-400 border-t-transparent animate-spin" />
       <span className="text-sm text-slate-400">Loading map data…</span>
@@ -26,7 +24,7 @@ function ErrorScreen({ message }) {
   return (
     <div
       className="flex h-full items-center justify-center text-red-400 text-sm"
-      style={{ background: "linear-gradient(160deg,#0f172a 0%,#1e293b 100%)" }}
+      style={{ background: "#0f172a" }}
     >
       {message}
     </div>
@@ -34,16 +32,17 @@ function ErrorScreen({ message }) {
 }
 
 export default function GISMapPage() {
-  const { projects, muniGeojson, muniIndex, projectLocations, loading, error } =
+  const { projects, muniGeojson, projectLocations, loading, error } =
     useMapData();
   const [selectedProject, setSelectedProject] = useState(null);
   const [showProjects, setShowProjects] = useState(true);
   const [muniZoomFeatures, setMuniZoomFeatures] = useState([]);
+  const [mapType, setMapType] = useState("default");
+  const [showDensity, setShowDensity] = useState(false);
 
-  const { wardFeatures, wardLoading, wardError, clearWards } = useWardData({
+  const { wardFeatures, wardLoading, wardError } = useWardData({
     selectedProject,
     projectLocations,
-    muniIndex,
   });
 
   const handleSelectProject = useCallback((project) => {
@@ -51,21 +50,11 @@ export default function GISMapPage() {
     setMuniZoomFeatures([]);
   }, []);
 
-  const handleDismissProject = useCallback(() => {
-    setSelectedProject(null);
-    clearWards();
-  }, [clearWards]);
-
   const selectedCentroid = useMemo(() => {
     if (!selectedProject) return null;
     const loc = projectLocations[selectedProject._id];
     return [loc?.lat ?? NEPAL_CENTER[0], loc?.lng ?? NEPAL_CENTER[1]];
   }, [projectLocations, selectedProject]);
-
-  const coveredWards = useMemo(
-    () => parseWardList(selectedProject?.Location?.Wards_Covered),
-    [selectedProject],
-  );
 
   return (
     <div
@@ -87,6 +76,8 @@ export default function GISMapPage() {
             muniZoomFeatures={muniZoomFeatures}
             selectedCentroid={selectedCentroid}
             onSelectProject={handleSelectProject}
+            mapType={mapType}
+            showDensity={showDensity}
           />
 
           <FilterBar
@@ -108,19 +99,13 @@ export default function GISMapPage() {
               title={
                 showProjects ? "Hide project markers" : "Show project markers"
               }
-              className="flex items-center gap-2 h-9 rounded-lg px-3 text-sm font-bold shadow-lg border transition-all"
+              className="flex items-center gap-2 h-9 rounded-lg px-3 text-sm font-bold shadow border transition-colors"
               style={{
-                background: showProjects
-                  ? "linear-gradient(135deg,#10b981,#059669)"
-                  : "rgba(15,23,42,0.82)",
+                background: showProjects ? "#10b981" : "#1e293b",
                 color: showProjects ? "#fff" : "rgba(241,245,249,0.5)",
                 borderColor: showProjects
                   ? "transparent"
                   : "rgba(255,255,255,0.12)",
-                backdropFilter: "blur(12px)",
-                boxShadow: showProjects
-                  ? "0 4px 14px rgba(16,185,129,0.35)"
-                  : undefined,
               }}
             >
               <svg
@@ -155,22 +140,14 @@ export default function GISMapPage() {
             </button>
           </div>
 
-          {selectedProject && (
-            <ProjectInfoCard
-              project={selectedProject}
-              coveredWards={coveredWards}
-              wardLoading={wardLoading}
-              wardFeatures={wardFeatures}
-              wardError={wardError}
-              onDismiss={handleDismissProject}
-            />
-          )}
+          <WardToast wardLoading={wardLoading} wardError={wardError} />
 
-          {!selectedProject && (
-            <WardToast wardLoading={wardLoading} wardError={wardError} />
-          )}
-
-          <MapLegend />
+          <MapTypeControl
+            mapType={mapType}
+            onMapTypeChange={setMapType}
+            showDensity={showDensity}
+            onToggleDensity={setShowDensity}
+          />
         </>
       )}
     </div>

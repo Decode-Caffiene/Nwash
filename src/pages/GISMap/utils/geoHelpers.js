@@ -49,6 +49,7 @@ export const editDistance = (a, b) => {
 export const calculateCentroid = (features) => {
   const points = features.flatMap((feature) => {
     const { geometry } = feature;
+
     if (geometry?.type === "Polygon") return geometry.coordinates[0] || [];
     if (geometry?.type === "MultiPolygon")
       return geometry.coordinates.flat(2) || [];
@@ -56,6 +57,7 @@ export const calculateCentroid = (features) => {
   });
 
   const total = points.length;
+
   if (!total) return NEPAL_CENTER;
 
   const sum = points.reduce(
@@ -65,7 +67,7 @@ export const calculateCentroid = (features) => {
   return [sum.lat / total, sum.lng / total];
 };
 
-// ─── Ward list parsing ───────────────────────────────────────────────────────
+//Ward list parsing
 
 // Accepts an array, comma-separated string, or anything in between.
 export const parseWardList = (value) => {
