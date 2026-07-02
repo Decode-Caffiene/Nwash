@@ -1,0 +1,5035 @@
+[
+  {
+    "WSUC_ID": 1.0,
+    "WSUC_Name": "Lubhu_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Lalitpur ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Mahalaxmi",
+      "Wards_Covered": [
+        "7,8"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 75.0,
+      "OEI": 40.7,
+      "OM_Score": 0.8466384579219557,
+      "Service_Coverage_Score": 0.0,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.976019184652278,
+      "Grievance_Score": 0,
+      "Category_Number": 7,
+      "Category_Level": "7. Inactive-Functioning Level"
+    },
+    "Population_Served": 19000.0,
+    "HH_Served": 2045.0,
+    "Total_HH": 5000.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.3814,
+        27.6231
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-1",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 2.0,
+    "WSUC_Name": "Shivalaya_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Parbat ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Kusma",
+      "Wards_Covered": [
+        "4,5,6,7"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 65.5,
+      "OEI": 74.1,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.0,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0.5238095238095238,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 0.9545454545454547,
+      "Grievance_Score": 0,
+      "Category_Number": 5,
+      "Category_Level": "5. Improving \u2014 Improving Level"
+    },
+    "Population_Served": 15000.0,
+    "HH_Served": 2700.0,
+    "Total_HH": 4500.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        83.9847,
+        28.1735
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-2",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 3.0,
+    "WSUC_Name": "Ratnanagar_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Chitwan ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Ratnanagar",
+      "Wards_Covered": [
+        "1 ,2,3,4,5,6,7,8,9,10,11,12,13"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 61.2,
+      "OEI": 97.0,
+      "OM_Score": 0.8808579675964758,
+      "Service_Coverage_Score": 0.5675675675675678,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1,
+      "Category_Number": 5
+    },
+    "Population_Served": 90000.0,
+    "HH_Served": 15300.0,
+    "Total_HH": 18500.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        84.3444,
+        27.6092
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-3",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 4.0,
+    "WSUC_Name": "Nirmalpokhari_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Kaski",
+      "Municipality_Type": "Metropolitan",
+      "Municipality_Name": "Pokhara",
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 33.4,
+      "OEI": 81.0,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.0,
+      "Adequacy_Score": 0.0,
+      "Water_Quality_Score": 0.6000000000000001,
+      "Reliability_Score": 0.6190476190476191,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 0.04761904761904763,
+      "Grievance_Score": 1,
+      "Category_Number": 6,
+      "Category_Level": "6. Active \u2014 Functioning Level"
+    },
+    "Population_Served": 11000.0,
+    "HH_Served": 2100.0,
+    "Total_HH": 3500.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        83.9856,
+        28.2096
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-4",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 5.0,
+    "WSUC_Name": "Bhimad_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Tanahun ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Bhimad",
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": 0.7142857142857143,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": " "
+    },
+    "Population_Served": null,
+    "HH_Served": 2000.0,
+    "Total_HH": null,
+    "Business_Plan": null,
+    "Service_Coverage_Prerequisite": null,
+    "geometry": {
+      "coordinates": [
+        84.4167,
+        27.9667
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-5",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 6.0,
+    "WSUC_Name": "Katunje_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Bhaktapur",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Suryabinayak",
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": 0.5238095238095238,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": " "
+    },
+    "Population_Served": 19000.0,
+    "HH_Served": 3360.0,
+    "Total_HH": null,
+    "Business_Plan": null,
+    "Service_Coverage_Prerequisite": null,
+    "geometry": {
+      "coordinates": [
+        85.4195,
+        27.6654
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-6",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 7.0,
+    "WSUC_Name": "Nijgad_WSUC",
+    "Location": {
+      "Province_Name": "Madhesh",
+      "District_Name": "Bara ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Nijgad",
+      "Wards_Covered": [
+        "4,5,6,7,8,9"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": 0.5714285714285714,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": " "
+    },
+    "Population_Served": null,
+    "HH_Served": null,
+    "Total_HH": null,
+    "Business_Plan": null,
+    "Service_Coverage_Prerequisite": null,
+    "geometry": {
+      "coordinates": [
+        85.1321,
+        27.0014
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-7",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 8.0,
+    "WSUC_Name": "Tinthana_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Kathmandu",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Chandragiri",
+      "Wards_Covered": [
+        "9,15"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 65.7,
+      "OEI": 30.0,
+      "OM_Score": 0.4567663684499754,
+      "Service_Coverage_Score": 0.25,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 0.8,
+      "Reliability_Score": 0.5714285714285714,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.9305555555555554,
+      "Grievance_Score": 0,
+      "Category_Number": 7,
+      "Category_Level": "7. Inactive \u2014 Functioning Level"
+    },
+    "Population_Served": 28000.0,
+    "HH_Served": 3500.0,
+    "Total_HH": 5000.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.2433,
+        27.6628
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-8",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 9.0,
+    "WSUC_Name": "Birgunj_WSUC",
+    "Location": {
+      "Province_Name": "Madhesh",
+      "District_Name": "Parsa ",
+      "Municipality_Type": "Metropolitan",
+      "Municipality_Name": "Birgunj",
+      "Wards_Covered": [
+        "1 ,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": 0.7142857142857143,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": " "
+    },
+    "Population_Served": null,
+    "HH_Served": null,
+    "Total_HH": null,
+    "Business_Plan": null,
+    "Service_Coverage_Prerequisite": null,
+    "geometry": {
+      "coordinates": [
+        84.8772,
+        27.0104
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-9",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 10.0,
+    "WSUC_Name": "Gaur_WSUC",
+    "Location": {
+      "Province_Name": "Madhesh",
+      "District_Name": "Rautahat ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Gaur",
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": 0.6904761904761905,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": " "
+    },
+    "Population_Served": null,
+    "HH_Served": 1666.0,
+    "Total_HH": null,
+    "Business_Plan": null,
+    "Service_Coverage_Prerequisite": null,
+    "geometry": {
+      "coordinates": [
+        85.2792,
+        26.7738
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-10",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 11.0,
+    "WSUC_Name": "Beni_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Myagdi",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Beni",
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": " ",
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": " "
+    },
+    "Population_Served": null,
+    "HH_Served": 1143.0,
+    "Total_HH": null,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        83.5833,
+        28.35
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-11",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 12.0,
+    "WSUC_Name": "Narayansthan_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Baglung ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Baglung",
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": 0.47698541329011346,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": " ",
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": " "
+    },
+    "Population_Served": null,
+    "HH_Served": 907.0,
+    "Total_HH": null,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        83.5876,
+        28.2712
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-12",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 13.0,
+    "WSUC_Name": "Diktel_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Khotang ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Diktel",
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": 0.0,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": " ",
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": " "
+    },
+    "Population_Served": null,
+    "HH_Served": 1120.0,
+    "Total_HH": null,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        86.7833,
+        27.2167
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-13",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 14.0,
+    "WSUC_Name": "Parsa_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Chitwan ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Khairahani",
+      "Wards_Covered": [
+        "6"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 83.9,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": 0.7563636363636362,
+      "Adequacy_Score": 0.5019249452837239,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 0.5,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": " "
+    },
+    "Population_Served": 42575.0,
+    "HH_Served": 6205.0,
+    "Total_HH": 6875.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.4328,
+        27.6714
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-14",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 15.0,
+    "WSUC_Name": "Saradanagar_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Chitwan ",
+      "Municipality_Type": "Metropolitan",
+      "Municipality_Name": "Bharatpur",
+      "Wards_Covered": [
+        "1"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 79.4,
+      "OEI": 43.3,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.9777070063694268,
+      "Adequacy_Score": 0.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.9172046028627563,
+      "Grievance_Score": 0,
+      "Category_Number": 7,
+      "Category_Level": "7. Inactive \u2014 Functioning Level"
+    },
+    "Population_Served": 17367.0,
+    "HH_Served": 3890.0,
+    "Total_HH": 3925.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        84.45,
+        27.6833
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-15",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 16.0,
+    "WSUC_Name": "Gunjanagar_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Chitwan ",
+      "Municipality_Type": "Metropolitan",
+      "Municipality_Name": "Bharatpur",
+      "Wards_Covered": [
+        "17,18,19,20,26"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 53.7,
+      "OEI": 44.9,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.0,
+      "Adequacy_Score": 0.6363636363636364,
+      "Water_Quality_Score": 0.6000000000000001,
+      "Reliability_Score": 1,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.9964294215662939,
+      "Grievance_Score": 0,
+      "Category_Number": 7,
+      "Category_Level": "7. Inactive \u2014 Functioning Level"
+    },
+    "Population_Served": 25000.0,
+    "HH_Served": 4100.0,
+    "Total_HH": 7000.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        84.4789,
+        27.6542
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-16",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 17.0,
+    "WSUC_Name": "Meghauli_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Chitwan ",
+      "Municipality_Type": "Metropolitan",
+      "Municipality_Name": "Bharatpur",
+      "Wards_Covered": [
+        "1"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 53.3,
+      "OM_Score": 0.3999999999999999,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.9128605769230766,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 10250.0,
+    "HH_Served": 2496.0,
+    "Total_HH": null,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.2289,
+        27.5747
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-17",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 18.0,
+    "WSUC_Name": "Sukranagar_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Chitwan ",
+      "Municipality_Type": "Metropolitan",
+      "Municipality_Name": "Bharatpur",
+      "Wards_Covered": [
+        "25"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 27.9,
+      "OM_Score": 0.31666666666666643,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.0,
+      "Reliability_Score": 1,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 0
+    },
+    "Population_Served": 10250.0,
+    "HH_Served": 2050.0,
+    "Total_HH": null,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        84.3931,
+        27.6394
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-18",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 19.0,
+    "WSUC_Name": "Pithuwa_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Chitwan ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Ratnanagar",
+      "Wards_Covered": [
+        "14,15,16"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 94.4,
+      "OEI": 99.5,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.7741228070175439,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 0.9764871855161065,
+      "Grievance_Score": 1,
+      "Category_Number": 2,
+      "Category_Level": "2. Moderately Efficient \u2014 Efficient Level"
+    },
+    "Population_Served": 25925.0,
+    "HH_Served": 5185.0,
+    "Total_HH": 5700.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.3667,
+        27.5833
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-19",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 20.0,
+    "WSUC_Name": "Jutpani_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Chitwan ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Kalika",
+      "Wards_Covered": [
+        "11"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 65.8,
+      "OEI": null,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.887239347234814,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": 0.8333333333333333,
+      "NRW_Score": 0.5,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 24000.0,
+    "HH_Served": 4213.0,
+    "Total_HH": 4412.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.5167,
+        27.55
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-20",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 21.0,
+    "WSUC_Name": "Namunashivanagar_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Nawalparasi",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Gaidakot",
+      "Wards_Covered": [
+        "4"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 78.7,
+      "OEI": 59.6,
+      "OM_Score": 0.0,
+      "Service_Coverage_Score": 0.5824074074074076,
+      "Adequacy_Score": 0.45454545454545453,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 0.5,
+      "Metering_Ratio_Score": 0.9795268425841673,
+      "Grievance_Score": 1,
+      "Category_Number": 5,
+      "Category_Level": "5. Improving \u2014 Improving Level"
+    },
+    "Population_Served": 20000.0,
+    "HH_Served": 2249.0,
+    "Total_HH": 2700.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.4278,
+        27.6944
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-21",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 22.0,
+    "WSUC_Name": "Gaidakot_Pumping_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Nawalpur ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Gaidakot",
+      "Wards_Covered": [
+        "1,2,3,4,5,6,7,8,9"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": 0.33240519666387547,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.6000000000000001,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": " "
+    },
+    "Population_Served": null,
+    "HH_Served": 7000.0,
+    "Total_HH": null,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.2833,
+        27.6833
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-22",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 23.0,
+    "WSUC_Name": "Amarapuri_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Nawalpur ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Gaidakot",
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 62.6,
+      "OM_Score": 0.5857647430011843,
+      "Service_Coverage_Score": 0.6666666666666667,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.6000000000000001,
+      "Reliability_Score": 0.8095238095238095,
+      "NRW_Score": 0.1,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 18000.0,
+    "HH_Served": 2600.0,
+    "Total_HH": 3000.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.2667,
+        27.6667
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-23",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 24.0,
+    "WSUC_Name": "Jwalamukhi Rural Water Sanitation and Hygine Management Board",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Dhading ",
+      "Municipality_Type": "Rural municipality",
+      "Municipality_Name": "Jwalamukhi",
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": 0.8555153407612424,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": 1,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": " "
+    },
+    "Population_Served": null,
+    "HH_Served": 2751.0,
+    "Total_HH": null,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        84.8333,
+        27.9167
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-24",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 25.0,
+    "WSUC_Name": "Mulkhola_Thakre_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Dhading ",
+      "Municipality_Type": "Rural municipality",
+      "Municipality_Name": "Thakre",
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.0,
+      "Reliability_Score": 1,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": " "
+    },
+    "Population_Served": null,
+    "HH_Served": 2800.0,
+    "Total_HH": null,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.9167,
+        27.9833
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-25",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 26.0,
+    "WSUC_Name": "Belung_Salyankot_WSUC ",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Dhading ",
+      "Municipality_Type": "Rural municipality",
+      "Municipality_Name": "Tripurasundari",
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": 0.0,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.0,
+      "Reliability_Score": 0.8571428571428572,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": " "
+    },
+    "Population_Served": null,
+    "HH_Served": 750.0,
+    "Total_HH": null,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.7833,
+        27.85
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-26",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 27.0,
+    "WSUC_Name": " Anandaban Sankarnagar Water supply user and sanitation Accociation",
+    "Location": {
+      "Province_Name": "Lumbini",
+      "District_Name": "Rupandehi ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Tilottama",
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": 1,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": " "
+    },
+    "Population_Served": null,
+    "HH_Served": 10000.0,
+    "Total_HH": null,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        83.4833,
+        27.5833
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-27",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 28.0,
+    "WSUC_Name": "Mahadevsthan_Matatirtha_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Kathmandu ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Chandragiri",
+      "Wards_Covered": [
+        "5,6,7"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 63.0,
+      "OEI": 25.8,
+      "OM_Score": 0.3789473684210525,
+      "Service_Coverage_Score": 0.2,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 0.8,
+      "Reliability_Score": 0.5,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.818181818181818,
+      "Grievance_Score": 0,
+      "Category_Number": 7,
+      "Category_Level": "7. Inactive \u2014 Functioning Level"
+    },
+    "Population_Served": 40000.0,
+    "HH_Served": 5100.0,
+    "Total_HH": 7500.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.2667,
+        27.6833
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-28",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 29.0,
+    "WSUC_Name": "Dudhikot_Brihat_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Bhaktapur",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Suryabinayak",
+      "Wards_Covered": [
+        "4"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 90.0,
+      "OEI": 43.8,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.6,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.9418604651162787,
+      "Grievance_Score": 0,
+      "Category_Number": 7,
+      "Category_Level": "7. Inactive \u2014 Functioning Level"
+    },
+    "Population_Served": 23000.0,
+    "HH_Served": 4200.0,
+    "Total_HH": 5000.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        85.4298,
+        27.6711
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-29",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 30.0,
+    "WSUC_Name": "Diktel_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Khotang ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Rupakot Majhuwagadi",
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": " ",
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": " "
+    },
+    "Population_Served": null,
+    "HH_Served": 1120.0,
+    "Total_HH": null,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        86.8,
+        27.2
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-30",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 31.0,
+    "WSUC_Name": "Shuvaghat_WSUC",
+    "Location": {
+      "Province_Name": "Karnali",
+      "District_Name": "Surkhet",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Gurvakot",
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": " ",
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": " "
+    },
+    "Population_Served": null,
+    "HH_Served": 3245.0,
+    "Total_HH": null,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        81.6333,
+        28.6167
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-31",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 32.0,
+    "WSUC_Name": "Shivanagar_WSUC",
+    "Location": {
+      "Province_Name": "Madhesh",
+      "District_Name": "Sarlahi",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Kabilasi",
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": " ",
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": " "
+    },
+    "Population_Served": null,
+    "HH_Served": 4200.0,
+    "Total_HH": null,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.35,
+        26.85
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-32",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 33.0,
+    "WSUC_Name": "Kusma_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Parbat ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Kusma",
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": " ",
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": " "
+    },
+    "Population_Served": null,
+    "HH_Served": 2800.0,
+    "Total_HH": null,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        83.99,
+        28.18
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-33",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 34.0,
+    "WSUC_Name": "Ghorahi_WSUC",
+    "Location": {
+      "Province_Name": "Lumbini",
+      "District_Name": "Dang ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Dang",
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": " ",
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": " "
+    },
+    "Population_Served": null,
+    "HH_Served": 8385.0,
+    "Total_HH": null,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        82.4833,
+        28.0333
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-34",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 35.0,
+    "WSUC_Name": "Yasok Sukkha Area Tamor Pumping_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Panchthar ",
+      "Municipality_Type": "Rural municipality",
+      "Municipality_Name": "Kummayak ",
+      "Wards_Covered": [
+        "1,3,4,5"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 70.0,
+      "OEI": 46.4,
+      "OM_Score": 0.5183628000663545,
+      "Service_Coverage_Score": 0.2013161830690997,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0.5,
+      "NRW_Score": 0.1,
+      "Metering_Ratio_Score": 0.2743764172335602,
+      "Grievance_Score": 1,
+      "Category_Number": 7,
+      "Category_Level": "7. Inactive \u2014 Functioning Level"
+    },
+    "Population_Served": 9100.0,
+    "HH_Served": 2275.0,
+    "Total_HH": 3343.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        87.6667,
+        27.35
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-35",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 36.0,
+    "WSUC_Name": "Phidim_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Panchthar ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Phidim",
+      "Wards_Covered": [
+        "1,2,4"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 65.6,
+      "OEI": 45.0,
+      "OM_Score": 0.0,
+      "Service_Coverage_Score": 0.42263279445727486,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1,
+      "Category_Number": 7,
+      "Category_Level": "7. Inactive \u2014 Functioning Level"
+    },
+    "Population_Served": 11988.0,
+    "HH_Served": 2997.0,
+    "Total_HH": 3897.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        87.75,
+        27.15
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-36",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 37.0,
+    "WSUC_Name": "Taplejung_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Taplejung ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Phungling",
+      "Wards_Covered": [
+        "2,3,4,5,6,7,8"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 83.5,
+      "OEI": 58.0,
+      "OM_Score": 0.5208053691275167,
+      "Service_Coverage_Score": 0.7012578616352201,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0.5476190476190477,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1,
+      "Category_Number": 5,
+      "Category_Level": "5. Improving \u2014 Improving Level"
+    },
+    "Population_Served": 8485.0,
+    "HH_Served": 2100.0,
+    "Total_HH": 2385.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        87.67,
+        27.35
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-37",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 38.0,
+    "WSUC_Name": "Ilam Bazaar Urban_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Illam ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Illam",
+      "Wards_Covered": [
+        "5,6,7,8,9"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 84.9,
+      "OEI": 86.4,
+      "OM_Score": 0.4571428571428571,
+      "Service_Coverage_Score": 0.7,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0.6190476190476191,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1,
+      "Category_Number": 3,
+      "Category_Level": "3. Just Efficient \u2014 Efficient Level"
+    },
+    "Population_Served": 22000.0,
+    "HH_Served": 4400.0,
+    "Total_HH": 5000.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        87.92,
+        26.91
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-38",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 39.0,
+    "WSUC_Name": "Dhankuta_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Dhankuta ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Dhankuta",
+      "Wards_Covered": [
+        "3,4,5,6,7"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 83.9,
+      "OEI": 69.8,
+      "OM_Score": 0.3908675799086758,
+      "Service_Coverage_Score": 0.7557747834456208,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0.5,
+      "NRW_Score": 0.5,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1,
+      "Category_Number": 5,
+      "Category_Level": "5. Improving \u2014 Improving Level"
+    },
+    "Population_Served": 18750.0,
+    "HH_Served": 3750.0,
+    "Total_HH": 4156.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        87.35,
+        26.98
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-39",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 40.0,
+    "WSUC_Name": "Khandbari_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Sankhuwasabha ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Khandbari",
+      "Wards_Covered": [
+        "3,7,1,8,9"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 75.6,
+      "OEI": 42.0,
+      "OM_Score": 0.0,
+      "Service_Coverage_Score": 0.4236688211757464,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0.5,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.85,
+      "Grievance_Score": 1,
+      "Category_Number": 7,
+      "Category_Level": "7. Inactive \u2014 Functioning Level"
+    },
+    "Population_Served": 12500.0,
+    "HH_Served": 2500.0,
+    "Total_HH": 3249.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        87.22,
+        27.37
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-40",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 41.0,
+    "WSUC_Name": "Halesi Area Khotang Large Pumping",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Khotang ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Halesi Tuwachung",
+      "Wards_Covered": [
+        "1,2,3,4,5,6,7"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 10.0,
+      "OEI": 51.0,
+      "OM_Score": 0.0,
+      "Service_Coverage_Score": 0.0,
+      "Adequacy_Score": 0.0,
+      "Water_Quality_Score": 0.0,
+      "Reliability_Score": 0.5,
+      "NRW_Score": 0.2,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1,
+      "Category_Number": 6,
+      "Category_Level": "6. Active \u2014 Functioning Level"
+    },
+    "Population_Served": 11000.0,
+    "HH_Served": 2200.0,
+    "Total_HH": 5000.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        86.63,
+        27.42
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-41",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 42.0,
+    "WSUC_Name": "Kakarvitta_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Jhapa",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Mechinagar",
+      "Wards_Covered": [
+        "2,3,4,5,6,7,8"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 79.0,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.6076071256620125,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": 1,
+      "NRW_Score": 0.3,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": 1
+    },
+    "Population_Served": null,
+    "HH_Served": 8755.0,
+    "Total_HH": 10385.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        88.04,
+        26.65
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-42",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 43.0,
+    "WSUC_Name": "Khalanga_WSUC",
+    "Location": {
+      "Province_Name": "Sudurpaschim",
+      "District_Name": "Darchula ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Mahakali",
+      "Wards_Covered": [
+        "4,5"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 70.5,
+      "OEI": 99.0,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": 0.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0.5238095238095238,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 0.9487704918032787,
+      "Grievance_Score": 1,
+      "Category_Number": 4,
+      "Category_Level": "4. Improved \u2014 Improving Level"
+    },
+    "Population_Served": 11956.0,
+    "HH_Served": 2440.0,
+    "Total_HH": 2440.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        80.55,
+        29.85
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-43",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 44.0,
+    "WSUC_Name": "Nala_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Kavrepalanchok",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Banepa",
+      "Wards_Covered": [
+        "1"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 68.8,
+      "OM_Score": 0.7132955282880422,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.8,
+      "Reliability_Score": 0.5,
+      "NRW_Score": 0.2,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 2055.0,
+    "HH_Served": 411.0,
+    "Total_HH": 411.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.52,
+        27.63
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-44",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 45.0,
+    "WSUC_Name": "Dukuchhap_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Lalitpur  ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Godawari",
+      "Wards_Covered": [
+        "1"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 75.0,
+      "OM_Score": 0.0,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0.5238095238095238,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 3879.0,
+    "HH_Served": 707.0,
+    "Total_HH": 707.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        85.43,
+        27.58
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-45",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 46.0,
+    "WSUC_Name": "Kalitar_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Lalitpur",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Godawari",
+      "Wards_Covered": [
+        "6"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 85.0,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0.5238095238095238,
+      "NRW_Score": 0.5,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 559.0,
+    "HH_Served": 123.0,
+    "Total_HH": 123.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        85.43,
+        27.58
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-46",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 47.0,
+    "WSUC_Name": "Jaubari Gahu Bari _WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Lalitpur",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Godawari",
+      "Wards_Covered": [
+        "7"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 50.0,
+      "OM_Score": 0.0,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 0.5,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 0
+    },
+    "Population_Served": 559.0,
+    "HH_Served": 77.0,
+    "Total_HH": 77.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.43,
+        27.58
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-47",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 48.0,
+    "WSUC_Name": "Lekhnath_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Kaski ",
+      "Municipality_Type": "Metropolitan",
+      "Municipality_Name": "Pokhara",
+      "Wards_Covered": [
+        "26,27,28,29,30,31,32"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 80.4,
+      "OEI": 64.6,
+      "OM_Score": 0.4357740845643907,
+      "Service_Coverage_Score": 0.4077834179357023,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0.7619047619047619,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 0.9839010337230978,
+      "Grievance_Score": 1,
+      "Category_Number": 5,
+      "Category_Level": "5. Improving \u2014 Improving Level"
+    },
+    "Population_Served": 120000.0,
+    "HH_Served": 17589.0,
+    "Total_HH": 23049.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.0,
+        28.23
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-48",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 49.0,
+    "WSUC_Name": "Waling_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Syangja",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Waling",
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 50.6,
+      "OEI": 71.1,
+      "OM_Score": 0.7280468034115739,
+      "Service_Coverage_Score": 0.1302083333333332,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0.6190476190476191,
+      "NRW_Score": 0.3,
+      "Metering_Ratio_Score": 0.9472843450479236,
+      "Grievance_Score": 1,
+      "Category_Number": 5,
+      "Category_Level": "5. Improving \u2014 Improving Level"
+    },
+    "Population_Served": 30000.0,
+    "HH_Served": 3130.0,
+    "Total_HH": 4800.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        83.78,
+        27.98
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-49",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 50.0,
+    "WSUC_Name": "Baglung_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Baglung",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Baglung",
+      "Wards_Covered": [
+        "1,2,3,4"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 60.0,
+      "OEI": 51.8,
+      "OM_Score": 0.27330946720239035,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0,
+      "NRW_Score": 0.3,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1,
+      "Category_Number": 5,
+      "Category_Level": "5. Improving \u2014 Improving Level"
+    },
+    "Population_Served": 60000.0,
+    "HH_Served": 4250.0,
+    "Total_HH": 4250.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        83.6,
+        28.27
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-50",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 51.0,
+    "WSUC_Name": "Bojepani_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Lalitpur",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Mahalaxmi",
+      "Wards_Covered": [
+        "3"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 50.1,
+      "OEI": 30.4,
+      "OM_Score": 0.4434782608695651,
+      "Service_Coverage_Score": 0.18583333333333343,
+      "Adequacy_Score": 0.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0.5238095238095238,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.9670731707317074,
+      "Grievance_Score": 0,
+      "Category_Number": 7,
+      "Category_Level": "7. Inactive \u2014 Functioning Level"
+    },
+    "Population_Served": 10804.0,
+    "HH_Served": 2023.0,
+    "Total_HH": 3000.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.3876,
+        27.6248
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-51",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 52.0,
+    "WSUC_Name": "Tokha_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Kathmandu",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Tokha",
+      "Wards_Covered": [
+        "2,3"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 45.5,
+      "OEI": 28.9,
+      "OM_Score": 0.4479279667199825,
+      "Service_Coverage_Score": 0.0,
+      "Adequacy_Score": 0.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0.5238095238095238,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.8837209302325583,
+      "Grievance_Score": 0,
+      "Category_Number": 8,
+      "Category_Level": "8. Poor \u2014 Functioning Level"
+    },
+    "Population_Served": 20000.0,
+    "HH_Served": 2050.0,
+    "Total_HH": 4000.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.3222,
+        27.758
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-52",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 53.0,
+    "WSUC_Name": "Godawori_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Lalitpur  ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Godawari",
+      "Wards_Covered": [
+        "3"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 45.5,
+      "OEI": 43.0,
+      "OM_Score": 0.966038789660365,
+      "Service_Coverage_Score": 0.0,
+      "Adequacy_Score": 0.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0.5238095238095238,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.9418604651162787,
+      "Grievance_Score": 0,
+      "Category_Number": 8,
+      "Category_Level": "8. Poor \u2014 Functioning Level"
+    },
+    "Population_Served": 15000.0,
+    "HH_Served": 2100.0,
+    "Total_HH": 4000.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.4198,
+        27.5882
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-53",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 54.0,
+    "WSUC_Name": "Harisiddhi_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Lalitpur  ",
+      "Municipality_Type": "Metropolitan",
+      "Municipality_Name": "Lalitpur",
+      "Wards_Covered": [
+        "28,29"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 53.3,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": 0.3125,
+      "Adequacy_Score": 0.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0.5238095238095238,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.9166666666666667,
+      "Grievance_Score": 0
+    },
+    "Population_Served": 30000.0,
+    "HH_Served": 2900.0,
+    "Total_HH": 4000.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.3607,
+        27.6225
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-54",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 55.0,
+    "WSUC_Name": "Bidur_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Nuwakot",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Bidur",
+      "Wards_Covered": [
+        "1,2,4,5,6,8,9"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 88.6,
+      "OEI": 23.0,
+      "OM_Score": 0.1578284257674718,
+      "Service_Coverage_Score": 0.5458333333333336,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.9550000000000001,
+      "Grievance_Score": 0,
+      "Category_Number": 7,
+      "Category_Level": "7. Inactive \u2014 Functioning Level"
+    },
+    "Population_Served": 2500.0,
+    "HH_Served": 4910.0,
+    "Total_HH": 6000.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.152,
+        27.864
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-55",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 56.0,
+    "WSUC_Name": "Tikathali_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Lalitpur  ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Mahalaxmi",
+      "Wards_Covered": [
+        "5"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 54.3,
+      "OEI": 24.7,
+      "OM_Score": 0.6557822741226742,
+      "Service_Coverage_Score": 0.25,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 0.8,
+      "Reliability_Score": 0,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.412962962962963,
+      "Grievance_Score": 0,
+      "Category_Number": 7,
+      "Category_Level": "7. Inactive \u2014 Functioning Level"
+    },
+    "Population_Served": 16000.0,
+    "HH_Served": 2100.0,
+    "Total_HH": 3000.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.3742,
+        27.643
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-56",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 57.0,
+    "WSUC_Name": "Naikap_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Kathmandu",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Chandragiri",
+      "Wards_Covered": [
+        "14"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 65.0,
+      "OEI": 20.1,
+      "OM_Score": 0.4726944105950286,
+      "Service_Coverage_Score": 0.2216666666666665,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 0.8,
+      "Reliability_Score": 0.5714285714285714,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.412962962962963,
+      "Grievance_Score": 0,
+      "Category_Number": 7,
+      "Category_Level": "7. Inactive \u2014 Functioning Level"
+    },
+    "Population_Served": 16000.0,
+    "HH_Served": 2066.0,
+    "Total_HH": 3000.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.2162,
+        27.6782
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-57",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 58.0,
+    "WSUC_Name": "Goldhunga_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Kathmandu",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Tarkeshwor",
+      "Wards_Covered": [
+        "4,5"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 48.0,
+      "OEI": 43.8,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.0,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 0.8,
+      "Reliability_Score": 0,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.9390243902439025,
+      "Grievance_Score": 0,
+      "Category_Number": 8,
+      "Category_Level": "8. Poor \u2014 Functioning Level"
+    },
+    "Population_Served": 15000.0,
+    "HH_Served": 2000.0,
+    "Total_HH": 4500.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.2843,
+        27.7425
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-58",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 59.0,
+    "WSUC_Name": "Mahadevsthan_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Kathmandu",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Chandragiri",
+      "Wards_Covered": [
+        "5,6,7"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 63.0,
+      "OEI": 25.8,
+      "OM_Score": 0.3789473684210525,
+      "Service_Coverage_Score": 0.2,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 0.8,
+      "Reliability_Score": 0.5,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.818181818181818,
+      "Grievance_Score": 0,
+      "Category_Number": 7,
+      "Category_Level": "7. Inactive \u2014 Functioning Level"
+    },
+    "Population_Served": 40000.0,
+    "HH_Served": 5100.0,
+    "Total_HH": 7500.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.2308,
+        27.668
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-59",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 60.0,
+    "WSUC_Name": "Thaiba_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Lalitpur  ",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Godawari",
+      "Wards_Covered": [
+        "14"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 60.9,
+      "OEI": 17.8,
+      "OM_Score": 0.0,
+      "Service_Coverage_Score": 0.3333333333333332,
+      "Adequacy_Score": 0.7272727272727273,
+      "Water_Quality_Score": 0.8,
+      "Reliability_Score": 0.5,
+      "NRW_Score": 0.0,
+      "Metering_Ratio_Score": 0.8913043478260871,
+      "Grievance_Score": 0,
+      "Category_Number": 7,
+      "Category_Level": "7. Inactive \u2014 Functioning Level"
+    },
+    "Population_Served": 20000.0,
+    "HH_Served": 2200.0,
+    "Total_HH": 3000.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.4182,
+        27.5824
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-60",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 61.0,
+    "WSUC_Name": "Dachi Bhadrawasti_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Kathmandu",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Kageswori Manohara",
+      "Wards_Covered": [
+        "3,4,5"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 75.6,
+      "OEI": 39.4,
+      "OM_Score": 0.7792798318939951,
+      "Service_Coverage_Score": 0.6866666666666668,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 0.8,
+      "Reliability_Score": 0.5238095238095238,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.9937655860349128,
+      "Grievance_Score": 0,
+      "Category_Number": 7,
+      "Category_Level": "7. Inactive \u2014 Functioning Level"
+    },
+    "Population_Served": 13120.0,
+    "HH_Served": 2624.0,
+    "Total_HH": 3000.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.3723,
+        27.7048
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-61",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 62.0,
+    "WSUC_Name": "Bhaimal Gothatar_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Kathmandu",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Kageswori Manohara",
+      "Wards_Covered": [
+        "7,8,9,10"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 83.5,
+      "OEI": 32.9,
+      "OM_Score": 0.5226361563879531,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 0.8,
+      "Reliability_Score": 0.5238095238095238,
+      "NRW_Score": 0.0,
+      "Metering_Ratio_Score": 0.9937655860349128,
+      "Grievance_Score": 0,
+      "Category_Number": 7,
+      "Category_Level": "7. Inactive \u2014 Functioning Level"
+    },
+    "Population_Served": 20000.0,
+    "HH_Served": 2005.0,
+    "Total_HH": 2005.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.3848,
+        27.7118
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-62",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 63.0,
+    "WSUC_Name": "Katunje Ghattekhola_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Bhaktapur",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Suryabinayak",
+      "Wards_Covered": [
+        "5"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 65.1,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": 0.40249999999999986,
+      "Adequacy_Score": 0.48051948051948057,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0.5238095238095238,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 0.9638633377135349,
+      "Grievance_Score": 0
+    },
+    "Population_Served": 35000.0,
+    "HH_Served": 3044.0,
+    "Total_HH": 4000.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.4192,
+        27.6572
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-63",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 64.0,
+    "WSUC_Name": "Pithuwa_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Chitwan",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Ratnanagar",
+      "Wards_Covered": [
+        "14,15,16"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 94.3,
+      "OEI": 68.8,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.7736842105263158,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 0.9423431734317343,
+      "Grievance_Score": 1,
+      "Category_Number": 5,
+      "Category_Level": "5. Improving \u2014 Improving Level"
+    },
+    "Population_Served": 25925.0,
+    "HH_Served": 5184.0,
+    "Total_HH": 5700.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.3812,
+        27.5918
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-64",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 65.0,
+    "WSUC_Name": "Padampur_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Chitwan",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Kalika",
+      "Wards_Covered": [
+        "3"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 50.4,
+      "OEI": 75.0,
+      "OM_Score": 0.0,
+      "Service_Coverage_Score": 0.2679166666666667,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": 0.8333333333333333,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1,
+      "Category_Number": 5,
+      "Category_Level": "5. Improving \u2014 Improving Level"
+    },
+    "Population_Served": 22000.0,
+    "HH_Served": 4243.0,
+    "Total_HH": 6000.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        84.5082,
+        27.5478
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-65",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 66.0,
+    "WSUC_Name": "Piple_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Chitwan",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Rapti",
+      "Wards_Covered": [
+        "13"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 71.9,
+      "OEI": 68.8,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.04857142857142858,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0.7857142857142857,
+      "NRW_Score": 0.0,
+      "Metering_Ratio_Score": 0.9423431734317343,
+      "Grievance_Score": 1,
+      "Category_Number": 5,
+      "Category_Level": "5. Improving \u2014 Improving Level"
+    },
+    "Population_Served": 11000.0,
+    "HH_Served": 2168.0,
+    "Total_HH": 3500.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.422,
+        27.6418
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-66",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 67.0,
+    "WSUC_Name": "Shardanagar_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Chitwan",
+      "Municipality_Type": "Metropolitan",
+      "Municipality_Name": "Bharatpur",
+      "Wards_Covered": [
+        "1"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 79.4,
+      "OEI": 43.3,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.9777070063694268,
+      "Adequacy_Score": 0.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 0.0,
+      "Metering_Ratio_Score": 0.9172046028627563,
+      "Grievance_Score": 0,
+      "Category_Number": 7,
+      "Category_Level": "7. Inactive \u2014 Functioning Level"
+    },
+    "Population_Served": 17367.0,
+    "HH_Served": 3890.0,
+    "Total_HH": 3925.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        84.4292,
+        27.6752
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-67",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 68.0,
+    "WSUC_Name": "Gunjannagar_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Chitwan",
+      "Municipality_Type": "Metropolitan",
+      "Municipality_Name": "Bharatpur",
+      "Wards_Covered": [
+        "17,18,19,20,26"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 53.7,
+      "OEI": 74.0,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.0,
+      "Adequacy_Score": 0.6363636363636364,
+      "Water_Quality_Score": 0.6000000000000001,
+      "Reliability_Score": 1,
+      "NRW_Score": 0.0,
+      "Metering_Ratio_Score": 0.9488217091168767,
+      "Grievance_Score": 0,
+      "Category_Number": 5,
+      "Category_Level": "5. Improving \u2014 Improving Level"
+    },
+    "Population_Served": 25000.0,
+    "HH_Served": 4100.0,
+    "Total_HH": 7000.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        84.4812,
+        27.6518
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-68",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 69.0,
+    "WSUC_Name": "Dibyanagar(Joshimal)_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Chitwan",
+      "Municipality_Type": "Metropolitan",
+      "Municipality_Name": "Bharatpur",
+      "Wards_Covered": [
+        "25,26,27,28"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 44.4,
+      "OM_Score": 0.9942027253824031,
+      "Service_Coverage_Score": 0.6756007393715343,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.6000000000000001,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 0.9790335463258785,
+      "Grievance_Score": 0
+    },
+    "Population_Served": 10784.0,
+    "HH_Served": 2354.0,
+    "Total_HH": 2705.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.4698,
+        27.6882
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-69",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 70.0,
+    "WSUC_Name": "Parbatipur_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Chitwan",
+      "Municipality_Type": "Metropolitan",
+      "Municipality_Name": "Bharatpur",
+      "Wards_Covered": [
+        "20,21,14"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": 0.140625,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": null,
+    "HH_Served": 2100.0,
+    "Total_HH": 3200.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.4512,
+        27.6618
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-70",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 71.0,
+    "WSUC_Name": "Jagatpur_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Chitwan",
+      "Municipality_Type": "Metropolitan",
+      "Municipality_Name": "Bharatpur",
+      "Wards_Covered": [
+        "23"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 75.0,
+      "OEI": 75.1,
+      "OM_Score": 0.6304165318404116,
+      "Service_Coverage_Score": 0.0,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 0.9659632402995235,
+      "Grievance_Score": 1,
+      "Category_Number": 4,
+      "Category_Level": "4. Improved \u2014 Improving Level"
+    },
+    "Population_Served": 14840.0,
+    "HH_Served": 2968.0,
+    "Total_HH": 5800.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        84.4668,
+        27.7228
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-71",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 72.0,
+    "WSUC_Name": "Bharatpur_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Chitwan",
+      "Municipality_Type": "Metropolitan",
+      "Municipality_Name": "Bharatpur",
+      "Wards_Covered": [
+        "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,22"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 85.0,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.26523956647540603,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0.7142857142857143,
+      "NRW_Score": 0.5,
+      "Metering_Ratio_Score": 0.9996527777777778,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 251390.0,
+    "HH_Served": 43194.0,
+    "Total_HH": 61173.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        84.4333,
+        27.6833
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-72",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 73.0,
+    "WSUC_Name": "Namuna_Shivnagar_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Nawalparasi",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Gaidakot",
+      "Wards_Covered": [
+        "4"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 78.7,
+      "OEI": 47.6,
+      "OM_Score": 0.0,
+      "Service_Coverage_Score": 0.5824074074074076,
+      "Adequacy_Score": 0.45454545454545453,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 0.5,
+      "Metering_Ratio_Score": 0.9795268425841673,
+      "Grievance_Score": 1,
+      "Category_Number": 7,
+      "Category_Level": "7. Inactive \u2014 Functioning Level"
+    },
+    "Population_Served": 20000.0,
+    "HH_Served": 2249.0,
+    "Total_HH": 2700.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.2882,
+        27.6692
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-73",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 74.0,
+    "WSUC_Name": "Amarapuri_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Nawalpur",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Gaidakot",
+      "Wards_Covered": [
+        "14,15,16,17"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 64.6,
+      "OM_Score": 0.5857647430011843,
+      "Service_Coverage_Score": 0.6666666666666667,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.6000000000000001,
+      "Reliability_Score": 0.8095238095238095,
+      "NRW_Score": 0.1,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 0
+    },
+    "Population_Served": 18000.0,
+    "HH_Served": 2600.0,
+    "Total_HH": 3000.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.2812,
+        27.6812
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-74",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 75.0,
+    "WSUC_Name": "Kawasoti_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Nawalpur",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Kawasoti",
+      "Wards_Covered": [
+        "6"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 96.4,
+      "OEI": 84.2,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.9492499999999999,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 0.8809523809523809,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 0.9617229764213537,
+      "Grievance_Score": 1,
+      "Category_Number": 3,
+      "Category_Level": "3. Just Efficient \u2014 Efficient Level"
+    },
+    "Population_Served": 60000.0,
+    "HH_Served": 9797.0,
+    "Total_HH": 10000.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        84.1198,
+        27.7102
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-75",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 76.0,
+    "WSUC_Name": "Pragatinagar_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Nawalpur",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Devchuli",
+      "Wards_Covered": [
+        "10,11,12,13,14,15"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 80.5,
+      "OM_Score": 0.21985249412918373,
+      "Service_Coverage_Score": 0.9025423728813557,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": 1,
+      "NRW_Score": 0.5,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 28350.0,
+    "HH_Served": 5670.0,
+    "Total_HH": 5900.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.0732,
+        27.6848
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-76",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 77.0,
+    "WSUC_Name": "Aghauli_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Nawalparasi",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Kawasoti",
+      "Wards_Covered": [
+        "14,15,16,17"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 46.1,
+      "OEI": 85.0,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.07176806083650203,
+      "Adequacy_Score": 0.5176747777220592,
+      "Water_Quality_Score": 0.4,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1,
+      "Category_Number": 6,
+      "Category_Level": "6. Active \u2014 Functioning Level"
+    },
+    "Population_Served": 22842.0,
+    "HH_Served": 3307.0,
+    "Total_HH": 5260.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        84.1518,
+        27.7148
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-77",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 78.0,
+    "WSUC_Name": "Rajhar_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Nawalpur",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Devchuli",
+      "Wards_Covered": [
+        "16,17"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 79.9,
+      "OEI": 70.0,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.19444444444444464,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 0.5,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1,
+      "Category_Number": 4,
+      "Category_Level": "4. Improved \u2014 Improving Level"
+    },
+    "Population_Served": 12200.0,
+    "HH_Served": 3050.0,
+    "Total_HH": 4500.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.0628,
+        27.6482
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-78",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 79.0,
+    "WSUC_Name": "Tamasariya_sana_Sahari_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Nawalparasi",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Madhyabindu",
+      "Wards_Covered": [
+        "5,6,7,8,9,13,15"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 60.8,
+      "OEI": 66.6,
+      "OM_Score": 0.8659493149846136,
+      "Service_Coverage_Score": 0.8960526315789472,
+      "Adequacy_Score": 0.710344300508235,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": 0.8571428571428572,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1,
+      "Category_Number": 5,
+      "Category_Level": "5. Improving \u2014 Improving Level"
+    },
+    "Population_Served": 19032.0,
+    "HH_Served": 3642.0,
+    "Total_HH": 3800.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.2042,
+        27.7932
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-79",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 80.0,
+    "WSUC_Name": "Dibyapuri_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Nawalpur",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Devchuli",
+      "Wards_Covered": [
+        "5"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 67.9,
+      "OEI": 93.1,
+      "OM_Score": 0.7333333333333332,
+      "Service_Coverage_Score": 0.616891891891892,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 0.6000000000000001,
+      "Reliability_Score": 0.5714285714285714,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.9896265560165975,
+      "Grievance_Score": 1,
+      "Category_Number": 5,
+      "Category_Level": "5. Improving \u2014 Improving Level"
+    },
+    "Population_Served": 15665.0,
+    "HH_Served": 3133.0,
+    "Total_HH": 3700.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        84.0818,
+        27.6948
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-80",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 81.0,
+    "WSUC_Name": "Deurali_Hupsekot_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Nawalparasi",
+      "Municipality_Type": "Rural Municipality",
+      "Municipality_Name": "Hupsekot",
+      "Wards_Covered": [
+        "6"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 59.3,
+      "OEI": 81.2,
+      "OM_Score": 0.37539094651901905,
+      "Service_Coverage_Score": 0.9506024096385541,
+      "Adequacy_Score": 0.4244855636006078,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 0.8392514395393473,
+      "Grievance_Score": 1,
+      "Category_Number": 5,
+      "Category_Level": "5. Improving \u2014 Improving Level"
+    },
+    "Population_Served": 20340.0,
+    "HH_Served": 4068.0,
+    "Total_HH": 4150.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.125,
+        27.553
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-81",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 82.0,
+    "WSUC_Name": "Balubari_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Jhapa",
+      "Municipality_Type": "Rural Municipality",
+      "Municipality_Name": "Kachankawal",
+      "Wards_Covered": [
+        "7"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 75.0,
+      "OM_Score": 0.0,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 3960.0,
+    "HH_Served": 720.0,
+    "Total_HH": 720.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        87.9667,
+        26.6333
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-82",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 83.0,
+    "WSUC_Name": "Barne_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Jhapa",
+      "Municipality_Type": "Rural Municipality",
+      "Municipality_Name": "Buddhashanti",
+      "Wards_Covered": [
+        "4"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 75.0,
+      "OM_Score": 0.0,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 5280.0,
+    "HH_Served": 1100.0,
+    "Total_HH": 1100.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        87.75,
+        26.7
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-83",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 84.0,
+    "WSUC_Name": "Bhojpur_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Bhojpur",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Bhojpur",
+      "Wards_Covered": [
+        "3,4,5,6,7,8,9,10,11"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 100.0,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 12807.0,
+    "HH_Served": 2280.0,
+    "Total_HH": 2280.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        87.0508,
+        27.1747
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-84",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 85.0,
+    "WSUC_Name": "Bukuwa_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Illam",
+      "Municipality_Type": "Rural Municipality",
+      "Municipality_Name": "Chulachuli",
+      "Wards_Covered": [
+        "5"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 81.0,
+      "OM_Score": 0.23999999999999977,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 6600.0,
+    "HH_Served": 1200.0,
+    "Total_HH": 1200.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        87.9333,
+        26.8833
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-85",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 86.0,
+    "WSUC_Name": "Debdaha_WSUC",
+    "Location": {
+      "Province_Name": "Lumbini",
+      "District_Name": "Rupandehi",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Debdaha",
+      "Wards_Covered": [
+        "5,6,7,8,9"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 93.3,
+      "OM_Score": 0.7333333333333332,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 26048.0,
+    "HH_Served": 5920.0,
+    "Total_HH": 5920.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        83.4333,
+        27.5167
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-86",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 87.0,
+    "WSUC_Name": "Diktel_Bazzar_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Khotang",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Diktel Majuwa Rupkot",
+      "Wards_Covered": [
+        "1,2,3,4,5,9"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 100.0,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 5154.0,
+    "HH_Served": 1052.0,
+    "Total_HH": 1052.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        86.7833,
+        27.2167
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-87",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 88.0,
+    "WSUC_Name": "Illam_Bazzar_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Illam",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Illam",
+      "Wards_Covered": [
+        "6,7,8,9"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 100.0,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 21524.0,
+    "HH_Served": 3029.0,
+    "Total_HH": 3029.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        87.9234,
+        26.9082
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-88",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 89.0,
+    "WSUC_Name": "Indrapur_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Morang",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Sundar Haraicha",
+      "Wards_Covered": [
+        "1,9,10,11,12"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 100.0,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 41000.0,
+    "HH_Served": 8200.0,
+    "Total_HH": 8200.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        87.2,
+        26.6167
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-89",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 90.0,
+    "WSUC_Name": "Itahari_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Sunsari",
+      "Municipality_Type": "Sub-Metropolitan",
+      "Municipality_Name": "Itahari",
+      "Wards_Covered": [
+        "1,2,3,4,5,6,7,8,9,10,14,16,17,20"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 100.0,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 112500.0,
+    "HH_Served": 22500.0,
+    "Total_HH": 22500.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        87.2796,
+        26.665
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-90",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 91.0,
+    "WSUC_Name": "Jhumka_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Sunsari",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Ramdhuni",
+      "Wards_Covered": [
+        "1,2,3,5"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 75.2,
+      "OM_Score": 0.007062854130979179,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 18726.0,
+    "HH_Served": 3907.0,
+    "Total_HH": 3907.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        87.1,
+        26.75
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-91",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 92.0,
+    "WSUC_Name": "Kanchanpur_WSUC",
+    "Location": {
+      "Province_Name": "Madhesh",
+      "District_Name": "Saptari",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Kanchanpur",
+      "Wards_Covered": [
+        "4,7,8,9,11,12"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 87.4,
+      "OM_Score": 0.49523809523809526,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 24464.0,
+    "HH_Served": 4464.0,
+    "Total_HH": 4464.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        86.9167,
+        26.5833
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-92",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 93.0,
+    "WSUC_Name": "Katari_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Udayapur",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Katari",
+      "Wards_Covered": [
+        "3,4,5"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 90.0,
+      "OM_Score": 0.5999999999999999,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 11105.0,
+    "HH_Served": 2524.0,
+    "Total_HH": 2524.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        86.4833,
+        26.85
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-93",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 94.0,
+    "WSUC_Name": "Malupokhari_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Illam",
+      "Municipality_Type": "Rural Municipality",
+      "Municipality_Name": "Maijogmai",
+      "Wards_Covered": [
+        "5"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 82.4,
+      "OM_Score": 0.2976000000000001,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 3613.0,
+    "HH_Served": 657.0,
+    "Total_HH": 657.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        87.8667,
+        26.9667
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-94",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 95.0,
+    "WSUC_Name": "Mangadh_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Morang",
+      "Municipality_Type": "Metropolitan",
+      "Municipality_Name": "Biratnagar",
+      "Wards_Covered": [
+        "1,3,4,19"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 75.0,
+      "OM_Score": 0.0,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 32385.0,
+    "HH_Served": 6350.0,
+    "Total_HH": 6350.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        87.2718,
+        26.4556
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-95",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 96.0,
+    "WSUC_Name": "Myanglung_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Terhathum",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Myanglung",
+      "Wards_Covered": [
+        "7,8"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 75.0,
+      "OM_Score": 0.0,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 4840.0,
+    "HH_Served": 1030.0,
+    "Total_HH": 1030.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        87.55,
+        27.1333
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-96",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 97.0,
+    "WSUC_Name": "Namsaling_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Illam",
+      "Municipality_Type": "Rural Municipality",
+      "Municipality_Name": "Maijogmai",
+      "Wards_Covered": [
+        "3,4"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 78.0,
+      "OM_Score": 0.1200000000000001,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 1045.0,
+    "HH_Served": 190.0,
+    "Total_HH": 190.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        87.87,
+        26.97
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-97",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 98.0,
+    "WSUC_Name": "Rawabesi_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Khotang",
+      "Municipality_Type": "Rural Municipality",
+      "Municipality_Name": "Rawabesi",
+      "Wards_Covered": [
+        "4"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 76.7,
+      "OM_Score": 0.06666666666666643,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 2040.0,
+    "HH_Served": 400.0,
+    "Total_HH": 400.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        86.5833,
+        27.1
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-98",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 99.0,
+    "WSUC_Name": "Saptakoshi_WSUC",
+    "Location": {
+      "Province_Name": "Madhesh",
+      "District_Name": "Saptari",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Saptakoshi",
+      "Wards_Covered": [
+        "1,2,3,4,5,6,7,8,9,10,11"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 85.0,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 27046.0,
+    "HH_Served": 4917.0,
+    "Total_HH": 4917.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        87.0,
+        26.7333
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-99",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 100.0,
+    "WSUC_Name": "Urlabari_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Morang",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Urlabari",
+      "Wards_Covered": [
+        "9"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 68.3,
+      "OM_Score": 0.8136377945756224,
+      "Service_Coverage_Score": 0.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": 1,
+      "NRW_Score": 0.5,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 44534.0,
+    "HH_Served": 11100.0,
+    "Total_HH": 19860.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        87.1667,
+        26.65
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-100",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 101.0,
+    "WSUC_Name": "Mukundapur_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Nawalparasi",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Gaidakot",
+      "Wards_Covered": [
+        "10,11,12,13"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 70.3,
+      "OEI": 69.9,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.9331395348837208,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": 1,
+      "NRW_Score": 0.1,
+      "Metering_Ratio_Score": 0.9970131421744324,
+      "Grievance_Score": 1,
+      "Category_Number": 5,
+      "Category_Level": "5. Improving \u2014 Improving Level"
+    },
+    "Population_Served": 25000.0,
+    "HH_Served": 4185.0,
+    "Total_HH": 4300.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        84.2667,
+        27.5833
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-101",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 102.0,
+    "WSUC_Name": "Devchuli_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Nawalpur",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Devchuli",
+      "Wards_Covered": [
+        "3"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 53.6,
+      "OEI": 60.2,
+      "OM_Score": 0.5249999999999999,
+      "Service_Coverage_Score": 0.5454545454545456,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 0.0,
+      "Reliability_Score": 1,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.8015873015873016,
+      "Grievance_Score": 1,
+      "Category_Number": 5,
+      "Category_Level": "5. Improving \u2014 Improving Level"
+    },
+    "Population_Served": 15000.0,
+    "HH_Served": 1800.0,
+    "Total_HH": 2200.0,
+    "Business_Plan": null,
+    "Service_Coverage_Prerequisite": null,
+    "geometry": {
+      "coordinates": [
+        84.0017,
+        27.57
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-102",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 103.0,
+    "WSUC_Name": "Shivmandir_WSUC",
+    "Location": {
+      "Province_Name": "Gandaki",
+      "District_Name": "Nawalparasi",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Kawasoti",
+      "Wards_Covered": [
+        "1,5,6"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 55.9,
+      "OEI": 65.0,
+      "OM_Score": 0.8078952995851296,
+      "Service_Coverage_Score": 0.3382352941176471,
+      "Adequacy_Score": 0.44055944055944046,
+      "Water_Quality_Score": 0.6000000000000001,
+      "Reliability_Score": 0.8809523809523809,
+      "NRW_Score": 0.2,
+      "Metering_Ratio_Score": 0.9877232142857142,
+      "Grievance_Score": 1,
+      "Category_Number": 5,
+      "Category_Level": "5. Improving \u2014 Improving Level"
+    },
+    "Population_Served": 13000.0,
+    "HH_Served": 2500.0,
+    "Total_HH": 3400.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        84.1167,
+        27.5917
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-103",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 104.0,
+    "WSUC_Name": "Palung_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Makwanpur",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Thaha",
+      "Wards_Covered": [
+        "12"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 60.0,
+      "OM_Score": 0.0,
+      "Service_Coverage_Score": 0.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.0,
+      "Reliability_Score": 1,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 13015.0,
+    "HH_Served": 2603.0,
+    "Total_HH": 9749.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.0333,
+        27.55
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-104",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 105.0,
+    "WSUC_Name": "Hetauda_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Makwanpur",
+      "Municipality_Type": "Sub-Metropolitan",
+      "Municipality_Name": "Hetauda",
+      "Wards_Covered": [
+        "17"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 87.7,
+      "OEI": 89.8,
+      "OM_Score": 0.5908208783979483,
+      "Service_Coverage_Score": 0.8115625000000002,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": null,
+      "NRW_Score": 0.5,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1,
+      "Category_Number": 3,
+      "Category_Level": "3. Just Efficient \u2014 Efficient Level"
+    },
+    "Population_Served": 165000.0,
+    "HH_Served": 29588.0,
+    "Total_HH": 32000.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.0333,
+        27.4167
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-105",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 106.0,
+    "WSUC_Name": "Padampokhari_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Makwanpur",
+      "Municipality_Type": "Sub-Metropolitan",
+      "Municipality_Name": "Hetauda",
+      "Wards_Covered": [
+        "2"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 50.9,
+      "OEI": 84.5,
+      "OM_Score": 0.42754094635963424,
+      "Service_Coverage_Score": 0.15594472242077692,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": null,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 0.9388489208633093,
+      "Grievance_Score": 1,
+      "Category_Number": 5,
+      "Category_Level": "5. Improving \u2014 Improving Level"
+    },
+    "Population_Served": 14926.0,
+    "HH_Served": 2780.0,
+    "Total_HH": 4197.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        85.04,
+        27.42
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-106",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 107.0,
+    "WSUC_Name": "Angoreshwor_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Makwanpur",
+      "Municipality_Type": "Sub-Metropolitan",
+      "Municipality_Name": "Hetauda",
+      "Wards_Covered": [
+        "16,17,18"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 40.0,
+      "OEI": 45.0,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.0,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 0.0,
+      "Reliability_Score": null,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 0,
+      "Category_Number": 8,
+      "Category_Level": "8. Poor \u2014 Functioning Level"
+    },
+    "Population_Served": 25000.0,
+    "HH_Served": 2200.0,
+    "Total_HH": 5500.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        85.045,
+        27.425
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-107",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 108.0,
+    "WSUC_Name": "Gunduk_Khola_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Makwanpur",
+      "Municipality_Type": "Rural Municipality",
+      "Municipality_Name": "Bagmati",
+      "Wards_Covered": [
+        "1,2,3,4,5,6,7,8,9"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": 1.0,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": 0.0,
+      "Reliability_Score": null,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": " "
+    },
+    "Population_Served": null,
+    "HH_Served": 5259.0,
+    "Total_HH": 1089.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        85.1833,
+        27.3667
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-108",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 109.0,
+    "WSUC_Name": "Jwalamukhi_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Dhading",
+      "Municipality_Type": "Rural Municipality",
+      "Municipality_Name": "Jwalamukhi",
+      "Wards_Covered": [
+        "7"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 21.0,
+      "OEI": 70.6,
+      "OM_Score": 0.6649223518372356,
+      "Service_Coverage_Score": 0.0,
+      "Adequacy_Score": 0.0,
+      "Water_Quality_Score": 0.6000000000000001,
+      "Reliability_Score": null,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1,
+      "Category_Number": 6,
+      "Category_Level": "6. Active \u2014 Functioning Level"
+    },
+    "Population_Served": 1200.0,
+    "HH_Served": 3000.0,
+    "Total_HH": 6079.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        84.8833,
+        27.9333
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-109",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 110.0,
+    "WSUC_Name": "Benighat_Rorang_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Dhading",
+      "Municipality_Type": "Rural Municipality",
+      "Municipality_Name": "Benighat",
+      "Wards_Covered": [
+        "10"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 48.4,
+      "OEI": 31.0,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.0,
+      "Adequacy_Score": 0.14825159641140534,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": null,
+      "NRW_Score": 0.3,
+      "Metering_Ratio_Score": 0.0,
+      "Grievance_Score": 0,
+      "Category_Number": 8,
+      "Category_Level": "8. Poor \u2014 Functioning Level"
+    },
+    "Population_Served": 9211.0,
+    "HH_Served": 2070.0,
+    "Total_HH": 7606.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        84.8833,
+        27.7667
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-110",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 111.0,
+    "WSUC_Name": "Narayani_Sahalagani_WSUC",
+    "Location": {
+      "Province_Name": "Bagmati",
+      "District_Name": "Nawalparasi",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Madhyabindu",
+      "Wards_Covered": [
+        "2,4,6"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 41.4,
+      "OEI": 85.0,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.0,
+      "Adequacy_Score": 0.02097902097902097,
+      "Water_Quality_Score": 0.6000000000000001,
+      "Reliability_Score": null,
+      "NRW_Score": 0.2,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1,
+      "Category_Number": 6,
+      "Category_Level": "6. Active \u2014 Functioning Level"
+    },
+    "Population_Served": 6500.0,
+    "HH_Served": 1075.0,
+    "Total_HH": 2450.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        83.9167,
+        27.6167
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-111",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 112.0,
+    "WSUC_Name": "Mahendranagar_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Sunsari",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Barahachetra",
+      "Wards_Covered": [
+        "11"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": 99.8,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": null,
+      "NRW_Score": 0.5,
+      "Metering_Ratio_Score": 0.98828125,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 11147.0,
+    "HH_Served": 3200.0,
+    "Total_HH": null,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        87.11,
+        26.74
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-112",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 113.0,
+    "WSUC_Name": "Tikapur_WSUC",
+    "Location": {
+      "Province_Name": "Sudurpaschim",
+      "District_Name": "Kailali",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Tikapur",
+      "Wards_Covered": [
+        "9"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 75.0,
+      "OEI": 60.0,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.0,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": null,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1,
+      "Category_Number": 5,
+      "Category_Level": "5. Improving \u2014 Improving Level"
+    },
+    "Population_Served": 42000.0,
+    "HH_Served": 9110.0,
+    "Total_HH": 16564.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        81.1208,
+        28.525
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-113",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 114.0,
+    "WSUC_Name": "Charali_Sana_sahari_WSUC",
+    "Location": {
+      "Province_Name": "Koshi",
+      "District_Name": "Jhapa",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Mechinagar",
+      "Wards_Covered": [
+        "15"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 80.7,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": 0.22641509433962242,
+      "Adequacy_Score": 1.0,
+      "Water_Quality_Score": 1.0,
+      "Reliability_Score": null,
+      "NRW_Score": 0.5,
+      "Metering_Ratio_Score": 0.9590163934426229,
+      "Grievance_Score": 1
+    },
+    "Population_Served": 14640.0,
+    "HH_Served": 3660.0,
+    "Total_HH": 5300.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        88.1222,
+        26.6667
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-114",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 115.0,
+    "WSUC_Name": "Karhiya_Makrahar_WSUC",
+    "Location": {
+      "Province_Name": "Lumbini",
+      "District_Name": "Rupandehi",
+      "Municipality_Type": "Municipality",
+      "Municipality_Name": "Tilottama",
+      "Wards_Covered": [
+        "8"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 24.1,
+      "OEI": 10.0,
+      "OM_Score": 0.3999999999999999,
+      "Service_Coverage_Score": 0.0,
+      "Adequacy_Score": 0.0,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": null,
+      "NRW_Score": 1.0,
+      "Metering_Ratio_Score": 1.0,
+      "Grievance_Score": 1,
+      "Category_Number": 9,
+      "Category_Level": "9. Very Poor \u2014 Functioning Level"
+    },
+    "Population_Served": 50000.0,
+    "HH_Served": 3000.0,
+    "Total_HH": 10000.0,
+    "Business_Plan": "Yes",
+    "Service_Coverage_Prerequisite": "Yes",
+    "geometry": {
+      "coordinates": [
+        83.46,
+        27.63
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-115",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 116.0,
+    "WSUC_Name": "Tulsipur_WSUC",
+    "Location": {
+      "Province_Name": "Lumbini",
+      "District_Name": "Dang",
+      "Municipality_Type": "Sub-Metropolitan",
+      "Municipality_Name": "Tulsipur",
+      "Wards_Covered": [
+        "19"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": 39.6,
+      "OEI": 25.0,
+      "OM_Score": 1.0,
+      "Service_Coverage_Score": 0.4961666666666666,
+      "Adequacy_Score": 0.48663101604278075,
+      "Water_Quality_Score": 0.2,
+      "Reliability_Score": null,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": 0.9989563329715285,
+      "Grievance_Score": 1,
+      "Category_Number": 8,
+      "Category_Level": "8. Poor \u2014 Functioning Level"
+    },
+    "Population_Served": 85000.0,
+    "HH_Served": 11977.0,
+    "Total_HH": 15000.0,
+    "Business_Plan": "No",
+    "Service_Coverage_Prerequisite": "No",
+    "geometry": {
+      "coordinates": [
+        82.2981,
+        28.1333
+      ]
+    },
+    "Documents": [],
+    "_id": "wsuc-116",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 0.0,
+    "WSUC_Name": 0,
+    "Location": {
+      "Province_Name": 0,
+      "District_Name": 0,
+      "Municipality_Type": 0,
+      "Municipality_Name": 0,
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": null,
+      "Reliability_Score": null,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": null
+    },
+    "Population_Served": null,
+    "HH_Served": null,
+    "Total_HH": null,
+    "Business_Plan": null,
+    "Service_Coverage_Prerequisite": null,
+    "geometry": {
+      "coordinates": []
+    },
+    "Documents": [],
+    "_id": "wsuc-0",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 0.0,
+    "WSUC_Name": 0,
+    "Location": {
+      "Province_Name": 0,
+      "District_Name": 0,
+      "Municipality_Type": 0,
+      "Municipality_Name": 0,
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": null,
+      "Reliability_Score": null,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": null
+    },
+    "Population_Served": null,
+    "HH_Served": null,
+    "Total_HH": null,
+    "Business_Plan": null,
+    "Service_Coverage_Prerequisite": null,
+    "geometry": {
+      "coordinates": []
+    },
+    "Documents": [],
+    "_id": "wsuc-0",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 0.0,
+    "WSUC_Name": 0,
+    "Location": {
+      "Province_Name": 0,
+      "District_Name": 0,
+      "Municipality_Type": 0,
+      "Municipality_Name": 0,
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": null,
+      "Reliability_Score": null,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": null
+    },
+    "Population_Served": null,
+    "HH_Served": null,
+    "Total_HH": null,
+    "Business_Plan": null,
+    "Service_Coverage_Prerequisite": null,
+    "geometry": {
+      "coordinates": []
+    },
+    "Documents": [],
+    "_id": "wsuc-0",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 0.0,
+    "WSUC_Name": 0,
+    "Location": {
+      "Province_Name": 0,
+      "District_Name": 0,
+      "Municipality_Type": 0,
+      "Municipality_Name": 0,
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": null,
+      "Reliability_Score": null,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": null
+    },
+    "Population_Served": null,
+    "HH_Served": null,
+    "Total_HH": null,
+    "Business_Plan": null,
+    "Service_Coverage_Prerequisite": null,
+    "geometry": {
+      "coordinates": []
+    },
+    "Documents": [],
+    "_id": "wsuc-0",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 0.0,
+    "WSUC_Name": 0,
+    "Location": {
+      "Province_Name": 0,
+      "District_Name": 0,
+      "Municipality_Type": 0,
+      "Municipality_Name": 0,
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": null,
+      "Reliability_Score": null,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": null
+    },
+    "Population_Served": null,
+    "HH_Served": null,
+    "Total_HH": null,
+    "Business_Plan": null,
+    "Service_Coverage_Prerequisite": null,
+    "geometry": {
+      "coordinates": []
+    },
+    "Documents": [],
+    "_id": "wsuc-0",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 0.0,
+    "WSUC_Name": 0,
+    "Location": {
+      "Province_Name": 0,
+      "District_Name": 0,
+      "Municipality_Type": 0,
+      "Municipality_Name": 0,
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": null,
+      "Reliability_Score": null,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": null
+    },
+    "Population_Served": null,
+    "HH_Served": null,
+    "Total_HH": null,
+    "Business_Plan": null,
+    "Service_Coverage_Prerequisite": null,
+    "geometry": {
+      "coordinates": []
+    },
+    "Documents": [],
+    "_id": "wsuc-0",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 0.0,
+    "WSUC_Name": 0,
+    "Location": {
+      "Province_Name": 0,
+      "District_Name": 0,
+      "Municipality_Type": 0,
+      "Municipality_Name": 0,
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": null,
+      "Reliability_Score": null,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": null
+    },
+    "Population_Served": null,
+    "HH_Served": null,
+    "Total_HH": null,
+    "Business_Plan": null,
+    "Service_Coverage_Prerequisite": null,
+    "geometry": {
+      "coordinates": []
+    },
+    "Documents": [],
+    "_id": "wsuc-0",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 0.0,
+    "WSUC_Name": 0,
+    "Location": {
+      "Province_Name": 0,
+      "District_Name": 0,
+      "Municipality_Type": 0,
+      "Municipality_Name": 0,
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": null,
+      "Reliability_Score": null,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": null
+    },
+    "Population_Served": null,
+    "HH_Served": null,
+    "Total_HH": null,
+    "Business_Plan": null,
+    "Service_Coverage_Prerequisite": null,
+    "geometry": {
+      "coordinates": []
+    },
+    "Documents": [],
+    "_id": "wsuc-0",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 0.0,
+    "WSUC_Name": 0,
+    "Location": {
+      "Province_Name": 0,
+      "District_Name": 0,
+      "Municipality_Type": 0,
+      "Municipality_Name": 0,
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": null,
+      "Reliability_Score": null,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": null
+    },
+    "Population_Served": null,
+    "HH_Served": null,
+    "Total_HH": null,
+    "Business_Plan": null,
+    "Service_Coverage_Prerequisite": null,
+    "geometry": {
+      "coordinates": []
+    },
+    "Documents": [],
+    "_id": "wsuc-0",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": 0.0,
+    "WSUC_Name": 0,
+    "Location": {
+      "Province_Name": 0,
+      "District_Name": 0,
+      "Municipality_Type": 0,
+      "Municipality_Name": 0,
+      "Wards_Covered": [
+        "0"
+      ]
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": null,
+      "Reliability_Score": null,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": null
+    },
+    "Population_Served": null,
+    "HH_Served": null,
+    "Total_HH": null,
+    "Business_Plan": null,
+    "Service_Coverage_Prerequisite": null,
+    "geometry": {
+      "coordinates": []
+    },
+    "Documents": [],
+    "_id": "wsuc-0",
+    "__v": 0
+  },
+  {
+    "WSUC_ID": null,
+    "WSUC_Name": null,
+    "Location": {
+      "Province_Name": null,
+      "District_Name": null,
+      "Municipality_Type": null,
+      "Municipality_Name": null,
+      "Wards_Covered": []
+    },
+    "Summary_Index": {
+      "SPI": null,
+      "OEI": null,
+      "OM_Score": null,
+      "Service_Coverage_Score": null,
+      "Adequacy_Score": null,
+      "Water_Quality_Score": null,
+      "Reliability_Score": null,
+      "NRW_Score": null,
+      "Metering_Ratio_Score": null,
+      "Grievance_Score": null
+    },
+    "Population_Served": null,
+    "HH_Served": 491270.0,
+    "Total_HH": null,
+    "Business_Plan": null,
+    "Service_Coverage_Prerequisite": null,
+    "geometry": {
+      "coordinates": []
+    },
+    "Documents": [],
+    "_id": null,
+    "__v": 0
+  }
+]

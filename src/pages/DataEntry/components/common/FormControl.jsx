@@ -1,7 +1,7 @@
 import { getFieldType } from "../../utils/formUtils";
 
 const inputClass =
-  "mt-2 w-full rounded-lg border border-surface-border bg-white px-3 py-2 text-sm text-text-primary outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-light";
+  "mt-2 w-full rounded-lg border border-surface-border bg-white px-3 py-2.5 text-sm text-text-primary outline-none transition-all duration-200 focus:border-brand-primary focus:ring-2 focus:ring-brand-light hover:border-surface-border/80";
 
 function FormControl({
   id,
@@ -12,8 +12,9 @@ function FormControl({
   placeholder = "Select option",
   disabled = false,
   required = false,
+  type: overrideType,
 }) {
-  const type = getFieldType(label);
+  const type = overrideType || getFieldType(label);
 
   if (options) {
     return (

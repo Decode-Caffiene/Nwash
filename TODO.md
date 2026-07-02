@@ -1,4 +1,3 @@
-- [ ] Add tolerant matching + debug flag for Trace wards (Chitwan) in src/pages/DataEntry/utils/locationOptions.js
-- [ ] Implement robust municipality name matching fallback
-- [ ] Implement robust district/type matching fallback
-- [ ] Remove/disable debug logs after confirming Chitwan works
+- [ ] Implement overview search: wire Navbar input to URL query param (?q=...)
+- [ ] Update OverviewPage to read query param and filter providers + recalc dashboard metrics
+- [ ] Verify search clears correctly and charts/cards update

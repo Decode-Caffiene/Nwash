@@ -31,43 +31,60 @@ export default function DrawingMap({
   const [currentPointCount, setCurrentPointCount] = useState(0);
 
   useEffect(() => {
-    if (!map.current || !polygonDrawingRef?.current) return;
+    const setupDrawingMode = () => {
+      if (!map.current || !polygonDrawingRef?.current) return false;
 
-    if (drawModeEnabled) {
-      polygonDrawingRef.current.startDrawing();
-      if (map.current.dragging) map.current.dragging.disable();
-      if (map.current.scrollWheelZoom) map.current.scrollWheelZoom.disable();
-      console.log("📍 Polygon drawing enabled");
-    } else {
-      polygonDrawingRef.current.stopDrawing();
-      if (map.current.dragging) map.current.dragging.enable();
-      if (map.current.scrollWheelZoom) map.current.scrollWheelZoom.enable();
-      console.log("🖐️ Pan mode enabled");
+      if (drawModeEnabled) {
+        polygonDrawingRef.current.startDrawing();
+        if (map.current.dragging) map.current.dragging.disable();
+        if (map.current.scrollWheelZoom) map.current.scrollWheelZoom.disable();
+      } else {
+        polygonDrawingRef.current.stopDrawing();
+        if (map.current.dragging) map.current.dragging.enable();
+        if (map.current.scrollWheelZoom) map.current.scrollWheelZoom.enable();
+      }
+      return true;
+    };
+
+    if (!setupDrawingMode()) {
+      const readyCheck = setInterval(() => {
+        if (setupDrawingMode()) {
+          clearInterval(readyCheck);
+        }
+      }, 300);
+      return () => clearInterval(readyCheck);
     }
-  }, [drawModeEnabled, map, polygonDrawingRef]);
+  }, [drawModeEnabled]);
 
   return (
-    <section className="stat-card">
-      <div className="flex items-center justify-between mb-4 pb-4 border-b">
-        <div>
-          <h2 className="text-lg font-semibold text-text-primary">
-            🖊️ Drawing Coverage Area: {municipalityName}
-          </h2>
-          <p className="text-xs text-text-secondary mt-1">
-            {district}, {province} | Press Pencil button to draw, drag on map to draw lines
-          </p>
+    <section className="stat-card overflow-hidden">
+      <div className="bg-gradient-to-r from-brand-light to-white px-5 py-4 -mx-5 -mt-5 border-b border-surface-border">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-primary text-white shadow-sm">
+              <PenTool size={20} />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-text-primary">
+                Draw Coverage Area
+              </h2>
+              <p className="text-xs text-text-secondary mt-0.5">
+                {municipalityName}, {district}, {province}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onCancelDrawing}
+            className="p-2 hover:bg-red-100 rounded-lg transition text-red-600 hover:text-red-700"
+            title="Cancel and close"
+          >
+            <X size={20} />
+          </button>
         </div>
-        <button
-          onClick={onCancelDrawing}
-          className="p-2 hover:bg-red-100 rounded-lg transition"
-          title="Cancel and close"
-        >
-          <X size={20} className="text-red-600" />
-        </button>
       </div>
 
       {mapError && (
-        <div className="mb-4 rounded bg-red-50 p-3 border border-red-200 flex gap-2">
+        <div className="mt-4 rounded-lg bg-red-50 border border-red-200 p-3 flex items-start gap-2">
           <AlertCircle size={16} className="text-red-600 flex-shrink-0 mt-0.5" />
           <p className="text-sm text-red-800">{mapError}</p>
         </div>
@@ -75,46 +92,60 @@ export default function DrawingMap({
 
       <div
         ref={mapContainer}
-        className="w-full h-96 rounded-lg overflow-hidden border-2 border-blue-400 bg-gray-100 relative"
+        className="w-full mt-4 rounded-xl overflow-hidden border-2 border-brand-primary/30 bg-gray-100 relative"
         style={{ minHeight: "400px" }}
       >
-        {/* Instructions */}
-        {drawModeEnabled && (
-          <div className="absolute top-20 left-4 z-[999] bg-blue-50 border-l-4 border-blue-600 p-3 rounded shadow-md max-w-xs">
-            <p className="text-sm text-blue-900 font-medium">📍 Click points on the map to draw a polygon</p>
-            <p className="text-xs text-blue-700 mt-1">Distances and area will be calculated automatically</p>
+        {!map.current && (
+          <div className="absolute inset-0 z-[1000] flex items-center justify-center bg-white/80 backdrop-blur-sm">
+            <div className="flex flex-col items-center gap-3">
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-primary border-t-transparent" />
+              <p className="text-sm font-medium text-text-secondary">Initializing map...</p>
+            </div>
           </div>
         )}
 
-        {/* Mode Indicator */}
-        <div className="absolute top-4 right-4 z-[999] px-4 py-2 rounded-lg text-sm font-bold bg-white border-2 border-gray-300 shadow-md">
-          {drawModeEnabled ? (
-            <span className="text-blue-600 flex items-center gap-2">
-              <span>📍 Polygon Drawing</span>
+        {drawModeEnabled && (
+          <div className="absolute top-20 left-4 z-[999] bg-white/95 backdrop-blur-sm border-l-4 border-brand-primary p-3.5 rounded-lg shadow-lg max-w-xs">
+            <p className="text-sm text-text-primary font-semibold">Click points on the map to draw a polygon</p>
+            <p className="text-xs text-text-secondary mt-1">Double-click to finish the current polygon</p>
+          </div>
+        )}
+
+        <div className="absolute top-4 right-4 z-[999] px-3 py-1.5 rounded-lg text-xs font-bold bg-white/95 backdrop-blur-sm border shadow-lg">
+          {!map.current ? (
+            <span className="text-text-secondary flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full bg-text-secondary" />
+              Loading...
+            </span>
+          ) : drawModeEnabled ? (
+            <span className="text-brand-primary flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full bg-brand-primary animate-pulse" />
+              Drawing Mode
             </span>
           ) : (
-            <span className="text-gray-600 flex items-center gap-2">
-              <span>🖐️ Pan Mode</span>
+            <span className="text-text-secondary flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full bg-text-secondary" />
+              Pan Mode
             </span>
           )}
         </div>
       </div>
 
       <div className="mt-4 space-y-3">
-        <div className="flex gap-3 justify-between items-center">
-          <div className="text-xs text-gray-600">
+        <div className="flex items-center justify-between bg-surface rounded-lg px-4 py-2.5">
+          <div className="text-sm text-text-secondary">
             {drawingStats.lines > 0 ? (
               <span>
-                <span className="font-semibold">{drawingStats.lines}</span> polygon(s) drawn,{" "}
-                <span className="font-semibold">{drawingStats.points}</span> points total
+                <span className="font-semibold text-text-primary">{drawingStats.lines}</span> polygon(s) drawn,{" "}
+                <span className="font-semibold text-text-primary">{drawingStats.points}</span> points
               </span>
             ) : (
-              <span className="text-gray-400">👉 Press "Start Drawing" button, then click on map to place points</span>
+              <span className="text-text-secondary/60">Press "Start Drawing" then click the map to place points</span>
             )}
           </div>
         </div>
 
-        <div className={`grid gap-2 ${drawModeEnabled ? "grid-cols-5" : "grid-cols-4"}`}>
+        <div className="flex flex-wrap gap-2">
           <Button variant="secondary" onClick={onCancelDrawing} className="gap-2">
             <X size={16} />
             Cancel
@@ -124,8 +155,8 @@ export default function DrawingMap({
             onClick={onDrawModeToggle}
             className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
               drawModeEnabled
-                ? "bg-blue-600 text-white hover:bg-blue-700 shadow-md"
-                : "bg-white text-blue-600 border-2 border-blue-400 hover:bg-blue-50"
+                ? "bg-brand-primary text-white hover:bg-brand-secondary shadow-md"
+                : "bg-white text-brand-primary border-2 border-brand-primary/40 hover:bg-brand-light"
             }`}
             title={drawModeEnabled ? "Drawing mode ON - Click to pan" : "Click to enable drawing mode"}
           >
@@ -136,7 +167,7 @@ export default function DrawingMap({
           {drawModeEnabled && (
             <button
               onClick={onCompletePolygon}
-              className="px-4 py-2 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2 bg-purple-600 text-white hover:bg-purple-700 shadow-md"
+              className="px-4 py-2 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2 bg-violet-600 text-white hover:bg-violet-700 shadow-md"
               title="Complete the current polygon and start a new one"
             >
               <Lock size={16} />

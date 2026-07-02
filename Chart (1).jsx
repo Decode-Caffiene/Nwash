@@ -12,11 +12,11 @@ import {
   Tooltip,
   Cell,
 } from "recharts";
-import SideBar from "../components/SideBar";
-import LoadingSpinner from "../components/LoadingSpinner";
+import Sidebar from "./src/components/layout/Sidebar";
+import Loader from "./src/components/common/Loader";
 
 //Api imports
-import { fetchOperators } from "../api/operator";
+import { getServiceProviders } from "./src/api/serviceProviderApi";
 
 // 1. Memoized Tooltip to prevent re-renders when the mouse moves over the chart
 const CustomTooltip = React.memo(({ active, payload }) => {
@@ -57,21 +57,20 @@ const Chart = () => {
     async function getData() {
       try {
         setLoading(true);
-        const res = await fetchOperators();
-        if (res.data) {
-          const formattedData = res.data
-            .filter(
-              (item) =>
-                item?.Summary_Index?.OEI !== null &&
-                item?.Summary_Index?.SPI !== null
-            )
-            .map((item) => ({
-              ...item,
-              x: item?.Summary_Index?.OEI,
-              y: item?.Summary_Index?.SPI,
-            }));
-          setData(formattedData);
-        }
+        const res = await getServiceProviders();
+        const items = Array.isArray(res) ? res : [];
+        const formattedData = items
+          .filter(
+            (item) =>
+              item?.Summary_Index?.OEI != null &&
+              item?.Summary_Index?.SPI != null
+          )
+          .map((item) => ({
+            ...item,
+            x: item?.Summary_Index?.OEI,
+            y: item?.Summary_Index?.SPI,
+          }));
+        setData(formattedData);
       } catch (error) {
         console.error("Fetch error", error);
       } finally {
@@ -100,7 +99,7 @@ const Chart = () => {
 
   return (
     <div className="flex min-h-screen w-full overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-      <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
+      <Sidebar />
 
       <main className="flex-1 flex flex-col items-center justify-center p-4 md:p-8 transition-all duration-300">
         <div className="w-full max-w-7xl bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl shadow-2xl p-6 md:p-8">
@@ -123,7 +122,7 @@ const Chart = () => {
 
           <div className="bg-white rounded-xl p-2 md:p-4 shadow-inner min-h-[580px] flex items-center justify-center">
             {loading ? (
-              <LoadingSpinner />
+              <Loader />
             ) : (
               <ResponsiveContainer width="100%" height={680}>
                 <ScatterChart
@@ -246,21 +245,6 @@ const Chart = () => {
                     }}
                   />
                   <ReferenceArea
-                    x1={70}
-                    x2={100}
-                    y1={70}
-                    y2={100}
-                    fill="#22c55e"
-                    fillOpacity={0.6}
-                    isAnimationActive={false}
-                    label={{
-                      value: "Improved",
-                      fontWeight: "bold",
-                      position: "insideBottomRight",
-                      fontSize: 14,
-                    }}
-                  />
-                  <ReferenceArea
                     x1={80}
                     x2={100}
                     y1={80}
@@ -323,7 +307,7 @@ const Chart = () => {
                     {chartData.map((entry, index) => (
                       <Cell
                         key={`cell-${index}`}
-                        fill={entry.isHighlighted ? "#ff0000" : "#1e40af"}
+                        fill={entry.isHighlighted ? "#f97316" : "#1e40af"}
                         r={entry.isHighlighted ? 10 : 4}
                         stroke={entry.isHighlighted ? "#fff" : "none"}
                         strokeWidth={2}

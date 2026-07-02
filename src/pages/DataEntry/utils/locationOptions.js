@@ -22,27 +22,38 @@ const normalizeDistrict = (name) => {
   if (!name) return "";
 
   // Use a canonical lowercase key for matching to avoid casing/underscore issues.
-  const canonical = String(name)
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, " ");
+  const canonical = String(name).trim().toLowerCase().replace(/\s+/g, " ");
 
   const MAP = {
-    "chitawan": "Chitwan",
-    "makawanpur": "Makwanpur",
-    "tanahu": "Tanahun",
-    "sindhupalchok": "Sindhupalchowk",
-    "kabhrepalanchok": "Kavrepalanchok",
-    "dhanusha": "Dhanusa",
-    "terhathum": "Terathum",
+    chitawan: "Chitwan",
+    makawanpur: "Makwanpur",
+    tanahu: "Tanahun",
+    sindhupalchok: "Sindhupalchowk",
+    kabhrepalanchok: "Kavrepalanchok",
+    kavrepalanchowk: "Kavrepalanchok",
+    dhanusha: "Dhanusa",
+    terhathum: "Terathum",
     // Split districts: both _E and _W map to the parent district name
-    "rukum_e": "Rukum",
-    "rukum_w": "Rukum",
-    "nawalparasi_e": "Nawalpur",
-    "nawalparasi_w": "Nawalparasi",
+    rukum_e: "Rukum",
+    rukum_w: "Rukum",
+    nawalparasi_e: "Nawalparasi",
+    nawalparasi_w: "Nawalparasi",
+    nawalpur: "Nawalparasi",
+    manag: "Manang",
   };
 
   return MAP[canonical] || toTitleCase(name);
+};
+
+// Municipality name aliases: national-dataset names that differ from GeoJSON names.
+// Key = national-dataset municipality name, Value = the GeoJSON name to match against.
+const MUNICIPALITY_NAME_ALIASES = {
+  bethanchok: "Bethanchowk",
+  "mandan deupur": "Mandandeupur",
+  bhojpur: "Bhumlu",
+  ichchhakamana: "Ichchhyakamana",
+  ichchhhyakamana: "Ichchhyakamana",
+  ichchhyakamana: "Ichchhyakamana",
 };
 
 // Enable temporary logs only when you want to debug.
@@ -83,28 +94,40 @@ const canonicalizeForFuzzyMatch = (value) => {
   );
 };
 
+const levenshteinDistance = (a, b) => {
+  if (a.length === 0) return b.length;
+  if (b.length === 0) return a.length;
+  const matrix = [];
+  for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+  for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      if (b.charAt(i - 1) === a.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1,
+          matrix[i][j - 1] + 1,
+          matrix[i - 1][j] + 1,
+        );
+      }
+    }
+  }
+  return matrix[b.length][a.length];
+};
+
 const municipalityNameMatches = ({
   wardMunicipalityNameCanon,
   municipalityNameCanon,
   wardMunicipalityNameFuzzy,
   municipalityNameFuzzy,
-  municipalityIsInNational,
 }) => {
-  // 1) strict equality
-  if (
-    municipalityIsInNational
-      ? wardMunicipalityNameCanon === municipalityNameCanon
-      : wardMunicipalityNameCanon === municipalityNameCanon
-  ) {
-    return true;
-  }
+  if (wardMunicipalityNameCanon === municipalityNameCanon) return true;
 
-  // 2) fuzzy equality
   if (wardMunicipalityNameFuzzy && municipalityNameFuzzy) {
     if (wardMunicipalityNameFuzzy === municipalityNameFuzzy) return true;
   }
 
-  // 3) prefix match (useful when one dataset has an extra leading/trailing token)
   if (wardMunicipalityNameCanon && municipalityNameCanon) {
     if (
       wardMunicipalityNameCanon.startsWith(municipalityNameCanon) ||
@@ -113,6 +136,30 @@ const municipalityNameMatches = ({
       return true;
     }
   }
+
+  const geoNoSpace = wardMunicipalityNameCanon
+    ? wardMunicipalityNameCanon.replace(/\s+/g, "")
+    : "";
+  const searchNoSpace = municipalityNameCanon
+    ? municipalityNameCanon.replace(/\s+/g, "")
+    : "";
+  if (geoNoSpace && searchNoSpace && geoNoSpace === searchNoSpace) return true;
+
+  const checkLevenshtein = (a, b) => {
+    if (!a || !b || a.length < 4 || b.length < 4) return false;
+    const dist = levenshteinDistance(a, b);
+    const maxLen = Math.max(a.length, b.length);
+    return dist <= 1 || (dist <= 2 && dist / maxLen <= 0.25);
+  };
+
+  if (checkLevenshtein(wardMunicipalityNameCanon, municipalityNameCanon))
+    return true;
+  if (
+    wardMunicipalityNameFuzzy &&
+    municipalityNameFuzzy &&
+    checkLevenshtein(wardMunicipalityNameFuzzy, municipalityNameFuzzy)
+  )
+    return true;
 
   return false;
 };
@@ -286,7 +333,21 @@ export const getMunicipalityNameOptions = (district, municipalityType) => {
       .map((m) => m.name),
   );
 
-  return uniqueSorted(fromNational.filter((name) => allowedByType.has(name)));
+  // Also include aliased GeoJSON names so national-dataset names with
+  // spelling differences (e.g. Bethanchok → Bethanchowk) remain available.
+  const allowedAliases = new Set(
+    [...allowedByType].flatMap((geoName) => {
+      const geoNameCanon = canonicalizeName(geoName);
+      return Object.entries(MUNICIPALITY_NAME_ALIASES)
+        .filter(
+          ([, aliasTarget]) => canonicalizeName(aliasTarget) === geoNameCanon,
+        )
+        .map(([nationalName]) => toTitleCase(nationalName));
+    }),
+  );
+
+  const combined = new Set([...allowedByType, ...allowedAliases]);
+  return uniqueSorted(fromNational.filter((name) => combined.has(name)));
 };
 
 export const getWardFeatures = (
@@ -298,23 +359,14 @@ export const getWardFeatures = (
   const municipalityNameCanon = canonicalizeName(municipalityName);
   const municipalityNameFuzzy = canonicalizeForFuzzyMatch(municipalityName);
 
-  // National dataset is the source of truth for how municipality names are spelled.
-  // We match ward geojson to nationaldataset-derived names to avoid spacing/casing issues.
-  const canonicalMunicipalities =
-    municipalitiesByDistrictFromNational?.[district] || [];
-
-  const canonicalMunicipalitiesCanon = canonicalMunicipalities.map((m) =>
-    canonicalizeName(m),
+  // Resolve national-dataset municipality name aliases to GeoJSON names
+  const aliasedMunicipalityName =
+    MUNICIPALITY_NAME_ALIASES[municipalityNameCanon] || municipalityName;
+  const aliasedMunicipalityNameCanon = canonicalizeName(
+    aliasedMunicipalityName,
   );
-  const canonicalMunicipalitiesFuzzy = canonicalMunicipalities.map((m) =>
-    canonicalizeForFuzzyMatch(m),
-  );
-
-  const municipalityIsInNational = canonicalMunicipalitiesCanon.includes(
-    municipalityNameCanon,
-  );
-  const municipalityIsInNationalFuzzy = canonicalMunicipalitiesFuzzy.includes(
-    municipalityNameFuzzy,
+  const aliasedMunicipalityNameFuzzy = canonicalizeForFuzzyMatch(
+    aliasedMunicipalityName,
   );
 
   const debug =
@@ -348,25 +400,25 @@ export const getWardFeatures = (
 
     // Municipality matching
     const doesMunicipalityMatch = (() => {
-      // Prefer national-set matching semantics when possible.
-      if (municipalityIsInNational || municipalityIsInNationalFuzzy) {
-        return municipalityNameMatches({
-          municipalityIsInNational,
-          wardMunicipalityNameCanon,
-          municipalityNameCanon,
-          wardMunicipalityNameFuzzy,
-          municipalityNameFuzzy,
-        });
-      }
-
-      // Fallback: fuzzy + canonical (still tolerant)
-      return municipalityNameMatches({
-        municipalityIsInNational: false,
+      const directMatch = municipalityNameMatches({
         wardMunicipalityNameCanon,
         municipalityNameCanon,
         wardMunicipalityNameFuzzy,
         municipalityNameFuzzy,
       });
+
+      if (directMatch) return true;
+
+      if (aliasedMunicipalityName !== municipalityName) {
+        return municipalityNameMatches({
+          wardMunicipalityNameCanon,
+          municipalityNameCanon: aliasedMunicipalityNameCanon,
+          wardMunicipalityNameFuzzy,
+          municipalityNameFuzzy: aliasedMunicipalityNameFuzzy,
+        });
+      }
+
+      return false;
     })();
 
     const doesTypeMatch = !municipalityType || wardType === municipalityType;

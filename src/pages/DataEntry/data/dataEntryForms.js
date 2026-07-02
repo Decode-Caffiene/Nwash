@@ -24,6 +24,7 @@ export const dataEntryForms = [
     sections: [
       {
         title: "Kpi 1",
+        sectionKey: "service_coverage",
         questions: [
           "Does a business plan exist? (Y/N)",
           "Number of households served by the WSUC (specify number)",
@@ -32,6 +33,7 @@ export const dataEntryForms = [
       },
       {
         title: "Kpi 2",
+        sectionKey: "adequacy",
         questions: [
           "Total volume of water billed to residential customers?",
           "Total number of population served?",
@@ -39,6 +41,7 @@ export const dataEntryForms = [
       },
       {
         title: "Kpi 3",
+        sectionKey: "water_quality",
         questions: [
           "Is there a Lab report? (Y/N)",
           "Water quality test conducted or not? (Y/N)",
@@ -49,6 +52,7 @@ export const dataEntryForms = [
       },
       {
         title: "Kpi 4",
+        sectionKey: "reliability",
         questions: [
           "Mode of water supply? (Continuous / Intermittent)",
           "Hours of water supply in a day?",
@@ -56,6 +60,7 @@ export const dataEntryForms = [
       },
       {
         title: "Kpi 5",
+        sectionKey: "non_revenue_water",
         questions: [
           "Is the logbook maintained for pumping hours?",
           "Flow measurement via pump curve? (Information about power (HP) and Head)",
@@ -67,6 +72,7 @@ export const dataEntryForms = [
       },
       {
         title: "Kpi 6",
+        sectionKey: "operating_ratio",
         questions: [
           "Is there an annual audit report?",
           "Total annual operation and maintenance (O&M) costs?",
@@ -75,6 +81,7 @@ export const dataEntryForms = [
       },
       {
         title: "Kpi 7",
+        sectionKey: "metering_ratio",
         questions: [
           "Total functional metered connections?",
           "Total number of metered connections?",
@@ -82,6 +89,7 @@ export const dataEntryForms = [
       },
       {
         title: "Kpi 8",
+        sectionKey: "grievances_addressal",
         questions: [
           "Is a log book maintained to record consumer complaints and actions taken in response to them?",
           "Grievance addressal mechanism exists? (Y/N)",
@@ -114,6 +122,7 @@ export const dataEntryForms = [
     sections: [
       {
         title: "Kpi 1",
+        sectionKey: "service_coverage",
         questions: [
           "Does a business plan exist? (Y/N)",
           "Number of households served by the WSUC (specify number)",
@@ -122,6 +131,7 @@ export const dataEntryForms = [
       },
       {
         title: "Kpi 2",
+        sectionKey: "adequacy",
         questions: [
           "Total volume of water billed to residential customers?",
           "Total number of population served?",
@@ -129,6 +139,7 @@ export const dataEntryForms = [
       },
       {
         title: "Kpi 3",
+        sectionKey: "water_quality",
         questions: [
           "Is there a Lab report? (Y/N)",
           "Water quality test conducted or not? (Y/N)",
@@ -139,6 +150,7 @@ export const dataEntryForms = [
       },
       {
         title: "Kpi 4",
+        sectionKey: "reliability",
         questions: [
           "Mode of water supply? (Continuous / Intermittent)",
           "Hours of water supply in a day?",
@@ -146,6 +158,7 @@ export const dataEntryForms = [
       },
       {
         title: "Kpi 5",
+        sectionKey: "non_revenue_water",
         questions: [
           "Is the logbook maintained for pumping hours?",
           "Flow measurement via pump curve? (Information about power (HP) and Head)",
@@ -157,6 +170,7 @@ export const dataEntryForms = [
       },
       {
         title: "Kpi 6",
+        sectionKey: "operating_ratio",
         questions: [
           "Is there an annual audit report?",
           "Total annual operation and maintenance (O&M) costs?",
@@ -165,6 +179,7 @@ export const dataEntryForms = [
       },
       {
         title: "Kpi 7",
+        sectionKey: "metering_ratio",
         questions: [
           "Total functional metered connections?",
           "Total number of metered connections?",
@@ -172,6 +187,7 @@ export const dataEntryForms = [
       },
       {
         title: "Kpi 8",
+        sectionKey: "grievances_addressal",
         questions: [
           "Is a log book maintained to record consumer complaints and actions taken in response to them?",
           "Grievance addressal mechanism exists? (Y/N)",

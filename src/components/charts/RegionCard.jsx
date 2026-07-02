@@ -15,6 +15,8 @@ export default function RegionCard({
         return <AlertCircle size={24} />;
       case "POOR":
         return <TrendingDown size={24} />;
+      case "ACTIVE":
+        return <TrendingUp size={24} />;
       case "IMPROVING":
         return <TrendingUp size={24} />;
       default:

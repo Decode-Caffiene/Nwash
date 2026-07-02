@@ -45,11 +45,25 @@ export function useMapData() {
 
   // Resolve every project's centroid + canonical municipality name up front
   // so individual markers never need to run the fuzzy resolver on render.
+  // Priority: 1. geometry.coordinates from project data (Excel-provided),
+  //           2. municipality centroid via fuzzy resolution.
   const projectLocations = useMemo(
     () =>
       projects.reduce((acc, project) => {
         const rawMuni = project.Location?.Municipality_Name ?? "";
         const rawDist = cleanDistrict(project.Location?.District_Name);
+
+        // Check for Excel-provided coordinates first
+        const geo = project.geometry?.coordinates;
+        if (geo && Array.isArray(geo) && geo.length === 2) {
+          const [lng, lat] = geo;
+          if (lat != null && lng != null) {
+            acc[project._id] = { lat, lng, canonicalMunicipality: rawMuni, district: rawDist };
+            return acc;
+          }
+        }
+
+        // Fall back to municipality centroid resolution
         const resolved = resolveMuni(rawMuni, rawDist, muniIndex);
         acc[project._id] = {
           lat: resolved.lat,

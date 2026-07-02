@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ClipboardList, MapPinned, Loader } from "lucide-react";
+import { ClipboardList, MapPinned, Loader, AlertCircle } from "lucide-react";
 
 import Button from "../../../../components/common/Button";
 import FormControl, { inputClass } from "../../components/common/FormControl";
@@ -144,18 +144,20 @@ function ServiceProviderSection({
   };
 
   return (
-    <section className="stat-card">
-      <div className="flex items-center gap-3 border-b border-surface-border pb-4">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-light text-brand-secondary">
-          <ClipboardList size={20} />
-        </div>
-        <div>
-          <h2 className="text-lg font-semibold text-text-primary">{title}</h2>
-          <p className="text-sm text-text-secondary">{subtitle}</p>
+    <section className="stat-card overflow-hidden">
+      <div className="bg-gradient-to-r from-brand-light to-white px-5 py-4 -mx-5 -mt-5 border-b border-surface-border">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-primary text-white shadow-sm">
+            <ClipboardList size={20} />
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-text-primary">{title}</h2>
+            <p className="text-sm text-text-secondary">{subtitle}</p>
+          </div>
         </div>
       </div>
 
-      <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {fields.map((field) => {
           const key = `spatial.${slugify(field)}`;
           const isWardsCoveredField = key === LOCATION_FIELD_KEYS.wardsCovered;
@@ -164,7 +166,7 @@ function ServiceProviderSection({
 
           if (isWardsCoveredField) {
             return (
-              <div key={key} className="block">
+              <div key={key} className="block md:col-span-2 xl:col-span-3">
                 <label
                   htmlFor={key}
                   className="text-sm font-medium text-text-primary"
@@ -179,13 +181,13 @@ function ServiceProviderSection({
                     onChange={(event) =>
                       handleFieldChange(key, event.target.value)
                     }
-                    className={`${inputClass} mt-0`}
+                    className={`${inputClass} mt-0 flex-1`}
                     placeholder="Trace wards from map"
                   />
                   <Button
                     type="button"
                     variant="secondary"
-                    className="shrink-0 px-3"
+                    className="shrink-0 px-4 border-brand-primary/30 text-brand-primary hover:bg-brand-light hover:border-brand-primary"
                     onClick={() => setIsWardTraceOpen(true)}
                     disabled={!canTraceWards}
                   >
@@ -198,22 +200,25 @@ function ServiceProviderSection({
           }
 
           if (isGpsLatitudeField || isGpsLongitudeField) {
-            // Only render latitude field with the button, skip longitude rendering
             if (isGpsLongitudeField) {
               return null;
             }
 
             return (
               <div key={key} className="block md:col-span-2 xl:col-span-3">
-                <label className="text-sm font-medium text-text-primary">
-                  GPS Coordinates
-                </label>
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="h-2 w-2 rounded-full bg-brand-primary" />
+                  <label className="text-sm font-medium text-text-primary">
+                    GPS Coordinates
+                  </label>
+                </div>
                 {gpsError && (
-                  <div className="mt-2 rounded bg-red-50 p-2 text-sm text-red-600">
+                  <div className="mb-2 rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700 flex items-center gap-2">
+                    <AlertCircle size={14} className="flex-shrink-0" />
                     {gpsError}
                   </div>
                 )}
-                <div className="mt-2 grid gap-2 md:grid-cols-2">
+                <div className="grid gap-3 md:grid-cols-2">
                   <div>
                     <label
                       htmlFor={LOCATION_FIELD_KEYS.gpsLatitude}
@@ -262,7 +267,7 @@ function ServiceProviderSection({
                 <Button
                   type="button"
                   variant="secondary"
-                  className="mt-2 w-full"
+                  className="mt-3 w-full border-brand-primary/30 text-brand-primary hover:bg-brand-light hover:border-brand-primary"
                   onClick={captureGPSLocation}
                   disabled={isGpsLoading}
                 >
@@ -283,8 +288,8 @@ function ServiceProviderSection({
           }
 
           return (
-            <label key={key} htmlFor={key} className="block">
-              <span className="text-sm font-medium text-text-primary">
+            <label key={key} htmlFor={key} className="block group">
+              <span className="text-sm font-medium text-text-primary group-focus-within:text-brand-primary transition-colors">
                 {fieldTranslations[language][field] || field}
               </span>
               <FormControl

@@ -17,7 +17,6 @@ export default function AnalyticsSummary({ chartData = [] }) {
     const inactiveStats = calculateZoneStats(categorizedData.INACTIVE);
     const activeStats = calculateZoneStats(categorizedData.ACTIVE);
     const improvingStats = calculateZoneStats(categorizedData.IMPROVING);
-
     return {
       categorized: categorizedData,
       stats: {

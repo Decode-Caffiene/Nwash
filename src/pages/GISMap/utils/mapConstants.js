@@ -21,6 +21,29 @@ export const MUNI_CORRECTIONS = {
   "rupakot majuwa rupkot": "Rupakot Majhuwagadhi",
 };
 
+// Zone colours matching zoneAnalytics.js categories
+const ZONE_COLORS = {
+  VERY_POOR: "#dc2626",
+  POOR: "#ec4899",
+  INACTIVE: "#475569",
+  ACTIVE: "#15803d",
+  HIGHLY_EFFICIENT: "#1e40af",
+  MODERATELY_EFFICIENT: "#06b6d4",
+  JUST_EFFICIENT: "#84cc16",
+  IMPROVED: "#65a30d",
+  IMPROVING: "#d5d906",
+};
+
+export const categoryMarkerIcons = {};
+for (const [key, color] of Object.entries(ZONE_COLORS)) {
+  categoryMarkerIcons[key] = L.divIcon({
+    html: `<span style="display:block;width:12px;height:12px;border-radius:9999px;border:2.5px solid #fff;background:${color};box-shadow:0 2px 8px ${color}99,0 0 0 4px ${color}33;"></span>`,
+    className: "",
+    iconSize: [12, 12],
+    iconAnchor: [6, 6],
+  });
+}
+
 export const defaultMarkerIcon = L.divIcon({
   html: `<span style="display:block;width:12px;height:12px;border-radius:9999px;border:2.5px solid #fff;background:#10b981;box-shadow:0 2px 8px rgba(16,185,129,0.55),0 0 0 4px rgba(16,185,129,0.2);"></span>`,
   className: "",

@@ -107,32 +107,35 @@ export default function CoverageAreaPreview({
   }, [geojson, district, municipalityName]);
 
   return (
-    <div className="rounded-lg border border-blue-300 overflow-hidden bg-white">
-      <div className="flex items-center justify-between bg-blue-50 px-4 py-3 border-b border-blue-200">
-        <h3 className="font-semibold text-blue-900 text-sm">
-          Coverage Area Preview
-        </h3>
-        <div className="flex gap-2">
+    <div className="rounded-xl border border-brand-primary/20 overflow-hidden bg-white shadow-sm">
+      <div className="flex items-center justify-between bg-gradient-to-r from-brand-light to-white px-4 py-3 border-b border-brand-primary/10">
+        <div className="flex items-center gap-2">
+          <div className="h-2 w-2 rounded-full bg-brand-primary" />
+          <h3 className="font-semibold text-text-primary text-sm">
+            Coverage Area Preview
+          </h3>
+        </div>
+        <div className="flex gap-1.5">
           <button
             onClick={onEdit}
-            className="p-1.5 hover:bg-blue-200 rounded-lg transition text-blue-700"
+            className="p-1.5 hover:bg-brand-primary/10 rounded-lg transition text-brand-primary"
             title="Edit coverage area"
           >
-            <Edit3 size={16} />
+            <Edit3 size={15} />
           </button>
           <button
             onClick={onClear}
-            className="p-1.5 hover:bg-red-200 rounded-lg transition text-red-700"
+            className="p-1.5 hover:bg-red-100 rounded-lg transition text-red-600"
             title="Clear coverage area"
           >
-            <X size={16} />
+            <X size={15} />
           </button>
         </div>
       </div>
       <div
         ref={mapContainer}
         className="w-full"
-        style={{ height: "300px", background: "#f0f0f0" }}
+        style={{ height: "300px", background: "#f8fafc" }}
       />
     </div>
   );

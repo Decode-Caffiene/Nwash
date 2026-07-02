@@ -17,10 +17,103 @@ const ensureMuniCache = async () => {
   return muniCachePromise;
 };
 
-const normalizeBoundaryValue = (value) =>
-  String(value ?? "")
+const canonicalizeName = (value) => {
+  return String(value || "")
     .trim()
-    .toLowerCase();
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .replace(/[’']/g, "'")
+    .replace(/\s*-\s*/g, "-")
+    .replace(/[.,]/g, "");
+};
+
+const canonicalizeForFuzzyMatch = (value) => {
+  return canonicalizeName(value)
+    .replace(
+      /\b(gaunpalika|nagarpalika|mahanagarpalika|upamahanagarpalika)\b/g,
+      "",
+    )
+    .replace(/\s+/g, " ")
+    .trim();
+};
+
+const toTitleCase = (value) =>
+  String(value || "")
+    .toLowerCase()
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+
+// Levenshtein distance for fuzzy fallback matching
+const levenshteinDistance = (a, b) => {
+  if (a.length === 0) return b.length;
+  if (b.length === 0) return a.length;
+  const matrix = [];
+  for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+  for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      if (b.charAt(i - 1) === a.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1,
+          matrix[i][j - 1] + 1,
+          matrix[i - 1][j] + 1,
+        );
+      }
+    }
+  }
+  return matrix[b.length][a.length];
+};
+
+const municipalityNameMatches = ({
+  geoNameCanon,
+  searchNameCanon,
+  geoNameFuzzy,
+  searchNameFuzzy,
+}) => {
+  if (geoNameCanon === searchNameCanon) return true;
+  if (geoNameFuzzy && searchNameFuzzy && geoNameFuzzy === searchNameFuzzy)
+    return true;
+  if (geoNameCanon && searchNameCanon) {
+    if (
+      geoNameCanon.startsWith(searchNameCanon) ||
+      searchNameCanon.startsWith(geoNameCanon)
+    )
+      return true;
+  }
+  const geoNoSpace = geoNameCanon ? geoNameCanon.replace(/\s+/g, "") : "";
+  const searchNoSpace = searchNameCanon
+    ? searchNameCanon.replace(/\s+/g, "")
+    : "";
+  if (geoNoSpace && searchNoSpace && geoNoSpace === searchNoSpace) return true;
+
+  const checkLevenshtein = (a, b) => {
+    if (!a || !b || a.length < 4 || b.length < 4) return false;
+    const dist = levenshteinDistance(a, b);
+    const maxLen = Math.max(a.length, b.length);
+    return dist <= 1 || (dist <= 2 && dist / maxLen <= 0.25);
+  };
+
+  if (checkLevenshtein(geoNameCanon, searchNameCanon)) return true;
+  if (
+    geoNameFuzzy &&
+    searchNameFuzzy &&
+    checkLevenshtein(geoNameFuzzy, searchNameFuzzy)
+  )
+    return true;
+
+  return false;
+};
+
+// Municipality name aliases: national-dataset names that differ from GeoJSON names.
+const MUNICIPALITY_NAME_ALIASES = {
+  bethanchok: "Bethanchowk",
+  "mandan deupur": "Mandandeupur",
+  bhojpur: "Bhumlu",
+  ichchhakamana: "Ichchhyakamana",
+  ichchhhyakamana: "Ichchhyakamana",
+  ichchhyakamana: "Ichchhyakamana",
+};
 
 // Same district name normalization as locationOptions.js
 // Maps known GeoJSON misspellings to the national-dataset spelling.
@@ -33,14 +126,66 @@ const normalizeDistrict = (name) => {
     tanahu: "Tanahun",
     sindhupalchok: "Sindhupalchowk",
     kabhrepalanchok: "Kavrepalanchok",
+    kavrepalanchowk: "Kavrepalanchok",
     dhanusha: "Dhanusa",
     terhathum: "Terathum",
     rukum_e: "Rukum",
     rukum_w: "Rukum",
-    nawalparasi_e: "Nawalpur",
+    nawalparasi_e: "Nawalparasi",
     nawalparasi_w: "Nawalparasi",
+    nawalpur: "Nawalparasi",
+    manag: "Manang",
   };
-  return MAP[canonical] || name.trim();
+  return MAP[canonical] || toTitleCase(name);
+};
+
+const findMatchingFeatures = (features, district, municipalityName) => {
+  const districtNorm = normalizeDistrict(district);
+
+  const searchNameCanon = canonicalizeName(municipalityName);
+  const searchNameFuzzy = canonicalizeForFuzzyMatch(municipalityName);
+
+  // Resolve national-dataset municipality name aliases to GeoJSON names
+  const aliasedName =
+    MUNICIPALITY_NAME_ALIASES[searchNameCanon] || municipalityName;
+  const aliasedNameCanon = canonicalizeName(aliasedName);
+  const aliasedNameFuzzy = canonicalizeForFuzzyMatch(aliasedName);
+
+  const matching = features.filter((feature) => {
+    const featureDistrictNorm = normalizeDistrict(
+      feature.properties?.DISTRICT,
+    );
+    if (featureDistrictNorm !== districtNorm) return false;
+
+    const geoNameCanon = canonicalizeName(feature.properties?.NAME);
+    const geoNameFuzzy = canonicalizeForFuzzyMatch(feature.properties?.NAME);
+
+    // Try direct match first
+    if (
+      municipalityNameMatches({
+        geoNameCanon,
+        searchNameCanon,
+        geoNameFuzzy,
+        searchNameFuzzy,
+      })
+    ) {
+      return true;
+    }
+
+    // Try alias-resolved name
+    if (aliasedName !== municipalityName) {
+      return municipalityNameMatches({
+        geoNameCanon,
+        searchNameCanon: aliasedNameCanon,
+        geoNameFuzzy,
+        searchNameFuzzy: aliasedNameFuzzy,
+      });
+    }
+
+    return false;
+  });
+
+  return matching;
 };
 
 export const getMunicipalityBoundary = (district, municipalityName) => {
@@ -48,20 +193,11 @@ export const getMunicipalityBoundary = (district, municipalityName) => {
   // NOTE: legacy sync export (kept for compatibility)
   if (!muniCache?.features) return null;
 
-  const districtNorm = normalizeBoundaryValue(normalizeDistrict(district));
-  const muniNameNorm = normalizeBoundaryValue(municipalityName);
-
-  const features = muniCache.features || [];
-  const matching = features.filter((feature) => {
-    const featureDistrictNorm = normalizeBoundaryValue(
-      normalizeDistrict(feature.properties?.DISTRICT),
-    );
-    const featureNameNorm = normalizeBoundaryValue(feature.properties?.NAME);
-
-    return (
-      featureDistrictNorm === districtNorm && featureNameNorm === muniNameNorm
-    );
-  });
+  const matching = findMatchingFeatures(
+    muniCache.features,
+    district,
+    municipalityName,
+  );
 
   if (matching.length === 0) return null;
 
@@ -79,19 +215,7 @@ export const getMunicipalityBoundaryAsync = async (
   const muniGeo = await ensureMuniCache();
   const features = muniGeo?.features || [];
 
-  const districtNorm = normalizeBoundaryValue(normalizeDistrict(district));
-  const muniNameNorm = normalizeBoundaryValue(municipalityName);
-
-  const matching = features.filter((feature) => {
-    const featureDistrictNorm = normalizeBoundaryValue(
-      normalizeDistrict(feature.properties?.DISTRICT),
-    );
-    const featureNameNorm = normalizeBoundaryValue(feature.properties?.NAME);
-
-    return (
-      featureDistrictNorm === districtNorm && featureNameNorm === muniNameNorm
-    );
-  });
+  const matching = findMatchingFeatures(features, district, municipalityName);
 
   if (matching.length === 0) return null;
 

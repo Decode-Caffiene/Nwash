@@ -1,14 +1,20 @@
 import L from "leaflet";
-// Ensure the plugin is registered (side-effect import). Some bundlers may be sensitive
-// to pure side-effect imports, so we also attempt an explicit require.
-import "leaflet-geodesy";
 
-try {
-  // eslint-disable-next-line global-require
-  require("leaflet-geodesy");
-} catch {
-  // ignore - runtime may not support require depending on bundler
-}
+const WGS84_RADIUS = 6378137;
+
+const rad = (deg) => (deg * Math.PI) / 180;
+
+const geodesicArea = (latlngs) => {
+  if (latlngs.length < 3) return 0;
+  let area = 0;
+  for (let i = 0; i < latlngs.length; i++) {
+    const j = (i + 1) % latlngs.length;
+    const p1 = latlngs[i];
+    const p2 = latlngs[j];
+    area += rad(p2.lng - p1.lng) * (2 + Math.sin(rad(p1.lat)) + Math.sin(rad(p2.lat)));
+  }
+  return (area * WGS84_RADIUS * WGS84_RADIUS) / 2;
+};
 
 export const setupPolygonDrawing = (
   mapContainer,
@@ -30,20 +36,7 @@ export const setupPolygonDrawing = (
 
   const calculateArea = (points) => {
     if (points.length < 3) return 0;
-
-    // Guard against cases where leaflet-geodesy failed to register.
-    const geodesicAreaFn =
-      L?.GeometryUtil?.geodesicArea ||
-      (L?.GeometryUtil && typeof L.GeometryUtil.geodesicArea === "function"
-        ? L.GeometryUtil.geodesicArea
-        : null);
-
-    if (typeof geodesicAreaFn !== "function") {
-      return 0;
-    }
-
-    const latlngs = points.map((p) => [p.lat, p.lng]);
-    return geodesicAreaFn(latlngs); // returns area in square meters
+    return geodesicArea(points);
   };
 
   const formatDistance = (meters) => {

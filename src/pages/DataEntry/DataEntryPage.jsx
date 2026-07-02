@@ -10,27 +10,97 @@ import CoverageAreaForm from "./components/coverage/CoverageAreaForm";
 import { dataEntryForms } from "./data/dataEntryForms";
 import { saveServiceProviderForm } from "../../api/serviceProviderApi";
 
+const FIELD_MAP = {
+  "Name": "name",
+  "Email": "email",
+  "Phone Number": "phone",
+  "Designation": "designation",
+  "Name of Service Provider": "",
+  "WSUC Name": "wsucName",
+  "Province Name": "province",
+  "District": "district",
+  "Municipality Name": "municipality",
+  "Number of wards covered": "wardsCovered",
+  "Coverage Area": "coordinates",
+  "GPS Latitude": "latitude",
+  "GPS Longitude": "longitude",
+};
+
+const SPATIAL_MAP = {
+  "name": "name",
+  "email": "email",
+  "designation": "designation",
+  "name-of-service-provider": "",
+  "wsuc-name": "wsucName",
+  "province-name": "province",
+  "district": "district",
+  "municipality-name": "municipality",
+  "number-of-wards-covered": "wardsCovered",
+  "phone-number": "phone",
+  "gps-latitude": "latitude",
+  "gps-longitude": "longitude",
+};
+
 const COVERAGE_AREA_KEY = "spatial.coverage-area-geojson";
 
+const setNested = (obj, path, value) => {
+  const parts = path.split(".");
+  let current = obj;
+  for (let i = 0; i < parts.length - 1; i++) {
+    if (!current[parts[i]] || typeof current[parts[i]] !== "object") {
+      current[parts[i]] = {};
+    }
+    current = current[parts[i]];
+  }
+  current[parts[parts.length - 1]] = value;
+};
+
 const normalizeSubmitPayload = (formType, values) => {
-  const payload = {
-    formType,
-  };
+  const payload = { formType };
 
   Object.entries(values).forEach(([key, value]) => {
     if (key === "undefined") return;
+    if (value === "" || value === null || value === undefined) return;
 
-    if (key === COVERAGE_AREA_KEY && typeof value === "string") {
-      try {
-        payload[key] = JSON.parse(value);
-      } catch {
-        payload[key] = value;
+    if (key === COVERAGE_AREA_KEY) {
+      if (typeof value === "string") {
+        try {
+          const parsed = JSON.parse(value);
+          if (parsed && parsed.type === "FeatureCollection") {
+            payload.coordinates = parsed;
+          }
+        } catch {
+          // skip invalid coverage area string
+        }
+      } else if (value && typeof value === "object") {
+        payload.coordinates = value;
       }
       return;
     }
 
-    payload[key] = value;
+    setNested(payload, key, value);
   });
+
+  // Flatten detail fields from formType group to top level
+  const formGroup = payload[formType];
+  if (formGroup) {
+    Object.entries(formGroup).forEach(([fieldName, fieldValue]) => {
+      const mappedKey = FIELD_MAP[fieldName] || fieldName;
+      payload[mappedKey] = fieldValue;
+    });
+    delete payload[formType];
+  }
+
+  // Flatten spatial fields to top level
+  const spatialGroup = payload.spatial;
+  if (spatialGroup) {
+    Object.entries(spatialGroup).forEach(([fieldName, fieldValue]) => {
+      const mappedKey = SPATIAL_MAP[fieldName];
+      if (mappedKey === "") return;
+      payload[mappedKey || fieldName] = fieldValue;
+    });
+    delete payload.spatial;
+  }
 
   return payload;
 };
@@ -70,12 +140,11 @@ function DataEntryPage() {
     setSubmitMessage("");
 
     try {
-      const backendFormType = activeForm.useMapSection
-        ? "service-provider"
-        : activeForm.id;
+      const backendFormType = activeForm.id;
       const payload = normalizeSubmitPayload(backendFormType, currentValues);
+      console.log("=== FORM PAYLOAD (normalized object) ===", JSON.stringify(payload, null, 2));
 
-      const response = await saveServiceProviderForm(payload);
+      const response = await saveServiceProviderForm(payload, currentValues);
 
       setSubmitStatus("success");
       setSubmitMessage(
@@ -89,6 +158,11 @@ function DataEntryPage() {
         setSubmitMessage("");
       }, 2000);
     } catch (error) {
+      console.error("=== FORM SUBMIT ERROR ===", {
+        status: error?.response?.status,
+        data: error?.response?.data,
+        message: error?.message,
+      });
       setSubmitStatus("error");
       setSubmitMessage(
         error?.response?.data?.message ||
@@ -151,7 +225,7 @@ function DataEntryPage() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-6">
         {activeForm.useMapSection ? (
           <CoverageAreaForm
             title={activeForm.detailsTitle}

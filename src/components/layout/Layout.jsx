@@ -1,9 +1,11 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 
 function Layout() {
+  const { pathname } = useLocation();
+
   return (
     <div className="min-h-screen bg-surface">
       <div className="flex min-h-screen">
@@ -13,7 +15,7 @@ function Layout() {
           <main className="flex-1 overflow-y-auto bg-surface px-6 py-6">
             <Outlet />
           </main>
-          <Footer />
+          {pathname === "/overview" && <Footer />}
         </div>
       </div>
     </div>

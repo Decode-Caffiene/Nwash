@@ -1,10 +1,22 @@
+const zoneColors = [
+  { color: "#1e40af", label: "Highly Efficient" },
+  { color: "#06b6d4", label: "Moderately Efficient" },
+  { color: "#84cc16", label: "Just Efficient" },
+  { color: "#65a30d", label: "Improved" },
+  { color: "#d5d906", label: "Improving" },
+  { color: "#15803d", label: "Active" },
+  { color: "#475569", label: "Inactive" },
+  { color: "#ec4899", label: "Poor" },
+  { color: "#dc2626", label: "Very Poor" },
+];
+
 const items = [
-  {
+  ...zoneColors.map((z) => ({
     shape: "circle",
-    color: "#10b981",
-    shadow: "0 0 0 3px rgba(16,185,129,0.25)",
-    label: "Project location",
-  },
+    color: z.color,
+    shadow: `0 0 0 3px ${z.color}44`,
+    label: z.label,
+  })),
   {
     shape: "circle",
     color: "#3b82f6",

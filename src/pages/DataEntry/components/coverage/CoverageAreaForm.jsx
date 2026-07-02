@@ -63,6 +63,7 @@ export default function CoverageAreaForm({
   const [gpsError, setGpsError] = useState(null);
   const [mapError, setMapError] = useState(null);
   const [drawingStats, setDrawingStats] = useState({ lines: 0, points: 0 });
+  const [mapReady, setMapReady] = useState(false);
 
   // Map drawing refs
   const mapContainer = useRef(null);
@@ -82,11 +83,10 @@ export default function CoverageAreaForm({
   useEffect(() => {
     if (!isDrawing) return;
 
-    // Always reset drawing state when opening the map for a new selection
-    // (prevents previously drawn items from disappearing/bleeding into a new municipality)
     drawnItems.current = [];
     setDrawingStats({ lines: 0, points: 0 });
     setMapError(null);
+    setMapReady(false);
 
     let cleanupCanvasListeners = null;
 
@@ -106,18 +106,24 @@ export default function CoverageAreaForm({
 
         map.current = L.map(mapContainer.current).setView([28.3949, 84.124], 6);
 
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          maxZoom: 19,
-          attribution: "© OpenStreetMap",
-        }).addTo(map.current);
+        L.tileLayer(
+          "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
+          {
+            maxZoom: 20,
+            attribution: "Google",
+          },
+        ).addTo(map.current);
 
         // Load and display selected boundary, then zoom to it
-        // Prefer municipality boundary (within selected district).
-        // If municipality match fails, fallback to district boundary.
         const municipalityGeoJSON = await getMunicipalityBoundaryAsync(
           district,
           municipalityName,
         );
+        if (!municipalityGeoJSON) {
+          console.warn(
+            `Municipality boundary not found for "${municipalityName}" in ${district}. Falling back to district boundary.`,
+          );
+        }
         const boundaryGeoJSON =
           municipalityGeoJSON || (await getDistrictBoundaryAsync(district));
 
@@ -137,67 +143,6 @@ export default function CoverageAreaForm({
           fitMapToLayer(map.current, boundaryLayer.current);
         }
 
-        // Load existing coverage area if available
-        if (coverageAreaGeoJson) {
-          try {
-            const existingGeometry =
-              typeof coverageAreaGeoJson === "string"
-                ? JSON.parse(coverageAreaGeoJson)
-                : coverageAreaGeoJson;
-
-            if (existingGeometry && existingGeometry.features) {
-              existingGeometry.features.forEach((feature) => {
-                const layer = L.geoJSON(feature, {
-                  style: {
-                    color: "#0066cc",
-                    weight: 3,
-                    opacity: 0.8,
-                  },
-                });
-
-                layer.eachLayer((sublayer) => {
-                  sublayer.addTo(map.current);
-                  sublayer.on("click", () => {
-                    if (map.current && map.current.hasLayer(sublayer)) {
-                      map.current.removeLayer(sublayer);
-                      drawnItems.current = drawnItems.current.filter(
-                        (item) => item !== sublayer,
-                      );
-                      setDrawingStats({
-                        lines: drawnItems.current.length,
-                        points: drawnItems.current.reduce((sum, item) => {
-                          try {
-                            const coords =
-                              item.toGeoJSON().geometry.coordinates;
-                            return sum + coords.length;
-                          } catch {
-                            return sum;
-                          }
-                        }, 0),
-                      });
-                    }
-                  });
-                  drawnItems.current.push(sublayer);
-                });
-              });
-
-              setDrawingStats({
-                lines: drawnItems.current.length,
-                points: drawnItems.current.reduce((sum, item) => {
-                  try {
-                    const coords = item.toGeoJSON().geometry.coordinates;
-                    return sum + coords.length;
-                  } catch {
-                    return sum;
-                  }
-                }, 0),
-              });
-            }
-          } catch (error) {
-            console.error("Error loading existing coverage area:", error);
-          }
-        }
-
         if (map.current.touchZoom) map.current.touchZoom.enable();
         if (map.current.doubleClickZoom) map.current.doubleClickZoom.enable();
         if (map.current.scrollWheelZoom) map.current.scrollWheelZoom.enable();
@@ -211,10 +156,8 @@ export default function CoverageAreaForm({
         );
         polygonDrawingRef.current = polygonDrawing;
 
-        // Only reset stats if no existing coverage area was loaded
-        if (!coverageAreaGeoJson) {
-          setDrawingStats({ lines: 0, points: 0 });
-        }
+        setDrawingStats({ lines: 0, points: 0 });
+        setMapReady(true);
       } catch (error) {
         console.error("Map initialization error:", error);
         setMapError("Failed to initialize map. Please try again.");
@@ -229,7 +172,69 @@ export default function CoverageAreaForm({
         polygonDrawingRef.current.cleanup();
       }
     };
-  }, [isDrawing, district, municipalityName, coverageAreaGeoJson]);
+  }, [isDrawing, district, municipalityName]);
+
+  // Load existing coverage area once map is ready
+  useEffect(() => {
+    if (!isDrawing || !mapReady || !map.current || !coverageAreaGeoJson) return;
+
+    try {
+      const existingGeometry =
+        typeof coverageAreaGeoJson === "string"
+          ? JSON.parse(coverageAreaGeoJson)
+          : coverageAreaGeoJson;
+
+      if (existingGeometry && existingGeometry.features) {
+        existingGeometry.features.forEach((feature) => {
+          const layer = L.geoJSON(feature, {
+            style: {
+              color: "#0066cc",
+              weight: 3,
+              opacity: 0.8,
+            },
+          });
+
+          layer.eachLayer((sublayer) => {
+            sublayer.addTo(map.current);
+            sublayer.on("click", () => {
+              if (map.current && map.current.hasLayer(sublayer)) {
+                map.current.removeLayer(sublayer);
+                drawnItems.current = drawnItems.current.filter(
+                  (item) => item !== sublayer,
+                );
+                setDrawingStats({
+                  lines: drawnItems.current.length,
+                  points: drawnItems.current.reduce((sum, item) => {
+                    try {
+                      const coords = item.toGeoJSON().geometry.coordinates;
+                      return sum + coords.length;
+                    } catch {
+                      return sum;
+                    }
+                  }, 0),
+                });
+              }
+            });
+            drawnItems.current.push(sublayer);
+          });
+        });
+
+        setDrawingStats({
+          lines: drawnItems.current.length,
+          points: drawnItems.current.reduce((sum, item) => {
+            try {
+              const coords = item.toGeoJSON().geometry.coordinates;
+              return sum + coords.length;
+            } catch {
+              return sum;
+            }
+          }, 0),
+        });
+      }
+    } catch (error) {
+      console.error("Error loading existing coverage area:", error);
+    }
+  }, [isDrawing, mapReady, coverageAreaGeoJson]);
 
   // Update canvas state when draw mode changes
   useEffect(() => {

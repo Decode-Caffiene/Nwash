@@ -18,6 +18,7 @@ import ChartPoint from "./chartPoint";
 
 export default function AnalyticsChart({ chartData }) {
   useEffect(() => {
+    if (!document.querySelector(".analytics-point")) return;
     gsap.from(".analytics-point", {
       opacity: 0,
       scale: 0,
@@ -78,7 +79,7 @@ export default function AnalyticsChart({ chartData }) {
 
           {/* POOR (PINK - split into 2 non-overlapping blocks) */}
 
-          {/* bottom-right part (x 30-50, y 0-30) */}
+          {/* top-right part */}
           <ReferenceArea
             x1={30}
             x2={50}
@@ -88,19 +89,19 @@ export default function AnalyticsChart({ chartData }) {
             fillOpacity={0.9}
           />
 
-          {/* left-middle part (x 0-50, y 30-52) */}
+          {/* bottom-left part */}
           <ReferenceArea
             x1={0}
             x2={50}
             y1={30}
-            y2={52}
+            y2={50}
             fill="#ec4899"
             fillOpacity={0.9}
           />
           <ReferenceArea
             x1={0}
             x2={50}
-            y1={52}
+            y1={50}
             y2={100}
             fill="#475569"
             fillOpacity={0.85}
@@ -109,14 +110,14 @@ export default function AnalyticsChart({ chartData }) {
             x1={50}
             x2={100}
             y1={0}
-            y2={52}
+            y2={50}
             fill="#15803d"
             fillOpacity={0.85}
           />
           <ReferenceArea
             x1={50}
             x2={100}
-            y1={52}
+            y1={50}
             y2={100}
             fill="#d5d906"
             fillOpacity={0.85}
@@ -162,9 +163,9 @@ export default function AnalyticsChart({ chartData }) {
             strokeDasharray="3 3"
             opacity={0.9}
           />
-          {/* LAYER 4: MAIN DIVISION LINES */}
+          {/* LAYER 4: MAIN 50% BREAK DIVISION LINES */}
           <ReferenceLine x={50} stroke="#1f2937" strokeWidth={3} />
-          <ReferenceLine y={52} stroke="#1f2937" strokeWidth={3} />
+          <ReferenceLine y={50} stroke="#1f2937" strokeWidth={3} />
 
           {/* LAYER 5: TEXT LABELS OVERLAYS */}
           <ReferenceArea
@@ -238,20 +239,6 @@ export default function AnalyticsChart({ chartData }) {
           />
 
           <ReferenceArea
-            x1={75}
-            x2={79}
-            y1={71}
-            y2={79}
-            fill="none"
-            label={{
-              value: "4. IMPROVED",
-              fill: "#1f2937",
-              fontSize: 13,
-              fontWeight: "700",
-            }}
-          />
-
-          <ReferenceArea
             x1={95}
             x2={84}
             y1={81}
@@ -264,36 +251,36 @@ export default function AnalyticsChart({ chartData }) {
               fontWeight: "700",
             }}
           />
-<ReferenceArea
-  x1={90}
-  x2={100}
-  y1={90}
-  y2={95}
-  fill="#06b6d4"
-  fillOpacity={0.55}
-  label={({ viewBox }) => {
-    const { x, y, width, height } = viewBox;
+          <ReferenceArea
+            x1={90}
+            x2={100}
+            y1={90}
+            y2={95}
+            fill="#06b6d4"
+            fillOpacity={0.55}
+            label={({ viewBox }) => {
+              const { x, y, width, height } = viewBox;
 
-    return (
-      <text
-        x={x + width / 2}
-        y={y + height / 2}
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fontSize={10.5}
-        fontWeight="700"
-        fill="#0f172a"
-      >
-        <tspan x={x + width / 2} dy="-6">
-           MODERATELY
-        </tspan>
-        <tspan x={x + width / 2} dy="14">
-          EFFICIENT
-        </tspan>
-      </text>
-    );
-  }}
-/>
+              return (
+                <text
+                  x={x + width / 2}
+                  y={y + height / 2}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  fontSize={10.5}
+                  fontWeight="700"
+                  fill="#0f172a"
+                >
+                  <tspan x={x + width / 2} dy="-6">
+                    MODERATELY
+                  </tspan>
+                  <tspan x={x + width / 2} dy="14">
+                    EFFICIENT
+                  </tspan>
+                </text>
+              );
+            }}
+          />
           <ReferenceArea
             x1={100}
             x2={100}
@@ -321,7 +308,7 @@ export default function AnalyticsChart({ chartData }) {
           <Scatter
             name="Providers"
             data={chartData}
-            shape={<ChartPoint />}
+            shape={(props) => <ChartPoint {...props} />}
             isAnimationActive={false}
           />
         </ScatterChart>

@@ -16,6 +16,7 @@ export default function RegionCardsSection({ chartData }) {
     () => ({
       veryPoor: calculateZoneStats(categorized.VERY_POOR),
       poor: calculateZoneStats(categorized.POOR),
+      active: calculateZoneStats(categorized.ACTIVE),
       improving: calculateZoneStats(categorized.IMPROVING),
     }),
     [categorized]
@@ -32,7 +33,7 @@ export default function RegionCardsSection({ chartData }) {
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-4">
         <RegionCard
           zone={ZONE_CATEGORIES.VERY_POOR}
           stats={stats.veryPoor}
@@ -41,6 +42,11 @@ export default function RegionCardsSection({ chartData }) {
         <RegionCard
           zone={ZONE_CATEGORIES.POOR}
           stats={stats.poor}
+          showDetails={true}
+        />
+        <RegionCard
+          zone={ZONE_CATEGORIES.ACTIVE}
+          stats={stats.active}
           showDetails={true}
         />
         <RegionCard

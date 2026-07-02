@@ -40,6 +40,18 @@ export default function ProjectInfoCard({
               ? `${(Number(project.Summary_Index.OM_Score) * 100).toFixed(2)}%`
               : null,
           ],
+          [
+            "SPI",
+            project.Summary_Index?.SPI != null
+              ? `${Number(project.Summary_Index.SPI).toFixed(1)}%`
+              : null,
+          ],
+          [
+            "OEI",
+            project.Summary_Index?.OEI != null
+              ? `${Number(project.Summary_Index.OEI).toFixed(1)}%`
+              : null,
+          ],
         ].map(([label, val]) => (
           <div key={label}>
             <p className="text-[9px] uppercase tracking-widest text-white/35">{label}</p>

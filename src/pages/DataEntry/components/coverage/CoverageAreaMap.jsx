@@ -6,7 +6,7 @@ import Button from "../../../../components/common/Button";
 import {
   getDistrictBoundaryAsync,
   getMunicipalityBoundaryAsync,
-} from "../../utils/locationOptions";
+} from "./boundaryUtils";
 
 
 // Fix Leaflet marker icons
@@ -47,7 +47,7 @@ export default function CoverageAreaMap({
   useEffect(() => {
     if (!isOpen) return;
 
-    const setupMap = () => {
+    const setupMap = async () => {
       try {
         if (!mapContainer.current) return;
 
@@ -60,11 +60,14 @@ export default function CoverageAreaMap({
         // Create new map
         map.current = L.map(mapContainer.current).setView([28.3949, 84.124], 6);
 
-        // Add OpenStreetMap tiles
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          maxZoom: 19,
-          attribution: "© OpenStreetMap",
-        }).addTo(map.current);
+        // Add Google Earth Hybrid tiles
+        L.tileLayer(
+          "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
+          {
+            maxZoom: 20,
+            attribution: "Google",
+          },
+        ).addTo(map.current);
 
         // Create canvas overlay
         createCanvasOverlay();

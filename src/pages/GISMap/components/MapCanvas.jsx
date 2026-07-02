@@ -1,7 +1,14 @@
+import { useMemo } from "react";
 import { GeoJSON, MapContainer, Marker, Popup, TileLayer, ZoomControl } from "react-leaflet";
 import nepalBoundary from "../../../data/boundary.json";
 import nepalProvinces from "../../../data/nepal_provinces.json";
-import { NEPAL_CENTER, defaultMarkerIcon, selectedMarkerIcon } from "../utils/mapConstants";
+import {
+  NEPAL_CENTER,
+  defaultMarkerIcon,
+  selectedMarkerIcon,
+  categoryMarkerIcons,
+} from "../utils/mapConstants";
+import { buildAnalyticsPointData, categorizeProviders } from "../../../utils/zoneAnalytics";
 import MuniBoundsController from "./controllers/MuniBoundsController";
 import ProjectFlyController from "./controllers/ProjectFlyController";
 
@@ -43,6 +50,28 @@ export default function MapCanvas({
   selectedCentroid,
   onSelectProject,
 }) {
+  // Compute SPI/OEI category for each project for marker coloring
+  const projectCategories = useMemo(() => {
+    const chartData = projects
+      .map((p) => buildAnalyticsPointData(p))
+      .filter(Boolean);
+    const categorized = categorizeProviders(chartData);
+    const catMap = {};
+    for (const [zone, items] of Object.entries(categorized)) {
+      for (const item of items) {
+        catMap[item._id] = zone;
+      }
+    }
+    return catMap;
+  }, [projects]);
+
+  const getMarkerIcon = (project, isSelected) => {
+    if (isSelected) return selectedMarkerIcon;
+    const zone = projectCategories[project._id];
+    if (zone && categoryMarkerIcons[zone]) return categoryMarkerIcons[zone];
+    return defaultMarkerIcon;
+  };
+
   return (
     <MapContainer
       center={NEPAL_CENTER}
@@ -88,7 +117,7 @@ export default function MapCanvas({
             <Marker
               key={project._id}
               position={[lat ?? NEPAL_CENTER[0], lng ?? NEPAL_CENTER[1]]}
-              icon={isSelected ? selectedMarkerIcon : defaultMarkerIcon}
+              icon={getMarkerIcon(project, isSelected)}
               zIndexOffset={isSelected ? 1000 : 0}
               eventHandlers={{ click: () => onSelectProject(project) }}
             >
@@ -104,10 +133,10 @@ export default function MapCanvas({
                     {project.Location?.District_Name || "Unknown district"}
                   </p>
                   <p style={{ fontSize: 12, color: "#10b981", fontWeight: 600, marginTop: 6 }}>
-                    OM Score:{" "}
-                    {project.Summary_Index?.OM_Score != null
-                      ? `${(Number(project.Summary_Index.OM_Score) * 100).toFixed(2)}%`
-                      : "—"}
+                    SPI: {project.Summary_Index?.SPI != null ? `${Number(project.Summary_Index.SPI).toFixed(1)}%` : "—"}
+                  </p>
+                  <p style={{ fontSize: 12, color: "#3b82f6", fontWeight: 600 }}>
+                    OEI: {project.Summary_Index?.OEI != null ? `${Number(project.Summary_Index.OEI).toFixed(1)}%` : "—"}
                   </p>
                 </div>
               </Popup>

@@ -102,18 +102,20 @@ export default function LocationFields({
   };
 
   return (
-    <section className="stat-card">
-      <div className="flex items-center gap-3 border-b border-surface-border pb-4">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-light text-brand-secondary">
-          <ClipboardList size={20} />
-        </div>
-        <div>
-          <h2 className="text-lg font-semibold text-text-primary">{title}</h2>
-          <p className="text-sm text-text-secondary">{subtitle}</p>
+    <section className="stat-card overflow-hidden">
+      <div className="bg-gradient-to-r from-brand-light to-white px-5 py-4 -mx-5 -mt-5 border-b border-surface-border">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-primary text-white shadow-sm">
+            <ClipboardList size={20} />
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-text-primary">{title}</h2>
+            <p className="text-sm text-text-secondary">{subtitle}</p>
+          </div>
         </div>
       </div>
 
-      <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {fields.map((field) => {
           const key = `spatial.${slugify(field)}`;
           const isCoverageAreaField = field.toLowerCase().includes("coverage");
@@ -121,66 +123,67 @@ export default function LocationFields({
           const isGpsLongitudeField = key === LOCATION_FIELD_KEYS.gpsLongitude;
 
           if (isCoverageAreaField) {
-            const hasCoverageArea = !!values[key];
+            const hasCoverageArea = !!values[LOCATION_FIELD_KEYS.coverageArea];
             return (
-              <div key={key} className="block md:col-span-2 xl:col-span-3 space-y-3">
-                <div>
+              <div key={key} className="block md:col-span-2 xl:col-span-3 rounded-lg border border-surface-border bg-surface/50 p-4 space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="h-2.5 w-2.5 rounded-full bg-brand-primary" />
                   <label className="text-sm font-medium text-text-primary">
                     Coverage Area (Map-based)
                   </label>
-                  {coverageAreaInfo && (
-                    <div className="mt-2 space-y-2">
-                      <div className="rounded bg-emerald-50 p-3 border border-emerald-200 flex gap-2 items-center">
-                        <CheckCircle size={16} className="text-emerald-600 flex-shrink-0" />
-                        <p className="text-sm text-emerald-800 flex-1">{coverageAreaInfo}</p>
-                      </div>
-                      {hasCoverageArea && (
-                        <div className="flex gap-2">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              onDrawClick();
-                            }}
-                            className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded bg-blue-50 text-blue-700 hover:bg-blue-100 transition border border-blue-200"
-                            title="View coverage area"
-                          >
-                            <Eye size={16} />
-                            View
-                          </button>
-                          <button
-                            type="button"
-                            onClick={onDrawClick}
-                            className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded bg-blue-50 text-blue-700 hover:bg-blue-100 transition border border-blue-200"
-                            title="Edit coverage area"
-                          >
-                            <Edit3 size={16} />
-                            Edit
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              handleFieldChange(key, "");
-                            }}
-                            className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded bg-red-50 text-red-700 hover:bg-red-100 transition border border-red-200"
-                            title="Delete coverage area"
-                          >
-                            <Trash2 size={16} />
-                            Delete
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )}
                 </div>
+                {coverageAreaInfo && (
+                  <div className="space-y-2">
+                    <div className="rounded-lg bg-emerald-50 p-3 border border-emerald-200 flex gap-2 items-center">
+                      <CheckCircle size={16} className="text-emerald-600 flex-shrink-0" />
+                      <p className="text-sm text-emerald-800 flex-1">{coverageAreaInfo}</p>
+                    </div>
+                    {hasCoverageArea && (
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            onDrawClick();
+                          }}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 transition border border-blue-200"
+                          title="View coverage area"
+                        >
+                          <Eye size={14} />
+                          View
+                        </button>
+                        <button
+                          type="button"
+                          onClick={onDrawClick}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 transition border border-blue-200"
+                          title="Edit coverage area"
+                        >
+                          <Edit3 size={14} />
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleFieldChange(key, "");
+                          }}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md bg-red-50 text-red-700 hover:bg-red-100 transition border border-red-200"
+                          title="Delete coverage area"
+                        >
+                          <Trash2 size={14} />
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {hasCoverageArea && (
                   <CoverageAreaPreview
-                    geojson={values[key]}
+                    geojson={values[LOCATION_FIELD_KEYS.coverageArea]}
                     district={values[LOCATION_FIELD_KEYS.district]}
                     municipalityName={values[LOCATION_FIELD_KEYS.municipalityName]}
                     onEdit={onDrawClick}
                     onClear={() => {
-                      handleFieldChange(key, "");
+                      handleFieldChange(LOCATION_FIELD_KEYS.coverageArea, "");
                     }}
                   />
                 )}
@@ -207,16 +210,19 @@ export default function LocationFields({
 
             return (
               <div key={key} className="block md:col-span-2 xl:col-span-3">
-                <label className="text-sm font-medium text-text-primary">
-                  GPS Coordinates
-                </label>
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="h-2 w-2 rounded-full bg-brand-primary" />
+                  <label className="text-sm font-medium text-text-primary">
+                    GPS Coordinates
+                  </label>
+                </div>
                 {gpsError && (
-                  <div className="mt-2 rounded bg-red-50 p-2 text-sm text-red-600 flex gap-2">
-                    <AlertCircle size={14} className="flex-shrink-0 mt-0.5" />
+                  <div className="mb-2 rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700 flex items-center gap-2">
+                    <AlertCircle size={14} className="flex-shrink-0" />
                     {gpsError}
                   </div>
                 )}
-                <div className="mt-2 grid gap-2 md:grid-cols-2">
+                <div className="grid gap-3 md:grid-cols-2">
                   <div>
                     <label
                       htmlFor={LOCATION_FIELD_KEYS.gpsLatitude}
@@ -259,7 +265,7 @@ export default function LocationFields({
                 <Button
                   type="button"
                   variant="secondary"
-                  className="mt-2 w-full"
+                  className="mt-3 w-full border-brand-primary/30 text-brand-primary hover:bg-brand-light hover:border-brand-primary"
                   onClick={onCaptureGPS}
                   disabled={isGpsLoading}
                 >
@@ -280,8 +286,8 @@ export default function LocationFields({
           }
 
           return (
-            <label key={key} htmlFor={key} className="block">
-              <span className="text-sm font-medium text-text-primary">
+            <label key={key} htmlFor={key} className="block group">
+              <span className="text-sm font-medium text-text-primary group-focus-within:text-brand-primary transition-colors">
                 {fieldTranslations[language][field] || field}
               </span>
               <FormControl

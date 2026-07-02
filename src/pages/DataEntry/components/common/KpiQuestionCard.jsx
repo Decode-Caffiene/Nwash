@@ -3,7 +3,6 @@ import {
   fieldTranslations,
 } from "../../utils/translations";
 import FormControl, { inputClass } from "./FormControl";
-import { slugify } from "../../utils/formUtils";
 
 const YES_NO_OPTIONS_ENG = ["Yes", "No"];
 const YES_NO_OPTIONS_NEP = ["हो", "होइन"];
@@ -11,6 +10,7 @@ const YES_NO_OPTIONS_NEP = ["हो", "होइन"];
 function KpiQuestionCard({
   formId,
   sectionTitle,
+  sectionKey,
   question,
   index,
   values,
@@ -18,11 +18,12 @@ function KpiQuestionCard({
   isGateKeepingQuestion,
   language = "eng",
 }) {
-  const key = `${formId}.${slugify(sectionTitle)}.${slugify(question)}`;
-  const descriptionKey = `${key}.description`;
-  const remarksKey = `${key}.remarks`;
+  const kpiIndex = `KPI_${index + 1}`;
+  const key = `${sectionKey}.${kpiIndex}`;
+  const descriptionKey = `documents`;
+  const remarksKey = `${sectionKey}.KPI_${index + 1}_Remark`;
   const normalizedQuestion = question.toLowerCase();
-  const isCoverageAreaForm = formId === "service-provider-map";
+
   const isBusinessPlanQuestion =
     normalizedQuestion.includes("business plan") &&
     normalizedQuestion.includes("exist");
@@ -30,10 +31,13 @@ function KpiQuestionCard({
     normalizedQuestion.includes("report") ||
     normalizedQuestion.includes("logbook") ||
     normalizedQuestion.includes("log book") ||
-    (isCoverageAreaForm && isBusinessPlanQuestion);
+    isBusinessPlanQuestion;
   const showSourceExplanation = isGateKeepingQuestion || usesFileSource;
 
   // Detect if this is a yes/no question
+  const isNumberInput =
+    sectionKey === "non_revenue_water" && (index === 1 || index === 2);
+
   const isYesNoQuestion =
     question.includes("(Y/N)") ||
     question.includes("(Yes/No)") ||
@@ -51,16 +55,31 @@ function KpiQuestionCard({
     language === "nep" ? YES_NO_OPTIONS_NEP : YES_NO_OPTIONS_ENG;
 
   return (
-    <div className="rounded-lg border border-surface-border bg-white p-4">
+    <div
+      className={`rounded-lg border bg-white p-4 transition-shadow hover:shadow-sm ${
+        isGateKeepingQuestion
+          ? "border-amber-200 shadow-[0_0_0_1px_rgba(251,191,36,0.15)]"
+          : "border-surface-border"
+      }`}
+    >
+      {isGateKeepingQuestion && (
+        <div className="-mx-4 -mt-4 mb-3 rounded-t-lg bg-gradient-to-r from-amber-50 to-white px-4 py-2 border-b border-amber-100">
+          <span className="text-xs font-bold uppercase tracking-wider text-amber-700 flex items-center gap-1.5">
+            <div className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+            Gate Keeping Question
+          </span>
+        </div>
+      )}
+
       <label htmlFor={key} className="block">
         <span className="text-xs font-semibold uppercase tracking-wide text-text-secondary">
           {isGateKeepingQuestion
             ? language === "nep"
               ? `गेट कीपिङ प्रश्न ${index + 1}`
-              : `Gate Keeping Question ${index + 1}`
+              : `Question ${index + 1}`
             : language === "nep"
-              ? `Question ${index+1}`
-              : `Question ${index+1}`}
+              ? `प्रश्न ${index + 1}`
+              : `Question ${index + 1}`}
         </span>
         <span className="mt-1 block text-sm font-medium text-text-primary">
           {questionTranslations[language][question] || question}
@@ -75,6 +94,7 @@ function KpiQuestionCard({
             placeholder:
               language === "nep" ? "छनोट गरनुहोस्" : "Select Yes or No",
           })}
+          type={isNumberInput ? "number" : undefined}
         />
       </label>
 
@@ -89,11 +109,12 @@ function KpiQuestionCard({
               <input
                 id={descriptionKey}
                 type="file"
+                name="documents"
                 onChange={(event) => {
                   const file = event.target.files?.[0];
                   onFieldChange(descriptionKey, file || "");
                 }}
-                className="mt-2 block w-full rounded-md border border-surface-border px-3 py-2 text-sm file:mr-4 file:rounded-md file:border-0 file:bg-brand-light file:px-3 file:py-1 file:text-sm file:font-medium file:text-brand-secondary hover:file:bg-brand-lighter"
+                className="mt-2 block w-full rounded-lg border border-surface-border bg-white px-3 py-2 text-sm text-text-primary outline-none transition file:mr-3 file:rounded-md file:border-0 file:bg-brand-primary file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-white hover:file:bg-brand-secondary focus:border-brand-primary focus:ring-2 focus:ring-brand-light"
               />
             ) : (
               <textarea
@@ -104,6 +125,7 @@ function KpiQuestionCard({
                   onFieldChange(descriptionKey, event.target.value)
                 }
                 className={inputClass}
+                placeholder="Enter source or explanation..."
               />
             )}
           </label>
@@ -119,6 +141,7 @@ function KpiQuestionCard({
             value={values[remarksKey] || ""}
             onChange={(event) => onFieldChange(remarksKey, event.target.value)}
             className={inputClass}
+            placeholder="Enter remarks..."
           />
         </label>
       </div>

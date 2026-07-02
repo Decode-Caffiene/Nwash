@@ -35,6 +35,7 @@ export default function GrowthChart({ data }) {
               dataKey="Operators"
               stroke="#0d9488"
               strokeWidth={2}
+              dot={{ r: 2 }}
             />
           </LineChart>
         </ResponsiveContainer>

@@ -1,5 +1,7 @@
 import React, { useMemo } from "react";
 import { Building2, Users2, Droplet, TrendingUp, Search } from "lucide-react";
+import { useLocation } from "react-router-dom";
+import { getProviderSearchText, normalizeQuery } from "./overviewSearchUtils";
 
 import useFetch from "../../hooks/useFetch";
 import { getServiceProviders } from "../../api/serviceProviderApi";
@@ -15,38 +17,55 @@ import {
   recentActivities,
   partnerContributions,
 } from "../../utils/overviewData";
-import { categorizeProviders } from "../../utils/zoneAnalytics";
+import {
+  buildAnalyticsPointData,
+  categorizeProviders,
+  extractPopulationValue,
+} from "../../utils/zoneAnalytics";
 
 export default function OverviewPage() {
+  const location = useLocation();
   const { data, loading, error } = useFetch(getServiceProviders, []);
   const list = Array.isArray(data) ? data : [];
 
-  // 1. Total Operators - from backend
-  const totalOperators = list.length;
+  const q = useMemo(() => {
+    try {
+      const sp = new URLSearchParams(location.search);
+      return normalizeQuery(sp.get("q"));
+    } catch {
+      return "";
+    }
+  }, [location.search]);
 
-  // Transform data for zone analysis
+  const filteredList = useMemo(() => {
+    if (!q) return list;
+    return list.filter((provider) => {
+      const haystack = getProviderSearchText(provider);
+      return haystack.includes(q);
+    });
+  }, [list, q]);
+
+  // 1. Total Operators - from backend (filtered)
+  const totalOperators = filteredList.length;
+
+  // Transform data for zone analysis (filtered)
   const chartDataForZones = useMemo(() => {
-    return list
-      .filter(
-        (item) =>
-          item?.Summary_Index?.OEI != null && item?.Summary_Index?.SPI != null,
-      )
-      .map((item) => ({
-        ...item,
-        x: item.Summary_Index.OEI,
-        y: item.Summary_Index.SPI,
-      }));
-  }, [list]);
+    return filteredList
+      .map((item) => buildAnalyticsPointData(item))
+      .filter(Boolean);
+  }, [filteredList]);
 
   // Categorize providers by zone
   const categorized = useMemo(() => {
     return categorizeProviders(chartDataForZones);
   }, [chartDataForZones]);
 
-  // 3. Improving Operators - OEI 50-100 & SPI 50-100
-  const improvingOperators = useMemo(() => {
+  const allImproving = useMemo(() => {
     return categorized.IMPROVING?.length || 0;
   }, [categorized]);
+
+  // 3. Improving Operators - total in top-right quadrant
+  const improvingOperators = allImproving;
 
   // 4. Poor/Very Poor Operators
   const poorVeryPoorOperators = useMemo(() => {
@@ -57,28 +76,26 @@ export default function OverviewPage() {
 
   // 5. Missing Data - records without complete SPI/OEI
   const missingData = useMemo(() => {
-    return list.length - chartDataForZones.length;
-  }, [list, chartDataForZones]);
+    return filteredList.length - chartDataForZones.length;
+  }, [filteredList, chartDataForZones]);
 
   // Compliance data derived from zone categorization
   const complianceData = useMemo(() => {
-    const compliant = categorized.IMPROVING?.length || 0;
+    const compliant = allImproving;
     const partial =
-      (categorized.INACTIVE?.length || 0) +
-      (categorized.ACTIVE?.length || 0);
+      (categorized.INACTIVE?.length || 0) + (categorized.ACTIVE?.length || 0);
     const nonCompliant =
-      (categorized.VERY_POOR?.length || 0) +
-      (categorized.POOR?.length || 0);
+      (categorized.VERY_POOR?.length || 0) + (categorized.POOR?.length || 0);
     return [
       { name: "Compliant", value: compliant, color: "#0d9488" },
       { name: "Partial", value: partial, color: "#3b82f6" },
       { name: "Non-Compliant", value: nonCompliant, color: "#dc2626" },
     ];
-  }, [categorized]);
+  }, [categorized, allImproving]);
 
   // 6. Total Households Covered - placeholder (0) until backend provides data
   const totalHouseholdsCovered = useMemo(() => {
-    return list.reduce((sum, provider) => {
+    return filteredList.reduce((sum, provider) => {
       const households =
         provider.households_served ||
         provider["Number of households served by the WSUC"] ||
@@ -88,14 +105,14 @@ export default function OverviewPage() {
 
       return sum + (Number(households) || 0);
     }, 0);
-  }, [list]);
+  }, [filteredList]);
 
   // 3. District Data - calculated from provider locations
   const { districtData, excludedCount } = useMemo(() => {
     const districtMap = {};
     let excluded = 0;
 
-    list.forEach((provider) => {
+    filteredList.forEach((provider) => {
       // Try to get district and province from multiple possible field names
       const district =
         provider.Location?.District_Name ||
@@ -130,23 +147,15 @@ export default function OverviewPage() {
       ),
       excludedCount: excluded,
     };
-  }, [list]);
+  }, [filteredList]);
 
   // 5. Active Partners - count unique regulatory partners in provinces where providers exist
 
-  // 6. Total Population Served - sum from all providers (if data available)
+  // 6. Total Population Served - use direct backend population fields when available,
+  // otherwise fall back to a household-based estimate so the card still displays data.
   const populationServed = useMemo(() => {
-    const total = list.reduce((sum, provider) => {
-      const population =
-        provider.MasterSheet?.Population_Served ||
-        provider["total-number-of-population-served"] ||
-        provider["Total number of population served?"] ||
-        provider["service-provider.kpi-2.total-number-of-population-served"] ||
-        provider["service-provider-map.kpi-2.total-number-of-population-served"] ||
-        provider.Population_Served ||
-        provider.population_served ||
-        0;
-
+    const total = filteredList.reduce((sum, provider) => {
+      const population = extractPopulationValue(provider);
       return sum + (Number(population) || 0);
     }, 0);
 
@@ -157,7 +166,7 @@ export default function OverviewPage() {
       return `${(total / 1000).toFixed(0)}K`;
     }
     return total.toString();
-  }, [list]);
+  }, [filteredList]);
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-[#f8fafc]">
@@ -191,7 +200,9 @@ export default function OverviewPage() {
           <StatCard
             title="Population"
             value={loading ? "—" : (populationServed ?? "N/A")}
-            subtitle={populationServed === null ? "Data pending" : "Served users"}
+            subtitle={
+              populationServed === null ? "Data pending" : "Served users"
+            }
             icon={Droplet}
           />
 
@@ -256,7 +267,6 @@ export default function OverviewPage() {
           <PartnerContributions partners={partnerContributions} />
         </div>
       </div>
-
     </div>
   );
 }
