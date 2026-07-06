@@ -113,6 +113,8 @@ function DataEntryPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null); // null, 'success', 'error'
   const [submitMessage, setSubmitMessage] = useState("");
+  const [formErrors, setFormErrors] = useState({});
+  const [isFormValid, setIsFormValid] = useState(true);
 
   const activeForm = useMemo(
     () =>
@@ -135,6 +137,13 @@ function DataEntryPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (!isFormValid) {
+      setSubmitStatus("error");
+      setSubmitMessage("Please fix validation errors before submitting the form.");
+      return;
+    }
+
     setSubmitting(true);
     setSubmitStatus(null);
     setSubmitMessage("");
@@ -177,6 +186,11 @@ function DataEntryPage() {
 
   const openPreview = () => {
     setIsPreviewOpen(true);
+  };
+
+  const handleValidationChange = (isValid, errors) => {
+    setIsFormValid(isValid);
+    setFormErrors(errors);
   };
 
   return (
@@ -244,6 +258,7 @@ function DataEntryPage() {
             values={currentValues}
             onFieldChange={updateField}
             language={language}
+            onValidationChange={handleValidationChange}
           />
         )}
 
