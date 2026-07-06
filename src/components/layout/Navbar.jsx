@@ -37,27 +37,8 @@ function Navbar() {
         </div>
       </div>
 
-      {/* Centre: Search */}
-      <div className="flex flex-1 flex-wrap items-center justify-end gap-4">
-        <label className="flex w-full max-w-xl items-center gap-3 rounded-xl border border-surface-border bg-surface px-4 py-2.5">
-          <Search size={18} className="text-text-secondary" />
-          <input
-            type="search"
-            placeholder="Search operators, districts…"
-            className="w-full border-0 bg-transparent text-sm outline-none placeholder:text-text-secondary"
-          />
-        </label>
-      </div>
-
       {/* Right: badges + Admin button + user area */}
       <div className="flex flex-wrap items-center gap-3">
-        <div className="flex items-center gap-2">
-          <Badge variant="default">DWSSM</Badge>
-          <Badge className="border border-brand-primary bg-transparent text-brand-secondary">
-            WaterAid
-          </Badge>
-        </div>
-
         <div className="relative">
           <button
             type="button"
