@@ -248,6 +248,7 @@ function DataEntryPage() {
             values={currentValues}
             onFieldChange={updateField}
             language={language}
+            onValidationChange={handleValidationChange}
           />
 
         ) : (
