@@ -228,32 +228,19 @@ function ServiceProviderSection({
                   className="text-sm font-medium text-text-primary"
                 >
                   {fieldTranslations[language][field] || field}
+                  <span className="text-red-500 ml-1">*</span>
                 </label>
                 <div className="mt-2 flex gap-2">
-                  <div className="flex-1">
-                    <input
-                      id={key}
-                      type="text"
-                      value={values[key] || ""}
-                      onChange={(event) =>
-                        handleFieldChange(key, event.target.value)
-                      }
-                      className={`${
-                        fieldErrors[key]
-                          ? "border-red-300 bg-white px-3 py-2.5 text-sm text-text-primary outline-none transition-all duration-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 hover:border-red-300 mt-0 w-full rounded-lg border"
-                          : `${inputClass} mt-0`
-                      }`}
-                      placeholder="Trace wards from map"
-                      aria-invalid={!!fieldErrors[key]}
-                      aria-describedby={fieldErrors[key] ? `${key}-error` : undefined}
-                    />
-                    {fieldErrors[key] && (
-                      <div id={`${key}-error`} className="mt-1 flex items-center gap-2 text-sm text-red-600">
-                        <AlertCircle size={14} className="flex-shrink-0" />
-                        {fieldErrors[key]}
-                      </div>
-                    )}
-                  </div>
+                  <input
+                    id={key}
+                    type="text"
+                    value={values[key] || ""}
+                    onChange={(event) =>
+                      handleFieldChange(key, event.target.value)
+                    }
+                    className={`${inputClass} mt-0 flex-1`}
+                    placeholder="Trace wards from map"
+                  />
                   <Button
                     type="button"
                     variant="secondary"
@@ -294,7 +281,7 @@ function ServiceProviderSection({
                       htmlFor={LOCATION_FIELD_KEYS.gpsLatitude}
                       className="text-xs font-medium text-text-secondary"
                     >
-                      Latitude
+                      Latitude <span className="text-red-500">*</span>
                     </label>
                     <input
                       id={LOCATION_FIELD_KEYS.gpsLatitude}
@@ -307,35 +294,16 @@ function ServiceProviderSection({
                           event.target.value,
                         )
                       }
-                      className={
-                        fieldErrors[LOCATION_FIELD_KEYS.gpsLatitude]
-                          ? "mt-2 w-full rounded-lg border border-red-300 bg-white px-3 py-2.5 text-sm text-text-primary outline-none transition-all duration-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 hover:border-red-300"
-                          : inputClass
-                      }
+                      className={inputClass}
                       placeholder="e.g., 27.7172"
-                      aria-invalid={!!fieldErrors[LOCATION_FIELD_KEYS.gpsLatitude]}
-                      aria-describedby={
-                        fieldErrors[LOCATION_FIELD_KEYS.gpsLatitude]
-                          ? `${LOCATION_FIELD_KEYS.gpsLatitude}-error`
-                          : undefined
-                      }
                     />
-                    {fieldErrors[LOCATION_FIELD_KEYS.gpsLatitude] && (
-                      <div
-                        id={`${LOCATION_FIELD_KEYS.gpsLatitude}-error`}
-                        className="mt-1 flex items-center gap-2 text-sm text-red-600"
-                      >
-                        <AlertCircle size={14} className="flex-shrink-0" />
-                        {fieldErrors[LOCATION_FIELD_KEYS.gpsLatitude]}
-                      </div>
-                    )}
                   </div>
                   <div>
                     <label
                       htmlFor={LOCATION_FIELD_KEYS.gpsLongitude}
                       className="text-xs font-medium text-text-secondary"
                     >
-                      Longitude
+                      Longitude <span className="text-red-500">*</span>
                     </label>
                     <input
                       id={LOCATION_FIELD_KEYS.gpsLongitude}
@@ -348,28 +316,9 @@ function ServiceProviderSection({
                           event.target.value,
                         )
                       }
-                      className={
-                        fieldErrors[LOCATION_FIELD_KEYS.gpsLongitude]
-                          ? "mt-2 w-full rounded-lg border border-red-300 bg-white px-3 py-2.5 text-sm text-text-primary outline-none transition-all duration-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 hover:border-red-300"
-                          : inputClass
-                      }
+                      className={inputClass}
                       placeholder="e.g., 85.3240"
-                      aria-invalid={!!fieldErrors[LOCATION_FIELD_KEYS.gpsLongitude]}
-                      aria-describedby={
-                        fieldErrors[LOCATION_FIELD_KEYS.gpsLongitude]
-                          ? `${LOCATION_FIELD_KEYS.gpsLongitude}-error`
-                          : undefined
-                      }
                     />
-                    {fieldErrors[LOCATION_FIELD_KEYS.gpsLongitude] && (
-                      <div
-                        id={`${LOCATION_FIELD_KEYS.gpsLongitude}-error`}
-                        className="mt-1 flex items-center gap-2 text-sm text-red-600"
-                      >
-                        <AlertCircle size={14} className="flex-shrink-0" />
-                        {fieldErrors[LOCATION_FIELD_KEYS.gpsLongitude]}
-                      </div>
-                    )}
                   </div>
                 </div>
                 <Button
@@ -397,14 +346,9 @@ function ServiceProviderSection({
 
           return (
             <label key={key} htmlFor={key} className="block group">
-              <span
-                className={`text-sm font-medium transition-colors ${
-                  fieldErrors[key]
-                    ? "text-red-600"
-                    : "text-text-primary group-focus-within:text-brand-primary"
-                }`}
-              >
+              <span className="text-sm font-medium text-text-primary group-focus-within:text-brand-primary transition-colors">
                 {fieldTranslations[language][field] || field}
+                <span className="text-red-500 ml-1">*</span>
               </span>
               <FormControl
                 id={key}
@@ -412,7 +356,6 @@ function ServiceProviderSection({
                 value={values[key] || ""}
                 onChange={(value) => handleFieldChange(key, value)}
                 required={key === "spatial.email"}
-                error={fieldErrors[key]}
                 {...getLocationControlProps(key)}
               />
             </label>
