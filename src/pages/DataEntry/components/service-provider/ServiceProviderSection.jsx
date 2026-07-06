@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ClipboardList, MapPinned, Loader, AlertCircle } from "lucide-react";
 
 import Button from "../../../../components/common/Button";
@@ -12,16 +12,13 @@ import {
   getMunicipalityTypeOptions,
   PROVINCES,
 } from "../../utils/locationOptions";
-
-const LOCATION_FIELD_KEYS = {
-  province: "spatial.province-name",
-  district: "spatial.district",
-  municipalityType: "spatial.municipality-type",
-  municipalityName: "spatial.municipality-name",
-  wardsCovered: "spatial.number-of-wards-covered",
-  gpsLatitude: "spatial.gps-latitude",
-  gpsLongitude: "spatial.gps-longitude",
-};
+import {
+  LOCATION_FIELD_KEYS,
+  validateLocationFields,
+  validateGpsCoordinate,
+  validateEmail,
+  validatePhone,
+} from "../../utils/formValidation";
 
 const parseWardValue = (value) =>
   String(value || "")
@@ -37,6 +34,7 @@ function ServiceProviderSection({
   values,
   onFieldChange,
   language = "eng",
+  onValidationChange,
 }) {
   const province = values[LOCATION_FIELD_KEYS.province] || "";
   const district = values[LOCATION_FIELD_KEYS.district] || "";
@@ -46,6 +44,64 @@ function ServiceProviderSection({
   const [isWardTraceOpen, setIsWardTraceOpen] = useState(false);
   const [isGpsLoading, setIsGpsLoading] = useState(false);
   const [gpsError, setGpsError] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
+
+  const validateForm = (currentValues) => {
+    const errors = {};
+
+    // Validate location fields
+    const locationErrors = validateLocationFields(currentValues);
+    Object.assign(errors, locationErrors);
+
+    // Validate wards covered if location fields are filled
+    const hasLocationData = Object.keys(locationErrors).length === 0;
+    if (hasLocationData && !currentValues[LOCATION_FIELD_KEYS.wardsCovered]) {
+      errors[LOCATION_FIELD_KEYS.wardsCovered] = "Ward numbers are required";
+    }
+
+    // Validate GPS coordinates
+    const hasGpsLat = currentValues[LOCATION_FIELD_KEYS.gpsLatitude];
+    const hasGpsLon = currentValues[LOCATION_FIELD_KEYS.gpsLongitude];
+
+    if (hasGpsLat || hasGpsLon) {
+      if (!hasGpsLat) {
+        errors[LOCATION_FIELD_KEYS.gpsLatitude] = "Latitude is required when providing GPS coordinates";
+      } else {
+        const latError = validateGpsCoordinate(hasGpsLat, "Latitude");
+        if (latError) errors[LOCATION_FIELD_KEYS.gpsLatitude] = latError;
+      }
+
+      if (!hasGpsLon) {
+        errors[LOCATION_FIELD_KEYS.gpsLongitude] = "Longitude is required when providing GPS coordinates";
+      } else {
+        const lonError = validateGpsCoordinate(hasGpsLon, "Longitude");
+        if (lonError) errors[LOCATION_FIELD_KEYS.gpsLongitude] = lonError;
+      }
+    }
+
+    // Validate other fields
+    fields.forEach((field) => {
+      const key = `spatial.${slugify(field)}`;
+
+      if (key === "spatial.email") {
+        const emailError = validateEmail(currentValues[key]);
+        if (emailError) errors[key] = emailError;
+      }
+
+      if (key === "spatial.phone-number") {
+        const phoneError = validatePhone(currentValues[key]);
+        if (phoneError) errors[key] = phoneError;
+      }
+    });
+
+    setFieldErrors(errors);
+    onValidationChange?.(Object.keys(errors).length === 0, errors);
+    return errors;
+  };
+
+  useEffect(() => {
+    validateForm(values);
+  }, [values, fields]);
 
   const captureGPSLocation = () => {
     setIsGpsLoading(true);
@@ -174,16 +230,30 @@ function ServiceProviderSection({
                   {fieldTranslations[language][field] || field}
                 </label>
                 <div className="mt-2 flex gap-2">
-                  <input
-                    id={key}
-                    type="text"
-                    value={values[key] || ""}
-                    onChange={(event) =>
-                      handleFieldChange(key, event.target.value)
-                    }
-                    className={`${inputClass} mt-0 flex-1`}
-                    placeholder="Trace wards from map"
-                  />
+                  <div className="flex-1">
+                    <input
+                      id={key}
+                      type="text"
+                      value={values[key] || ""}
+                      onChange={(event) =>
+                        handleFieldChange(key, event.target.value)
+                      }
+                      className={`${
+                        fieldErrors[key]
+                          ? "border-red-300 bg-white px-3 py-2.5 text-sm text-text-primary outline-none transition-all duration-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 hover:border-red-300 mt-0 w-full rounded-lg border"
+                          : `${inputClass} mt-0`
+                      }`}
+                      placeholder="Trace wards from map"
+                      aria-invalid={!!fieldErrors[key]}
+                      aria-describedby={fieldErrors[key] ? `${key}-error` : undefined}
+                    />
+                    {fieldErrors[key] && (
+                      <div id={`${key}-error`} className="mt-1 flex items-center gap-2 text-sm text-red-600">
+                        <AlertCircle size={14} className="flex-shrink-0" />
+                        {fieldErrors[key]}
+                      </div>
+                    )}
+                  </div>
                   <Button
                     type="button"
                     variant="secondary"
@@ -237,9 +307,28 @@ function ServiceProviderSection({
                           event.target.value,
                         )
                       }
-                      className={`${inputClass}`}
+                      className={
+                        fieldErrors[LOCATION_FIELD_KEYS.gpsLatitude]
+                          ? "mt-2 w-full rounded-lg border border-red-300 bg-white px-3 py-2.5 text-sm text-text-primary outline-none transition-all duration-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 hover:border-red-300"
+                          : inputClass
+                      }
                       placeholder="e.g., 27.7172"
+                      aria-invalid={!!fieldErrors[LOCATION_FIELD_KEYS.gpsLatitude]}
+                      aria-describedby={
+                        fieldErrors[LOCATION_FIELD_KEYS.gpsLatitude]
+                          ? `${LOCATION_FIELD_KEYS.gpsLatitude}-error`
+                          : undefined
+                      }
                     />
+                    {fieldErrors[LOCATION_FIELD_KEYS.gpsLatitude] && (
+                      <div
+                        id={`${LOCATION_FIELD_KEYS.gpsLatitude}-error`}
+                        className="mt-1 flex items-center gap-2 text-sm text-red-600"
+                      >
+                        <AlertCircle size={14} className="flex-shrink-0" />
+                        {fieldErrors[LOCATION_FIELD_KEYS.gpsLatitude]}
+                      </div>
+                    )}
                   </div>
                   <div>
                     <label
@@ -259,9 +348,28 @@ function ServiceProviderSection({
                           event.target.value,
                         )
                       }
-                      className={`${inputClass}`}
+                      className={
+                        fieldErrors[LOCATION_FIELD_KEYS.gpsLongitude]
+                          ? "mt-2 w-full rounded-lg border border-red-300 bg-white px-3 py-2.5 text-sm text-text-primary outline-none transition-all duration-200 focus:border-red-500 focus:ring-2 focus:ring-red-100 hover:border-red-300"
+                          : inputClass
+                      }
                       placeholder="e.g., 85.3240"
+                      aria-invalid={!!fieldErrors[LOCATION_FIELD_KEYS.gpsLongitude]}
+                      aria-describedby={
+                        fieldErrors[LOCATION_FIELD_KEYS.gpsLongitude]
+                          ? `${LOCATION_FIELD_KEYS.gpsLongitude}-error`
+                          : undefined
+                      }
                     />
+                    {fieldErrors[LOCATION_FIELD_KEYS.gpsLongitude] && (
+                      <div
+                        id={`${LOCATION_FIELD_KEYS.gpsLongitude}-error`}
+                        className="mt-1 flex items-center gap-2 text-sm text-red-600"
+                      >
+                        <AlertCircle size={14} className="flex-shrink-0" />
+                        {fieldErrors[LOCATION_FIELD_KEYS.gpsLongitude]}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <Button
@@ -289,7 +397,13 @@ function ServiceProviderSection({
 
           return (
             <label key={key} htmlFor={key} className="block group">
-              <span className="text-sm font-medium text-text-primary group-focus-within:text-brand-primary transition-colors">
+              <span
+                className={`text-sm font-medium transition-colors ${
+                  fieldErrors[key]
+                    ? "text-red-600"
+                    : "text-text-primary group-focus-within:text-brand-primary"
+                }`}
+              >
                 {fieldTranslations[language][field] || field}
               </span>
               <FormControl
@@ -298,6 +412,7 @@ function ServiceProviderSection({
                 value={values[key] || ""}
                 onChange={(value) => handleFieldChange(key, value)}
                 required={key === "spatial.email"}
+                error={fieldErrors[key]}
                 {...getLocationControlProps(key)}
               />
             </label>
