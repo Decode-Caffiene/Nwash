@@ -42,6 +42,7 @@ export default function CoverageAreaForm({
   values,
   onFieldChange,
   language = "eng",
+  onValidationChange,
 }) {
   const province = values[LOCATION_FIELD_KEYS.province] || "";
   const district = values[LOCATION_FIELD_KEYS.district] || "";
@@ -527,6 +528,7 @@ export default function CoverageAreaForm({
       isGpsLoading={isGpsLoading}
       gpsError={gpsError}
       onCaptureGPS={captureGPSLocation}
+      onValidationChange={onValidationChange}
     />
   );
 }
