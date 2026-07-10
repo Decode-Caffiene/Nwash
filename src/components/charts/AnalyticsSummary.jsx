@@ -13,10 +13,6 @@ const ZONE_CARDS = [
   { key: "inactive", zone: "INACTIVE", label: "Inactive", color: "text-slate-600" },
   { key: "active", zone: "ACTIVE", label: "Active", color: "text-green-600" },
   { key: "improving", zone: "IMPROVING", label: "Improving", color: "text-yellow-600" },
-  { key: "improved", zone: "IMPROVED", label: "Improved", color: "text-lime-700" },
-  { key: "justEfficient", zone: "JUST_EFFICIENT", label: "Just Efficient", color: "text-lime-600" },
-  { key: "moderatelyEfficient", zone: "MODERATELY_EFFICIENT", label: "Moderately Efficient", color: "text-cyan-600" },
-  { key: "highlyEfficient", zone: "HIGHLY_EFFICIENT", label: "Highly Efficient", color: "text-blue-700" },
 ];
 
 export default function AnalyticsSummary({ chartData = [] }) {
