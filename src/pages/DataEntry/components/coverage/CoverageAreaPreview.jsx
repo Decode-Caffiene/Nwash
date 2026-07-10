@@ -117,6 +117,7 @@ export default function CoverageAreaPreview({
         </div>
         <div className="flex gap-1.5">
           <button
+            type="button"
             onClick={onEdit}
             className="p-1.5 hover:bg-brand-primary/10 rounded-lg transition text-brand-primary"
             title="Edit coverage area"
@@ -124,6 +125,7 @@ export default function CoverageAreaPreview({
             <Edit3 size={15} />
           </button>
           <button
+            type="button"
             onClick={onClear}
             className="p-1.5 hover:bg-red-100 rounded-lg transition text-red-600"
             title="Clear coverage area"

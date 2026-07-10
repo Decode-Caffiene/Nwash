@@ -74,6 +74,7 @@ export default function DrawingMap({
             </div>
           </div>
           <button
+            type="button"
             onClick={onCancelDrawing}
             className="p-2 hover:bg-red-100 rounded-lg transition text-red-600 hover:text-red-700"
             title="Cancel and close"
@@ -152,6 +153,7 @@ export default function DrawingMap({
           </Button>
 
           <button
+            type="button"
             onClick={onDrawModeToggle}
             className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
               drawModeEnabled
@@ -166,6 +168,7 @@ export default function DrawingMap({
 
           {drawModeEnabled && (
             <button
+              type="button"
               onClick={onCompletePolygon}
               className="px-4 py-2 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2 bg-violet-600 text-white hover:bg-violet-700 shadow-md"
               title="Complete the current polygon and start a new one"

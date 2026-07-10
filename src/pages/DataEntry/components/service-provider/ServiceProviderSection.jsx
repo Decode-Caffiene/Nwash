@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ClipboardList, MapPinned, Loader, AlertCircle } from "lucide-react";
 
 import Button from "../../../../components/common/Button";
@@ -34,7 +34,6 @@ function ServiceProviderSection({
   values,
   onFieldChange,
   language = "eng",
-  onValidationChange,
 }) {
   const province = values[LOCATION_FIELD_KEYS.province] || "";
   const district = values[LOCATION_FIELD_KEYS.district] || "";
@@ -45,21 +44,19 @@ function ServiceProviderSection({
   const [isGpsLoading, setIsGpsLoading] = useState(false);
   const [gpsError, setGpsError] = useState(null);
   const [fieldErrors, setFieldErrors] = useState({});
+  const prevErrorsRef = useRef({});
 
   const validateForm = (currentValues) => {
     const errors = {};
 
-    // Validate location fields
     const locationErrors = validateLocationFields(currentValues);
     Object.assign(errors, locationErrors);
 
-    // Validate wards covered if location fields are filled
     const hasLocationData = Object.keys(locationErrors).length === 0;
     if (hasLocationData && !currentValues[LOCATION_FIELD_KEYS.wardsCovered]) {
       errors[LOCATION_FIELD_KEYS.wardsCovered] = "Ward numbers are required";
     }
 
-    // Validate GPS coordinates
     const hasGpsLat = currentValues[LOCATION_FIELD_KEYS.gpsLatitude];
     const hasGpsLon = currentValues[LOCATION_FIELD_KEYS.gpsLongitude];
 
@@ -79,7 +76,6 @@ function ServiceProviderSection({
       }
     }
 
-    // Validate other fields
     fields.forEach((field) => {
       const key = `spatial.${slugify(field)}`;
 
@@ -95,13 +91,12 @@ function ServiceProviderSection({
     });
 
     setFieldErrors(errors);
-    onValidationChange?.(Object.keys(errors).length === 0, errors);
     return errors;
   };
 
   useEffect(() => {
     validateForm(values);
-  }, [values, fields]);
+  }, [values]);
 
   const captureGPSLocation = () => {
     setIsGpsLoading(true);
@@ -200,168 +195,187 @@ function ServiceProviderSection({
   };
 
   return (
-    <section className="stat-card overflow-hidden">
-      <div className="bg-gradient-to-r from-brand-light to-white px-5 py-4 -mx-5 -mt-5 border-b border-surface-border">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-primary text-white shadow-sm">
-            <ClipboardList size={20} />
+    <section className="space-y-6">
+      <div className="rounded-xl border border-brand-primary/20 bg-gradient-to-br from-brand-primary/5 to-transparent p-6 backdrop-blur-sm">
+        <div className="flex items-start gap-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-primary/10 shadow-sm">
+            <ClipboardList size={24} className="text-brand-primary" />
           </div>
-          <div>
-            <h2 className="text-lg font-semibold text-text-primary">{title}</h2>
-            <p className="text-sm text-text-secondary">{subtitle}</p>
+          <div className="flex-1">
+            <h2 className="text-xl font-bold text-text-primary">{title}</h2>
+            <p className="mt-1 text-sm text-text-secondary">{subtitle}</p>
           </div>
         </div>
       </div>
 
-      <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {fields.map((field) => {
-          const key = `spatial.${slugify(field)}`;
-          const isWardsCoveredField = key === LOCATION_FIELD_KEYS.wardsCovered;
-          const isGpsLatitudeField = key === LOCATION_FIELD_KEYS.gpsLatitude;
-          const isGpsLongitudeField = key === LOCATION_FIELD_KEYS.gpsLongitude;
-
-          if (isWardsCoveredField) {
-            return (
-              <div key={key} className="block md:col-span-2 xl:col-span-3">
-                <label
-                  htmlFor={key}
-                  className="text-sm font-medium text-text-primary"
-                >
-                  {fieldTranslations[language][field] || field}
-                  <span className="text-red-500 ml-1">*</span>
-                </label>
-                <div className="mt-2 flex gap-2">
-                  <input
-                    id={key}
-                    type="text"
+      <div className="space-y-6">
+        <div>
+          <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold text-text-primary">
+            <div className="h-1 w-1 rounded-full bg-brand-primary" />
+            Contact Information
+          </h3>
+          <div className="grid gap-4 rounded-xl border border-surface-border bg-white/50 p-5 md:grid-cols-2">
+            {fields.filter(f => !['Province Name', 'District', 'Municipality Name', 'Number of wards covered', 'GPS Latitude', 'GPS Longitude'].includes(f)).map((field) => {
+              const key = `spatial.${slugify(field)}`;
+              return (
+                <label key={key} htmlFor={`provider-${key}`} className="block group">
+                  <span className="text-sm font-medium text-text-primary group-focus-within:text-brand-primary transition-colors">
+                    {fieldTranslations[language][field] || field}
+                    <span className="text-red-500 ml-1">*</span>
+                  </span>
+                  <FormControl
+                    id={`provider-${key}`}
+                    label={fieldTranslations[language][field] || field}
                     value={values[key] || ""}
-                    onChange={(event) =>
-                      handleFieldChange(key, event.target.value)
-                    }
-                    className={`${inputClass} mt-0 flex-1`}
-                    placeholder="Trace wards from map"
+                    onChange={(value) => handleFieldChange(key, value)}
+                    required={key === "spatial.email"}
+                    {...getLocationControlProps(key)}
                   />
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    className="shrink-0 px-4 border-brand-primary/30 text-brand-primary hover:bg-brand-light hover:border-brand-primary"
-                    onClick={() => setIsWardTraceOpen(true)}
-                    disabled={!canTraceWards}
-                  >
-                    <MapPinned size={16} className="mr-2" />
-                    Trace wards
-                  </Button>
-                </div>
-              </div>
-            );
-          }
+                </label>
+              );
+            })}
+          </div>
+        </div>
 
-          if (isGpsLatitudeField || isGpsLongitudeField) {
-            if (isGpsLongitudeField) {
-              return null;
-            }
+        <div>
+          <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold text-text-primary">
+            <div className="h-1 w-1 rounded-full bg-brand-primary" />
+            Location
+          </h3>
+          <div className="grid gap-4 rounded-xl border border-surface-border bg-white/50 p-5 md:grid-cols-2">
+            {fields.map((field) => {
+              const key = `spatial.${slugify(field)}`;
+              const isWardsCoveredField = key === LOCATION_FIELD_KEYS.wardsCovered;
+              const isGpsLatitudeField = key === LOCATION_FIELD_KEYS.gpsLatitude;
+              const isGpsLongitudeField = key === LOCATION_FIELD_KEYS.gpsLongitude;
 
-            return (
-              <div key={key} className="block md:col-span-2 xl:col-span-3">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="h-2 w-2 rounded-full bg-brand-primary" />
-                  <label className="text-sm font-medium text-text-primary">
-                    GPS Coordinates
-                  </label>
-                </div>
-                {gpsError && (
-                  <div className="mb-2 rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700 flex items-center gap-2">
-                    <AlertCircle size={14} className="flex-shrink-0" />
-                    {gpsError}
-                  </div>
-                )}
-                <div className="grid gap-3 md:grid-cols-2">
-                  <div>
-                    <label
-                      htmlFor={LOCATION_FIELD_KEYS.gpsLatitude}
-                      className="text-xs font-medium text-text-secondary"
-                    >
-                      Latitude <span className="text-red-500">*</span>
+              if (!isWardsCoveredField && !isGpsLatitudeField && !isGpsLongitudeField &&
+                  !['Province Name', 'District', 'Municipality Name', 'Number of wards covered', 'GPS Latitude', 'GPS Longitude'].includes(field)) {
+                return null;
+              }
+
+              if (isWardsCoveredField) {
+                return (
+                  <div key={key} className="md:col-span-2">
+                    <label htmlFor={key} className="text-sm font-medium text-text-primary">
+                      {fieldTranslations[language][field] || field}
+                      <span className="text-red-500 ml-1">*</span>
                     </label>
-                    <input
-                      id={LOCATION_FIELD_KEYS.gpsLatitude}
-                      type="number"
-                      step="0.000001"
-                      value={values[LOCATION_FIELD_KEYS.gpsLatitude] || ""}
-                      onChange={(event) =>
-                        handleFieldChange(
-                          LOCATION_FIELD_KEYS.gpsLatitude,
-                          event.target.value,
-                        )
-                      }
-                      className={inputClass}
-                      placeholder="e.g., 27.7172"
-                    />
+                    <div className="mt-2 flex gap-2">
+                      <input
+                        id={key}
+                        type="text"
+                        value={values[key] || ""}
+                        onChange={(event) => handleFieldChange(key, event.target.value)}
+                        className={`${inputClass} mt-0 flex-1`}
+                        placeholder="Trace wards from map"
+                      />
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        className="shrink-0 px-4"
+                        onClick={() => setIsWardTraceOpen(true)}
+                        disabled={!canTraceWards}
+                      >
+                        <MapPinned size={16} className="mr-2" />
+                        Trace wards
+                      </Button>
+                    </div>
                   </div>
-                  <div>
-                    <label
-                      htmlFor={LOCATION_FIELD_KEYS.gpsLongitude}
-                      className="text-xs font-medium text-text-secondary"
-                    >
-                      Longitude <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id={LOCATION_FIELD_KEYS.gpsLongitude}
-                      type="number"
-                      step="0.000001"
-                      value={values[LOCATION_FIELD_KEYS.gpsLongitude] || ""}
-                      onChange={(event) =>
-                        handleFieldChange(
-                          LOCATION_FIELD_KEYS.gpsLongitude,
-                          event.target.value,
-                        )
-                      }
-                      className={inputClass}
-                      placeholder="e.g., 85.3240"
-                    />
-                  </div>
-                </div>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  className="mt-3 w-full border-brand-primary/30 text-brand-primary hover:bg-brand-light hover:border-brand-primary"
-                  onClick={captureGPSLocation}
-                  disabled={isGpsLoading}
-                >
-                  {isGpsLoading ? (
-                    <>
-                      <Loader size={16} className="mr-2 animate-spin" />
-                      Capturing Location...
-                    </>
-                  ) : (
-                    <>
-                      <MapPinned size={16} className="mr-2" />
-                      Use Current Location
-                    </>
-                  )}
-                </Button>
-              </div>
-            );
-          }
+                );
+              }
 
-          return (
-            <label key={key} htmlFor={key} className="block group">
-              <span className="text-sm font-medium text-text-primary group-focus-within:text-brand-primary transition-colors">
-                {fieldTranslations[language][field] || field}
-                <span className="text-red-500 ml-1">*</span>
-              </span>
-              <FormControl
-                id={key}
-                label={fieldTranslations[language][field] || field}
-                value={values[key] || ""}
-                onChange={(value) => handleFieldChange(key, value)}
-                required={key === "spatial.email"}
-                {...getLocationControlProps(key)}
-              />
-            </label>
-          );
-        })}
+              if (isGpsLatitudeField) {
+                return (
+                  <div key={key} className="md:col-span-2">
+                    <label className="text-sm font-medium text-text-primary mb-3 flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-brand-primary" />
+                      GPS Coordinates
+                    </label>
+                    {gpsError && (
+                      <div className="mb-3 rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700 flex items-center gap-2">
+                        <AlertCircle size={14} className="flex-shrink-0" />
+                        {gpsError}
+                      </div>
+                    )}
+                    <div className="grid gap-3 md:grid-cols-2">
+                      <div>
+                        <label htmlFor="provider-gps-latitude" className="text-xs font-medium text-text-secondary">
+                          Latitude <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          id="provider-gps-latitude"
+                          type="number"
+                          step="0.000001"
+                          value={values[LOCATION_FIELD_KEYS.gpsLatitude] || ""}
+                          onChange={(event) => handleFieldChange(LOCATION_FIELD_KEYS.gpsLatitude, event.target.value)}
+                          className={inputClass}
+                          placeholder="e.g., 27.7172"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="provider-gps-longitude" className="text-xs font-medium text-text-secondary">
+                          Longitude <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          id="provider-gps-longitude"
+                          type="number"
+                          step="0.000001"
+                          value={values[LOCATION_FIELD_KEYS.gpsLongitude] || ""}
+                          onChange={(event) => handleFieldChange(LOCATION_FIELD_KEYS.gpsLongitude, event.target.value)}
+                          className={inputClass}
+                          placeholder="e.g., 85.3240"
+                        />
+                      </div>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      className="mt-3 w-full"
+                      onClick={captureGPSLocation}
+                      disabled={isGpsLoading}
+                    >
+                      {isGpsLoading ? (
+                        <>
+                          <Loader size={16} className="mr-2 animate-spin" />
+                          Capturing Location...
+                        </>
+                      ) : (
+                        <>
+                          <MapPinned size={16} className="mr-2" />
+                          Use Current Location
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                );
+              }
+
+              if (isGpsLongitudeField) {
+                return null;
+              }
+
+              return (
+                <label key={key} htmlFor={`provider-${key}`} className="block group">
+                  <span className="text-sm font-medium text-text-primary group-focus-within:text-brand-primary transition-colors">
+                    {fieldTranslations[language][field] || field}
+                    <span className="text-red-500 ml-1">*</span>
+                  </span>
+                  <FormControl
+                    id={`provider-${key}`}
+                    label={fieldTranslations[language][field] || field}
+                    value={values[key] || ""}
+                    onChange={(value) => handleFieldChange(key, value)}
+                    required={key === "spatial.email"}
+                    {...getLocationControlProps(key)}
+                  />
+                </label>
+              );
+            })}
+          </div>
+        </div>
       </div>
+
       <WardTraceModal
         isOpen={isWardTraceOpen}
         province={province}
@@ -370,9 +384,7 @@ function ServiceProviderSection({
         municipalityName={municipalityName}
         initialWards={parseWardValue(values[LOCATION_FIELD_KEYS.wardsCovered])}
         onClose={() => setIsWardTraceOpen(false)}
-        onSave={(wards) =>
-          onFieldChange(LOCATION_FIELD_KEYS.wardsCovered, wards.join(", "))
-        }
+        onSave={(wards) => onFieldChange(LOCATION_FIELD_KEYS.wardsCovered, wards.join(", "))}
       />
     </section>
   );
