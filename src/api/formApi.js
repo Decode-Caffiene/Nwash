@@ -5,17 +5,12 @@ export const getFormData = async () => {
   return response.data?.data ?? response.data;
 };
 
-// NOTE: update these paths to match your backend's accept/reject endpoints
-export const acceptFormSubmission = async (id) => {
-  const response = await axiosInstance.patch(`/form/updateStatus/${id}`, {
-    status: "accepted",
-  });
+export const acceptFormSubmission = async (id, userEmail) => {
+  const response = await axiosInstance.patch("/admin/approve", { id, userEmail });
   return response.data;
 };
 
-export const rejectFormSubmission = async (id) => {
-  const response = await axiosInstance.patch(`/form/updateStatus/${id}`, {
-    status: "rejected",
-  });
+export const rejectFormSubmission = async (id, reason, userEmail) => {
+  const response = await axiosInstance.patch(`/admin/reject/${id}`, { reason, userEmail });
   return response.data;
 };

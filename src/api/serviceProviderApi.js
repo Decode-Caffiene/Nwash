@@ -33,7 +33,11 @@ export const saveServiceProviderForm = async (payload, rawValues = {}) => {
 
   Object.entries(payload).forEach(([key, value]) => {
     if (value === "" || value === null || value === undefined) return;
-    if (typeof value === "object" && value !== null && !(value instanceof File)) {
+    if (
+      typeof value === "object" &&
+      value !== null &&
+      !(value instanceof File)
+    ) {
       formData.append(key, JSON.stringify(value));
     } else {
       formData.append(key, String(value));

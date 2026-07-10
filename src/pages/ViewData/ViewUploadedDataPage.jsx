@@ -15,6 +15,7 @@ import {
   Globe,
   Mail,
   MapPin,
+  MessageSquare,
   RefreshCw,
   Search,
   User,
@@ -26,6 +27,7 @@ import {
   getFormData,
   rejectFormSubmission,
 } from "../../api/formApi";
+import { useAuth } from "../../hooks/useAuth";
 
 // ── Status config ─────────────────────────────────────────────────────────────
 
@@ -117,9 +119,17 @@ function Toast({ toast, onClose }) {
 // ── Confirm Modal ─────────────────────────────────────────────────────────────
 
 function ConfirmModal({ modal, onConfirm, onCancel, loading }) {
+  const [reason, setReason] = useState("");
+
+  // Reset reason each time a new action is opened
+  useEffect(() => {
+    setReason("");
+  }, [modal?.id, modal?.action]);
+
   if (!modal) return null;
 
   const isAccept = modal.action === "accepted";
+  const canSubmit = isAccept || reason.trim().length > 0;
   const confirmCls = isAccept
     ? "bg-emerald-600 hover:bg-emerald-700 text-white"
     : "bg-red-600 hover:bg-red-700 text-white";
@@ -155,7 +165,7 @@ function ConfirmModal({ modal, onConfirm, onCancel, loading }) {
         </div>
 
         {/* Body */}
-        <div className="px-6 py-5">
+        <div className="px-6 py-5 space-y-4">
           <p className="text-sm leading-relaxed text-slate-600">
             {isAccept ? (
               <>
@@ -165,12 +175,36 @@ function ConfirmModal({ modal, onConfirm, onCancel, loading }) {
               </>
             ) : (
               <>
-                Are you sure you want to reject{" "}
-                <span className="font-semibold text-slate-800">{modal.wsucName}</span>?
-                {" "}This action will notify the operator via email.
+                You are about to reject{" "}
+                <span className="font-semibold text-slate-800">{modal.wsucName}</span>.
+                {" "}Please provide a reason — it will be sent to the operator via email.
               </>
             )}
           </p>
+
+          {/* Reason textarea — reject only */}
+          {!isAccept && (
+            <div>
+              <label className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold text-slate-600">
+                <MessageSquare size={12} />
+                Reason for rejection
+                <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                placeholder="Provide a clear reason for rejecting this submission…"
+                rows={4}
+                className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-3 text-sm text-slate-800 placeholder-slate-400 outline-none transition focus:border-red-300 focus:bg-white focus:ring-2 focus:ring-red-100"
+                autoFocus
+              />
+              <p className="mt-1.5 text-right text-[11px] text-slate-400">
+                {reason.trim().length === 0
+                  ? "Required — cannot submit without a reason"
+                  : `${reason.trim().length} characters`}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Footer */}
@@ -185,9 +219,9 @@ function ConfirmModal({ modal, onConfirm, onCancel, loading }) {
           </button>
           <button
             type="button"
-            onClick={onConfirm}
-            disabled={loading}
-            className={`flex items-center gap-2 rounded-xl px-5 py-2 text-sm font-semibold transition disabled:opacity-50 ${confirmCls}`}
+            onClick={() => onConfirm(reason)}
+            disabled={loading || !canSubmit}
+            className={`flex items-center gap-2 rounded-xl px-5 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-40 ${confirmCls}`}
           >
             {loading && <RefreshCw size={13} className="animate-spin" />}
             {isAccept ? "Yes, Accept" : "Yes, Reject"}
@@ -262,6 +296,7 @@ function SkeletonRow() {
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function ViewUploadedDataPage() {
+  const { user }                            = useAuth();
   const [submissions, setSubmissions]       = useState([]);
   const [loading, setLoading]               = useState(true);
   const [error, setError]                   = useState("");
@@ -313,14 +348,19 @@ export default function ViewUploadedDataPage() {
   };
 
   // Step 2: user confirmed in modal — run the API call
-  const confirmAction = async () => {
+  const confirmAction = async (reason) => {
     const { id, action, wsucName } = confirmModal;
+    const userEmail = user?.email ?? user?.userEmail ?? "";
+
     setActionLoading((prev) => ({ ...prev, [id]: action }));
     setConfirmModal(null);
 
     try {
-      if (action === "accepted") await acceptFormSubmission(id);
-      else await rejectFormSubmission(id);
+      if (action === "accepted") {
+        await acceptFormSubmission(id, userEmail);
+      } else {
+        await rejectFormSubmission(id, reason, userEmail);
+      }
 
       setSubmissions((prev) =>
         prev.map((s) =>
