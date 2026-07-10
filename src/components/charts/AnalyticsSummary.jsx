@@ -5,82 +5,47 @@ import {
   calculateZoneStats,
 } from "../../utils/zoneAnalytics";
 
+// One card per chart zone, ordered from worst (9) to best (1) category,
+// matching the categories in the DWSSM KPI mastersheet.
+const ZONE_CARDS = [
+  { key: "veryPoor", zone: "VERY_POOR", label: "Very Poor", color: "text-red-600" },
+  { key: "poor", zone: "POOR", label: "Poor", color: "text-pink-600" },
+  { key: "inactive", zone: "INACTIVE", label: "Inactive", color: "text-slate-600" },
+  { key: "active", zone: "ACTIVE", label: "Active", color: "text-green-600" },
+  { key: "improving", zone: "IMPROVING", label: "Improving", color: "text-yellow-600" },
+];
+
 export default function AnalyticsSummary({ chartData = [] }) {
   const [expandedZone, setExpandedZone] = useState(null);
 
-  const { categorized, stats, summary } = useMemo(() => {
-    const total = chartData.length;
+  const summary = useMemo(() => {
     const categorizedData = categorizeProviders(chartData);
 
-    const veryPoorStats = calculateZoneStats(categorizedData.VERY_POOR);
-    const poorStats = calculateZoneStats(categorizedData.POOR);
-    const inactiveStats = calculateZoneStats(categorizedData.INACTIVE);
-    const activeStats = calculateZoneStats(categorizedData.ACTIVE);
-    const improvingStats = calculateZoneStats(categorizedData.IMPROVING);
-    return {
-      categorized: categorizedData,
-      stats: {
-        veryPoor: veryPoorStats,
-        poor: poorStats,
-        inactive: inactiveStats,
-        active: activeStats,
-        improving: improvingStats,
+    return [
+      {
+        label: "Total Records",
+        value: chartData.length,
+        color: "text-slate-900",
+        key: "total",
       },
-      summary: [
-        {
-          label: "Total Records",
-          value: total,
-          color: "text-slate-900",
-          key: "total"
-        },
-        {
-          label: "Very Poor",
-          value: categorizedData.VERY_POOR.length,
-          color: "text-red-600",
-          key: "veryPoor",
-          providers: categorizedData.VERY_POOR,
-          stats: veryPoorStats,
-        },
-        {
-          label: "Poor",
-          value: categorizedData.POOR.length,
-          color: "text-pink-600",
-          key: "poor",
-          providers: categorizedData.POOR,
-          stats: poorStats,
-        },
-        {
-          label: "Inactive",
-          value: categorizedData.INACTIVE.length,
-          color: "text-slate-600",
-          key: "inactive",
-          providers: categorizedData.INACTIVE,
-          stats: inactiveStats,
-        },
-        {
-          label: "Active",
-          value: categorizedData.ACTIVE.length,
-          color: "text-green-600",
-          key: "active",
-          providers: categorizedData.ACTIVE,
-          stats: activeStats,
-        },
-        {
-          label: "Improving",
-          value: categorizedData.IMPROVING.length,
-          color: "text-yellow-600",
-          key: "improving",
-          providers: categorizedData.IMPROVING,
-          stats: improvingStats,
-        },
-      ],
-    };
+      ...ZONE_CARDS.map(({ key, zone, label, color }) => {
+        const providers = categorizedData[zone];
+        return {
+          label,
+          value: providers.length,
+          color,
+          key,
+          providers,
+          stats: calculateZoneStats(providers),
+        };
+      }),
+    ];
   }, [chartData]);
 
   return (
     <div className="space-y-4">
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
         {summary.map((item) => (
           <div
             key={item.label}

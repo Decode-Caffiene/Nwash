@@ -447,6 +447,7 @@ export default function CoverageAreaMap({
             </p>
           </div>
           <button
+            type="button"
             onClick={onClose}
             className="rounded-full p-2 hover:bg-gray-200 transition"
           >

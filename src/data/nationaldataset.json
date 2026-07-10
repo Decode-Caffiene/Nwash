@@ -9,17 +9,17 @@
   "provinces": {
     "Koshi": {
       "Bhojpur": {
-        "municipalities": [
-          "Bh",
-          "Shada",
-          "Hatuwagadhi",
-          "Ramprasad Rai",
-          "Aamchowk",
-          "Tyamke Maiyunm",
-          "Pauwadungma",
-          "Salpasilichho",
-          "Arun"
-        ]
+         "municipalities": [
+        "Bhojpur",
+        "Shadananda",
+        "Hatuwagadhi",
+        "Ramprasad Rai",
+        "Aamchowk",
+        "Tyamke Maiyum",
+        "Pauwadungma",
+        "Salpasilichho",
+        "Arun"
+      ]
       },
       "Dhankuta": {
         "municipalities": [
@@ -361,7 +361,7 @@
     "Bagmati": {
       "Kathmandu": {
         "municipalities": [
-          "Kathmandu Metropolitan City",
+          "Kathmandu ",
           "Budhanilkantha",
           "Chandragiri",
           "Dakshinkali",
@@ -376,7 +376,7 @@
       },
       "Lalitpur": {
         "municipalities": [
-          "Lalitpur Metropolitan City",
+          "Lalitpur ",
           "Godawari",
           "Mahalaxmi",
           "Konjyosom",
@@ -394,7 +394,7 @@
       },
       "Chitwan": {
         "municipalities": [
-          "Bharatpur Metropolitan City",
+          "Bharatpur ",
           "Kalika",
           "Khairahani",
           "Madi",
@@ -405,7 +405,7 @@
       },
       "Makwanpur": {
         "municipalities": [
-          "Hetauda Sub-Metropolitan City",
+          "Hetauda ",
           "Thaha",
           "Bhimphedi",
           "Makawanpurgadhi",
@@ -665,8 +665,8 @@
     "Lumbini": {
       "Dang": {
         "municipalities": [
-          "Ghorahi Sub-Metropolitan City",
-          "Tulsipur Sub-Metropolitan City",
+          "Ghorahi ",
+          "Tulsipur",
           "Lamahi",
           "Rapti",
           "Gadhawa",
@@ -679,7 +679,7 @@
       },
       "Banke": {
         "municipalities": [
-          "Nepalgunj Sub-Metropolitan City",
+          "Nepalgunj ",
           "Kohalpur",
           "Raptisonari",
           "Baijanath",
@@ -691,7 +691,7 @@
       },
       "Rupandehi": {
         "municipalities": [
-          "Butwal Sub-Metropolitan City",
+          "Butwal ",
           "Tilottama",
           "Lumbini Sanskritik",
           "Siddharthanagar",

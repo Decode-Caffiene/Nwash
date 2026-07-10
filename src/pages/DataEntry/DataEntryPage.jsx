@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Send, Loader, AlertCircle, CheckCircle } from "lucide-react";
 
 import Button from "../../components/common/Button";
@@ -16,7 +16,6 @@ const FIELD_MAP = {
   "Phone Number": "phone",
   "Designation": "designation",
   "Name of Service Provider": "",
-  "WSUC Name": "wsucName",
   "Province Name": "province",
   "District": "district",
   "Municipality Name": "municipality",
@@ -31,7 +30,6 @@ const SPATIAL_MAP = {
   "email": "email",
   "designation": "designation",
   "name-of-service-provider": "",
-  "wsuc-name": "wsucName",
   "province-name": "province",
   "district": "district",
   "municipality-name": "municipality",
@@ -131,10 +129,16 @@ function DataEntryPage() {
         [key]: value,
       },
     }));
+    // Clear success or error messages when user starts editing
+    if (submitStatus) {
+      setSubmitStatus(null);
+      setSubmitMessage("");
+    }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     setSubmitting(true);
     setSubmitStatus(null);
     setSubmitMessage("");
@@ -175,8 +179,25 @@ function DataEntryPage() {
     }
   };
 
+  // Clear messages when switching forms
+  useEffect(() => {
+    setSubmitStatus(null);
+    setSubmitMessage("");
+  }, [activeForm.id]);
+
+  // Clear messages on page load
+  useEffect(() => {
+    setSubmitStatus(null);
+    setSubmitMessage("");
+  }, []);
+
   const openPreview = () => {
     setIsPreviewOpen(true);
+  };
+
+  const handleDrawStart = () => {
+    setSubmitStatus(null);
+    setSubmitMessage("");
   };
 
   return (
@@ -234,6 +255,7 @@ function DataEntryPage() {
             values={currentValues}
             onFieldChange={updateField}
             language={language}
+            onDrawStart={handleDrawStart}
           />
 
         ) : (

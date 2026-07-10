@@ -146,7 +146,7 @@ function WardTraceModal({
           </button>
         </div>
 
-        <div className="grid min-h-0 flex-1 gap-0 lg:grid-cols-[minmax(0,1fr)_240px]">
+        <div className={`grid min-h-0 flex-1 gap-0 ${selectedWards.length > 0 ? 'lg:grid-cols-[minmax(0,1fr)_240px]' : ''}`}>
           <div className="h-[68vh] min-h-[420px]">
             {wardFeatures.length ? (
               <MapContainer
@@ -200,13 +200,13 @@ function WardTraceModal({
             )}
           </div>
 
-          <aside className="border-t border-surface-border p-4 lg:border-l lg:border-t-0">
-            <p className="text-sm font-semibold text-text-primary">
-              Selected wards
-            </p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {selectedWards.length ? (
-                selectedWards.map((ward) => (
+          {selectedWards.length > 0 && (
+            <aside className="border-t border-surface-border p-4 lg:border-l lg:border-t-0">
+              <p className="text-sm font-semibold text-text-primary">
+                Selected wards
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {selectedWards.map((ward) => (
                   <button
                     key={ward}
                     type="button"
@@ -215,14 +215,10 @@ function WardTraceModal({
                   >
                     {ward}
                   </button>
-                ))
-              ) : (
-                <p className="text-sm text-text-secondary">
-                  Click ward markers or ward areas on the map.
-                </p>
-              )}
-            </div>
-          </aside>
+                ))}
+              </div>
+            </aside>
+          )}
         </div>
 
         <div className="flex flex-col-reverse gap-3 border-t border-surface-border p-5 sm:flex-row sm:justify-end">
