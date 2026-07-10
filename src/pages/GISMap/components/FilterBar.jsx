@@ -71,13 +71,13 @@ export default function FilterBar({ projects, muniGeojson, onZoom }) {
   };
 
   const handleZoom = () => {
-    if (!municipality || !district) return;
+    if (!district) return;
     const distKey = cleanDistrict(district);
-    const features = (muniGeojson.features || []).filter(
-      (f) =>
-        cleanDistrict(f.properties?.DISTRICT) === distKey &&
-        f.properties?.NAME === municipality,
-    );
+    const features = (muniGeojson.features || []).filter((f) => {
+      const distMatch = cleanDistrict(f.properties?.DISTRICT) === distKey;
+      if (!municipality) return distMatch; // "All" → zoom to entire district
+      return distMatch && f.properties?.NAME === municipality;
+    });
     onZoom(features);
   };
 
@@ -159,10 +159,10 @@ export default function FilterBar({ projects, muniGeojson, onZoom }) {
       <button
         type="button"
         onClick={handleZoom}
-        disabled={!municipality}
+        disabled={!district}
         className="flex items-center gap-1.5 h-9 rounded-lg px-4 text-sm font-bold shadow border border-transparent transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         style={{
-          background: municipality ? "#10b981" : "#1e293b",
+          background: district ? "#10b981" : "#1e293b",
           color: "#fff",
         }}
       >

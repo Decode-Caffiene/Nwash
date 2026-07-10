@@ -48,7 +48,21 @@ export const PROVINCE_NAME_TO_NO = {
 // Municipality name corrections for known severe typos in project data
 // where Levenshtein matching would be unsafe.
 export const MUNI_CORRECTIONS = {
-  "rupakot majuwa rupkot": "Rupakot Majhuwagadhi",
+  "diktel majuwa rupkot": "Rupakot Majhuwagadhi",
+  kusma: "Kushma",
+  nijgad: "Nijgadh",
+  pokhara: "Pokhara Lekhnath",
+  tarkeshwor: "Tarakeshwor",
+  "kageswori manohara": "Kageshwori Manahora",
+  debdaha: "Devdaha",
+  "sundar haraicha": "Sundarharaicha",
+  kanchanpur: "Kanchanrup",
+  urlabari: "Uralabari",
+  benighat: "Benighat Rorang",
+  tilottama: "Tillotama",
+  barahachetra: "Barah",
+  diktel: "Rupakot Majhuwagadhi",
+  rawabesi: "Lamidanda",
 };
 
 // Maps what cleanDistrict() produces (uppercase of DB value) to the district
@@ -58,6 +72,8 @@ export const MUNI_CORRECTIONS = {
 // JSON district names: ILLAM is the only project-DB key that doesn't match.
 export const MUNI_DISTRICT_CORRECTIONS = {
   ILLAM: "ILAM",
+  NAWALPUR: "NAWALPARASI",
+  TERHATHUM: "TERATHUM",
 };
 
 // Maps what cleanDistrict() produces (uppercase of DB value) to the exact
@@ -73,6 +89,8 @@ export const DISTRICT_TO_WARD_KEY = {
   TERATHUM: "TERHATHUM",
   MANAG: "MANANG",
   ILLAM: "ILAM",
+  NAWALPUR: "NAWALPARASI_E",
+  NAWALPARASI: "NAWALPARASI_E",
 };
 
 // Base map styles selectable from the map type control.

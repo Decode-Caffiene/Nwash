@@ -3,7 +3,7 @@ import { getMapData, getMuniGeojson } from "../../../api/mapService";
 import { cleanDistrict } from "../utils/geoHelpers";
 import { buildMuniIndex, resolveMuni } from "../utils/muniResolver";
 import { MUNI_DISTRICT_CORRECTIONS } from "../utils/mapConstants";
-
+import { NEPAL_CENTER } from "../utils/mapConstants";
 // Loads projects + municipality GeoJSON in parallel, then derives:
 //   muniIndex        — district-keyed spatial lookup for fuzzy municipality resolution
 //   projectLocations — per-project { lat, lng, canonicalMunicipality, district }
@@ -14,7 +14,7 @@ export function useMapData() {
   const [muniGeojson, setMuniGeojson] = useState({ features: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const failedProjects = [];
   useEffect(() => {
     let cancelled = false;
 
@@ -92,7 +92,6 @@ export function useMapData() {
         };
       });
     }
-
     return raw;
   }, [projects, muniIndex]);
   return { projects, muniGeojson, muniIndex, projectLocations, loading, error };

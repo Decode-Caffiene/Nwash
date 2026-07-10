@@ -23,7 +23,7 @@ export function useWardData({ selectedProject, projectLocations }) {
   const [wardError, setWardError] = useState("");
 
   const clearWards = useCallback(() => setWardFeatures([]), []);
-
+  console.log("selected project", selectedProject);
   const fetchWardData = useCallback(
     async (project) => {
       if (!project) {
