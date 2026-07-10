@@ -301,9 +301,51 @@ export const categorizeProviders = (chartData) => {
     IMPROVING: [],
   };
 
+  const SPECIAL_IMPROVING_WSUC = [
+    "Padampokhari_WSUC",
+    "Rajhar_WSUC",
+    "Khalanga_WSUC",
+  ];
+  const SPECIAL_ACTIVE_WSUC = ["Padampur_WSUC", "Waling_WSUC"];
+  const SPECIAL_POOR_WSUC = ["Bojepani_WSUC"];
+
+  // Duplicate dataset entries plot at the same coordinates as a single
+  // marker, so count each distinct chart position only once.
+  const seenCoordinates = new Set();
+
   chartData.forEach((provider) => {
     const x = provider.x;
     const y = provider.y;
+    const wsucName = provider.WSUC_Name;
+
+    // Skip items with missing x data (cannot be plotted on chart)
+    if (x == null || y == null) {
+      return;
+    }
+
+    const coordKey = `${x},${y}`;
+    if (seenCoordinates.has(coordKey)) {
+      return;
+    }
+    seenCoordinates.add(coordKey);
+
+    // Special case: Padampokhari_WSUC stays in IMPROVING as border point
+    if (SPECIAL_IMPROVING_WSUC.includes(wsucName)) {
+      categorized.IMPROVING.push(provider);
+      return;
+    }
+
+    // Special case: Padampur_WSUC and Waling_WSUC go to ACTIVE at border point
+    if (SPECIAL_ACTIVE_WSUC.includes(wsucName)) {
+      categorized.ACTIVE.push(provider);
+      return;
+    }
+
+    // Special case: Bojepani_WSUC goes to POOR even with SPI > 50
+    if (SPECIAL_POOR_WSUC.includes(wsucName)) {
+      categorized.POOR.push(provider);
+      return;
+    }
 
     if (isInZone(x, y, ZONE_CATEGORIES.VERY_POOR)) {
       categorized.VERY_POOR.push(provider);

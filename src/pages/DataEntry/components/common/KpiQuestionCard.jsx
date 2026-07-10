@@ -7,6 +7,16 @@ import FormControl, { inputClass } from "./FormControl";
 const YES_NO_OPTIONS_ENG = ["Yes", "No"];
 const YES_NO_OPTIONS_NEP = ["हो", "होइन"];
 
+// Upload field names expected by the backend (multer upload.fields config),
+// matched against the question text.
+const DOCUMENT_FIELDS = [
+  { keyword: "business plan", name: "Business_Plan" },
+  { keyword: "lab report", name: "Lab_Report" },
+  { keyword: "pumping hours", name: "Logbook_For_Pumping_Hours" },
+  { keyword: "audit report", name: "Annual_Audit_Report" },
+  { keyword: "consumer complaint", name: "Logbook_For_Consumer_complaint" },
+];
+
 function KpiQuestionCard({
   formId,
   sectionTitle,
@@ -20,18 +30,14 @@ function KpiQuestionCard({
 }) {
   const kpiIndex = `KPI_${index + 1}`;
   const key = `${sectionKey}.${kpiIndex}`;
-  const descriptionKey = `documents`;
   const remarksKey = `${sectionKey}.KPI_${index + 1}_Remark`;
   const normalizedQuestion = question.toLowerCase();
 
-  const isBusinessPlanQuestion =
-    normalizedQuestion.includes("business plan") &&
-    normalizedQuestion.includes("exist");
-  const usesFileSource =
-    normalizedQuestion.includes("report") ||
-    normalizedQuestion.includes("logbook") ||
-    normalizedQuestion.includes("log book") ||
-    isBusinessPlanQuestion;
+  const documentFieldName =
+    DOCUMENT_FIELDS.find(({ keyword }) => normalizedQuestion.includes(keyword))
+      ?.name || null;
+  const usesFileSource = Boolean(documentFieldName);
+  const descriptionKey = documentFieldName || "documents";
   const showSourceExplanation = isGateKeepingQuestion || usesFileSource;
 
   // Detect if this is a yes/no question
@@ -109,7 +115,7 @@ function KpiQuestionCard({
               <input
                 id={descriptionKey}
                 type="file"
-                name="documents"
+                name={descriptionKey}
                 onChange={(event) => {
                   const file = event.target.files?.[0];
                   onFieldChange(descriptionKey, file || "");
