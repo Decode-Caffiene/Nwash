@@ -123,13 +123,15 @@ export default function AnalyticsChart({ chartData }) {
             fillOpacity={0.85}
           />
 
-          {/* LAYER 2: TOP-RIGHT SUB-ZONE OVERLAYS */}
+          {/* LAYER 2: TOP-RIGHT SUB-ZONE OVERLAYS
+              Colors follow ZONE_CATEGORIES so the chart reads like the cards:
+              4. Improved / 3. Just Efficient / 2. Moderately Efficient / 1. Highly Efficient */}
           <ReferenceArea
             x1={70}
             x2={100}
             y1={70}
             y2={100}
-            fill="#84cc16"
+            fill="#65a30d"
             fillOpacity={0.55}
           />
           <ReferenceArea
@@ -137,16 +139,16 @@ export default function AnalyticsChart({ chartData }) {
             x2={100}
             y1={80}
             y2={100}
-            fill="#06b6d4"
-            fillOpacity={0.55}
+            fill="#84cc16"
+            fillOpacity={0.65}
           />
           <ReferenceArea
             x1={90}
             x2={100}
             y1={90}
             y2={100}
-            fill="#22d3ee"
-            fillOpacity={0.55}
+            fill="#06b6d4"
+            fillOpacity={0.6}
           />
           <ReferenceArea
             x1={95}
@@ -239,6 +241,20 @@ export default function AnalyticsChart({ chartData }) {
           />
 
           <ReferenceArea
+            x1={70}
+            x2={82}
+            y1={71}
+            y2={77}
+            fill="none"
+            label={{
+              value: "4. IMPROVED",
+              fill: "#1f2937",
+              fontSize: 12,
+              fontWeight: "700",
+            }}
+          />
+
+          <ReferenceArea
             x1={95}
             x2={84}
             y1={81}
@@ -256,8 +272,7 @@ export default function AnalyticsChart({ chartData }) {
             x2={100}
             y1={90}
             y2={95}
-            fill="#06b6d4"
-            fillOpacity={0.55}
+            fill="none"
             label={({ viewBox }) => {
               const { x, y, width, height } = viewBox;
 

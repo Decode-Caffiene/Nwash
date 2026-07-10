@@ -43,6 +43,7 @@ export default function CoverageAreaForm({
   onFieldChange,
   language = "eng",
   onValidationChange,
+  onDrawStart,
 }) {
   const province = values[LOCATION_FIELD_KEYS.province] || "";
   const district = values[LOCATION_FIELD_KEYS.district] || "";
@@ -57,9 +58,7 @@ export default function CoverageAreaForm({
     lines: 0,
     points: 0,
   });
-  const [coverageAreaInfo, setCoverageAreaInfo] = useState(
-    coverageAreaGeoJson ? "✓ Coverage area selected" : null,
-  );
+  const [coverageAreaInfo, setCoverageAreaInfo] = useState(null);
   const [isGpsLoading, setIsGpsLoading] = useState(false);
   const [gpsError, setGpsError] = useState(null);
   const [mapError, setMapError] = useState(null);
@@ -79,6 +78,37 @@ export default function CoverageAreaForm({
   const polygonDrawingRef = useRef(null);
 
   const canOpenMap = province && district && municipalityName;
+
+  // Clear success message when starting to draw
+  useEffect(() => {
+    if (isDrawing) {
+      onDrawStart?.();
+    }
+  }, [isDrawing, onDrawStart]);
+
+  // Update coverage area info when coverage area data changes
+  useEffect(() => {
+    if (coverageAreaGeoJson) {
+      try {
+        const coverage = typeof coverageAreaGeoJson === "string"
+          ? JSON.parse(coverageAreaGeoJson)
+          : coverageAreaGeoJson;
+
+        if (coverage && coverage.features && coverage.features.length > 0) {
+          setCoverageAreaInfo(
+            `✓ Coverage area saved for ${municipalityName} (${coverage.features.length} area(s))`
+          );
+        } else {
+          setCoverageAreaInfo(null);
+        }
+      } catch {
+        setCoverageAreaInfo(null);
+      }
+    } else {
+      setCoverageAreaInfo(null);
+    }
+  }, [coverageAreaGeoJson, municipalityName]);
+
 
   // Initialize map when drawing mode starts
   useEffect(() => {
