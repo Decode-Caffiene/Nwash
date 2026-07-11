@@ -86,13 +86,14 @@ export default function CoverageAreaForm({
   useEffect(() => {
     if (coverageAreaGeoJson) {
       try {
-        const coverage = typeof coverageAreaGeoJson === "string"
-          ? JSON.parse(coverageAreaGeoJson)
-          : coverageAreaGeoJson;
+        const coverage =
+          typeof coverageAreaGeoJson === "string"
+            ? JSON.parse(coverageAreaGeoJson)
+            : coverageAreaGeoJson;
 
         if (coverage && coverage.features && coverage.features.length > 0) {
           setCoverageAreaInfo(
-            `✓ Coverage area saved for ${municipalityName} (${coverage.features.length} area(s))`
+            `✓ Coverage area saved for ${municipalityName} (${coverage.features.length} area(s))`,
           );
         } else {
           setCoverageAreaInfo(null);
@@ -104,7 +105,6 @@ export default function CoverageAreaForm({
       setCoverageAreaInfo(null);
     }
   }, [coverageAreaGeoJson, municipalityName]);
-
 
   // Initialize map when drawing mode starts
   useEffect(() => {
@@ -133,13 +133,10 @@ export default function CoverageAreaForm({
 
         map.current = L.map(mapContainer.current).setView([28.3949, 84.124], 6);
 
-        L.tileLayer(
-          "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
-          {
-            maxZoom: 20,
-            attribution: "Google",
-          },
-        ).addTo(map.current);
+        L.tileLayer("https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}", {
+          maxZoom: 20,
+          attribution: "Google",
+        }).addTo(map.current);
 
         // Load and display selected boundary, then zoom to it
         const municipalityGeoJSON = await getMunicipalityBoundaryAsync(

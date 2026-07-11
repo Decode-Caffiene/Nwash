@@ -1,4 +1,6 @@
+
 import { useMemo, useState, useEffect, useRef } from "react";
+
 import { Send, Loader, AlertCircle, CheckCircle } from "lucide-react";
 
 import Button from "../../components/common/Button";
@@ -15,7 +17,9 @@ const FIELD_MAP = {
   "Email": "email",
   "Phone Number": "phone",
   "Designation": "designation",
+
   "Name of Service Provider": "wsucName",
+
   "Province Name": "province",
   "District": "district",
   "Municipality Name": "municipality",
@@ -29,7 +33,9 @@ const SPATIAL_MAP = {
   "name": "name",
   "email": "email",
   "designation": "designation",
+
   "name-of-service-provider": "wsucName",
+
   "province-name": "province",
   "district": "district",
   "municipality-name": "municipality",

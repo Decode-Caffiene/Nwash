@@ -33,6 +33,7 @@ export const saveServiceProviderForm = async (payload) => {
 
   Object.entries(payload).forEach(([key, value]) => {
     if (value === "" || value === null || value === undefined) return;
+
     if (typeof value === "string" && value === "undefined") return;
 
     if (value instanceof File) {
@@ -46,6 +47,7 @@ export const saveServiceProviderForm = async (payload) => {
       } catch (error) {
         console.warn(`Failed to stringify ${key}:`, error);
       }
+
     } else {
       const strValue = String(value);
       if (strValue !== "undefined") {
