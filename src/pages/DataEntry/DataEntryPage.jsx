@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { Send, Loader, AlertCircle, CheckCircle } from "lucide-react";
 
 import Button from "../../components/common/Button";
@@ -15,7 +15,7 @@ const FIELD_MAP = {
   "Email": "email",
   "Phone Number": "phone",
   "Designation": "designation",
-  "Name of Service Provider": "",
+  "Name of Service Provider": "wsucName",
   "Province Name": "province",
   "District": "district",
   "Municipality Name": "municipality",
@@ -29,7 +29,7 @@ const SPATIAL_MAP = {
   "name": "name",
   "email": "email",
   "designation": "designation",
-  "name-of-service-provider": "",
+  "name-of-service-provider": "wsucName",
   "province-name": "province",
   "district": "district",
   "municipality-name": "municipality",
@@ -59,24 +59,56 @@ const normalizeSubmitPayload = (formType, values) => {
   Object.entries(values).forEach(([key, value]) => {
     if (key === "undefined") return;
     if (value === "" || value === null || value === undefined) return;
+    if (typeof value === "string" && value === "undefined") return;
 
     if (key === COVERAGE_AREA_KEY) {
+      let geojson = null;
+
       if (typeof value === "string") {
         try {
           const parsed = JSON.parse(value);
           if (parsed && parsed.type === "FeatureCollection") {
-            payload.coordinates = parsed;
+            geojson = parsed;
           }
         } catch {
           // skip invalid coverage area string
         }
       } else if (value && typeof value === "object") {
-        payload.coordinates = value;
+        geojson = value;
+      }
+
+      const geometries = geojson?.features
+        ?.map((feature) => feature.geometry)
+        .filter(Boolean);
+
+      if (geometries?.length === 1) {
+        payload.geometry = {
+          type: geometries[0].type,
+          coordinates: geometries[0].coordinates,
+        };
+      } else if (geometries?.length > 1) {
+        // Multiple shapes drawn on the map -> combine into one MultiPolygon
+        // geometry so the backend's single geometry field can still store it.
+        payload.geometry = {
+          type: "MultiPolygon",
+          coordinates: geometries.flatMap((geometry) =>
+            geometry.type === "MultiPolygon"
+              ? geometry.coordinates
+              : [geometry.coordinates],
+          ),
+        };
       }
       return;
     }
 
-    setNested(payload, key, value);
+    // Convert Yes/No to 1/0 for NRW_Score KPI fields that expect numbers
+    let normalizedValue = value;
+    if (key.startsWith("non_revenue_water.") && key.match(/KPI_\d+$/) && typeof value === "string") {
+      if (value === "Yes" || value === "हो") normalizedValue = 1;
+      else if (value === "No" || value === "होइन") normalizedValue = 0;
+    }
+
+    setNested(payload, key, normalizedValue);
   });
 
   // Flatten detail fields from formType group to top level
@@ -100,10 +132,20 @@ const normalizeSubmitPayload = (formType, values) => {
     delete payload.spatial;
   }
 
+  
+  if (!payload.geometry && payload.latitude && payload.longitude) {
+    const lat = parseFloat(payload.latitude);
+    const lon = parseFloat(payload.longitude);
+    if (Number.isFinite(lat) && Number.isFinite(lon)) {
+      payload.geometry = { type: "Point", coordinates: [lon, lat] };
+    }
+  }
+
   return payload;
 };
 
 function DataEntryPage() {
+  const formRef = useRef(null);
   const [activeFormId, setActiveFormId] = useState(dataEntryForms[0].id);
   const [formValues, setFormValues] = useState({});
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -158,6 +200,9 @@ function DataEntryPage() {
       // Reset form after success
       setTimeout(() => {
         setFormValues({});
+        if (formRef.current) {
+          formRef.current.reset();
+        }
         setSubmitStatus(null);
         setSubmitMessage("");
       }, 2000);
@@ -246,7 +291,7 @@ function DataEntryPage() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-6">
+      <form ref={formRef} onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-6">
         {activeForm.useMapSection ? (
           <CoverageAreaForm
             title={activeForm.detailsTitle}

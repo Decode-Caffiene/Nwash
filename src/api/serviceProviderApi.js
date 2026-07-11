@@ -28,19 +28,29 @@ export const getProviderPerformance = async () => {
   return response.data;
 };
 
-export const saveServiceProviderForm = async (payload, rawValues = {}) => {
+export const saveServiceProviderForm = async (payload) => {
   const formData = new FormData();
 
   Object.entries(payload).forEach(([key, value]) => {
     if (value === "" || value === null || value === undefined) return;
-    if (
-      typeof value === "object" &&
-      value !== null &&
-      !(value instanceof File)
-    ) {
-      formData.append(key, JSON.stringify(value));
+    if (typeof value === "string" && value === "undefined") return;
+
+    if (value instanceof File) {
+      formData.append(key, value);
+    } else if (typeof value === "object") {
+      try {
+        const jsonStr = JSON.stringify(value);
+        if (jsonStr !== undefined && jsonStr !== "undefined") {
+          formData.append(key, jsonStr);
+        }
+      } catch (error) {
+        console.warn(`Failed to stringify ${key}:`, error);
+      }
     } else {
-      formData.append(key, String(value));
+      const strValue = String(value);
+      if (strValue !== "undefined") {
+        formData.append(key, strValue);
+      }
     }
   });
 
@@ -49,6 +59,6 @@ export const saveServiceProviderForm = async (payload, rawValues = {}) => {
     console.log(`${key}:`, val instanceof File ? `File(${val.name})` : val);
   }
 
-  const response = await axiosInstance.post("/form/upload", formData);
+  const response = await axiosInstance.postForm("/form/upload", formData);
   return response.data;
 };

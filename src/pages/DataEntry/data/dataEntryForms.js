@@ -61,12 +61,12 @@ export const dataEntryForms = [
         title: "Kpi 5",
         sectionKey: "non_revenue_water",
         questions: [
-          "Is the logbook maintained for pumping hours?",
-          "Flow measurement via pump curve? (Information about power (HP) and Head)",
-          "Reservoir scale measured?",
-          "Distribution hours measured?",
-          "Are there flow meters in transmission and distribution?",
-          "Is there a DMA-based network with sensors/software/data logging?",
+          "Is the logbook maintained for pumping hours? (Y/N)",
+          "Is flow measurement done via pump curve? (Y/N)",
+          "Is reservoir scale measured? (Y/N)",
+          "Are distribution hours measured? (Y/N)",
+          "Are there flow meters in transmission and distribution? (Y/N)",
+          "Is there a DMA-based network with sensors/software/data logging? (Y/N)",
         ],
       },
       {
@@ -98,7 +98,7 @@ export const dataEntryForms = [
   },
   {
     id: "service-provider-map",
-    title: "Coverage Area Form (Map-based)",
+    title: "Coverage Area Form",
 
     subtitle: "Spatial identification with coverage area mapping",
     detailsTitle: "Service Provider Details",
@@ -114,8 +114,6 @@ export const dataEntryForms = [
       "District",
       "Municipality Name",
       "Coverage Area",
-      "GPS Latitude",
-      "GPS Longitude",
     ],
     sections: [
       {
@@ -158,12 +156,12 @@ export const dataEntryForms = [
         title: "Kpi 5",
         sectionKey: "non_revenue_water",
         questions: [
-          "Is the logbook maintained for pumping hours?",
-          "Flow measurement via pump curve? (Information about power (HP) and Head)",
-          "Reservoir scale measured?",
-          "Distribution hours measured?",
-          "Are there flow meters in transmission and distribution?",
-          "Is there a DMA-based network with sensors/software/data logging?",
+          "Is the logbook maintained for pumping hours? (Y/N)",
+          "Is flow measurement done via pump curve? (Y/N)",
+          "Is reservoir scale measured? (Y/N)",
+          "Are distribution hours measured? (Y/N)",
+          "Are there flow meters in transmission and distribution? (Y/N)",
+          "Is there a DMA-based network with sensors/software/data logging? (Y/N)",
         ],
       },
       {

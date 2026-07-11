@@ -60,20 +60,18 @@ function ServiceProviderSection({
     const hasGpsLat = currentValues[LOCATION_FIELD_KEYS.gpsLatitude];
     const hasGpsLon = currentValues[LOCATION_FIELD_KEYS.gpsLongitude];
 
-    if (hasGpsLat || hasGpsLon) {
-      if (!hasGpsLat) {
-        errors[LOCATION_FIELD_KEYS.gpsLatitude] = "Latitude is required when providing GPS coordinates";
-      } else {
-        const latError = validateGpsCoordinate(hasGpsLat, "Latitude");
-        if (latError) errors[LOCATION_FIELD_KEYS.gpsLatitude] = latError;
-      }
+    if (!hasGpsLat) {
+      errors[LOCATION_FIELD_KEYS.gpsLatitude] = "Latitude is required";
+    } else {
+      const latError = validateGpsCoordinate(hasGpsLat, "Latitude");
+      if (latError) errors[LOCATION_FIELD_KEYS.gpsLatitude] = latError;
+    }
 
-      if (!hasGpsLon) {
-        errors[LOCATION_FIELD_KEYS.gpsLongitude] = "Longitude is required when providing GPS coordinates";
-      } else {
-        const lonError = validateGpsCoordinate(hasGpsLon, "Longitude");
-        if (lonError) errors[LOCATION_FIELD_KEYS.gpsLongitude] = lonError;
-      }
+    if (!hasGpsLon) {
+      errors[LOCATION_FIELD_KEYS.gpsLongitude] = "Longitude is required";
+    } else {
+      const lonError = validateGpsCoordinate(hasGpsLon, "Longitude");
+      if (lonError) errors[LOCATION_FIELD_KEYS.gpsLongitude] = lonError;
     }
 
     fields.forEach((field) => {
@@ -194,32 +192,48 @@ function ServiceProviderSection({
     }
   };
 
+  const shouldShowError = (key) => {
+    if (!fieldErrors[key]) return false;
+    const value = values[key];
+    const locationKeys = [
+      LOCATION_FIELD_KEYS.province,
+      LOCATION_FIELD_KEYS.district,
+      LOCATION_FIELD_KEYS.municipalityType,
+      LOCATION_FIELD_KEYS.municipalityName,
+    ];
+    if (key === "spatial.email" || key === "spatial.phone-number" || locationKeys.includes(key)) {
+      return value && value.trim() !== "";
+    }
+    return true;
+  };
+
   return (
-    <section className="space-y-6">
-      <div className="rounded-xl border border-brand-primary/20 bg-gradient-to-br from-brand-primary/5 to-transparent p-6 backdrop-blur-sm">
-        <div className="flex items-start gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-primary/10 shadow-sm">
-            <ClipboardList size={24} className="text-brand-primary" />
+    <section className="space-y-4 sm:space-y-6">
+      <div className="rounded-lg sm:rounded-xl border border-brand-primary/20 bg-gradient-to-br from-brand-primary/5 to-transparent p-4 sm:p-6 backdrop-blur-sm">
+        <div className="flex items-start gap-3 sm:gap-4">
+          <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-lg sm:rounded-xl bg-brand-primary/10 shadow-sm">
+            <ClipboardList size={20} className="text-brand-primary sm:block hidden" />
+            <ClipboardList size={18} className="text-brand-primary sm:hidden" />
           </div>
-          <div className="flex-1">
-            <h2 className="text-xl font-bold text-text-primary">{title}</h2>
-            <p className="mt-1 text-sm text-text-secondary">{subtitle}</p>
+          <div className="flex-1 min-w-0">
+            <h2 className="text-lg sm:text-xl font-bold text-text-primary truncate">{title}</h2>
+            <p className="mt-1 text-xs sm:text-sm text-text-secondary">{subtitle}</p>
           </div>
         </div>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <div>
-          <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold text-text-primary">
-            <div className="h-1 w-1 rounded-full bg-brand-primary" />
-            Contact Information
+          <h3 className="mb-3 sm:mb-4 flex items-center gap-2 text-xs sm:text-sm font-semibold text-text-primary">
+            <div className="h-1 w-1 shrink-0 rounded-full bg-brand-primary" />
+            <span>Contact Information</span>
           </h3>
-          <div className="grid gap-4 rounded-xl border border-surface-border bg-white/50 p-5 md:grid-cols-2">
+          <div className="grid gap-3 sm:gap-4 rounded-lg sm:rounded-xl border border-surface-border bg-white/50 p-3 sm:p-5 grid-cols-1 sm:grid-cols-2">
             {fields.filter(f => !['Province Name', 'District', 'Municipality Name', 'Number of wards covered', 'GPS Latitude', 'GPS Longitude'].includes(f)).map((field) => {
               const key = `spatial.${slugify(field)}`;
               return (
                 <label key={key} htmlFor={`provider-${key}`} className="block group">
-                  <span className="text-sm font-medium text-text-primary group-focus-within:text-brand-primary transition-colors">
+                  <span className="text-xs sm:text-sm font-medium text-text-primary group-focus-within:text-brand-primary transition-colors">
                     {fieldTranslations[language][field] || field}
                     <span className="text-red-500 ml-1">*</span>
                   </span>
@@ -229,8 +243,12 @@ function ServiceProviderSection({
                     value={values[key] || ""}
                     onChange={(value) => handleFieldChange(key, value)}
                     required={key === "spatial.email"}
+                    error={shouldShowError(key) ? fieldErrors[key] : null}
                     {...getLocationControlProps(key)}
                   />
+                  {shouldShowError(key) && fieldErrors[key] && (
+                    <p className="mt-1 text-xs text-red-500">{fieldErrors[key]}</p>
+                  )}
                 </label>
               );
             })}
@@ -238,11 +256,11 @@ function ServiceProviderSection({
         </div>
 
         <div>
-          <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold text-text-primary">
-            <div className="h-1 w-1 rounded-full bg-brand-primary" />
-            Location
+          <h3 className="mb-3 sm:mb-4 flex items-center gap-2 text-xs sm:text-sm font-semibold text-text-primary">
+            <div className="h-1 w-1 shrink-0 rounded-full bg-brand-primary" />
+            <span>Location</span>
           </h3>
-          <div className="grid gap-4 rounded-xl border border-surface-border bg-white/50 p-5 md:grid-cols-2">
+          <div className="grid gap-3 sm:gap-4 rounded-lg sm:rounded-xl border border-surface-border bg-white/50 p-3 sm:p-5 grid-cols-1 sm:grid-cols-2">
             {fields.map((field) => {
               const key = `spatial.${slugify(field)}`;
               const isWardsCoveredField = key === LOCATION_FIELD_KEYS.wardsCovered;
@@ -256,12 +274,12 @@ function ServiceProviderSection({
 
               if (isWardsCoveredField) {
                 return (
-                  <div key={key} className="md:col-span-2">
-                    <label htmlFor={key} className="text-sm font-medium text-text-primary">
+                  <div key={key} className="sm:col-span-2">
+                    <label htmlFor={key} className="text-xs sm:text-sm font-medium text-text-primary">
                       {fieldTranslations[language][field] || field}
                       <span className="text-red-500 ml-1">*</span>
                     </label>
-                    <div className="mt-2 flex gap-2">
+                    <div className="mt-2 flex flex-col sm:flex-row gap-2">
                       <input
                         id={key}
                         type="text"
@@ -273,32 +291,36 @@ function ServiceProviderSection({
                       <Button
                         type="button"
                         variant="secondary"
-                        className="shrink-0 px-4"
+                        className="shrink-0 w-full sm:w-auto px-3 sm:px-4 text-xs sm:text-sm"
                         onClick={() => setIsWardTraceOpen(true)}
                         disabled={!canTraceWards}
                       >
-                        <MapPinned size={16} className="mr-2" />
-                        Trace wards
+                        <MapPinned size={14} className="sm:mr-2 mr-1" />
+                        <span className="hidden sm:inline">Trace wards</span>
+                        <span className="sm:hidden">Trace</span>
                       </Button>
                     </div>
+                    {fieldErrors[key] && (
+                      <p className="mt-1 text-xs text-red-500">{fieldErrors[key]}</p>
+                    )}
                   </div>
                 );
               }
 
               if (isGpsLatitudeField) {
                 return (
-                  <div key={key} className="md:col-span-2">
-                    <label className="text-sm font-medium text-text-primary mb-3 flex items-center gap-2">
-                      <div className="h-2 w-2 rounded-full bg-brand-primary" />
+                  <div key={key} className="sm:col-span-2">
+                    <label className="text-xs sm:text-sm font-medium text-text-primary mb-3 flex items-center gap-2">
+                      <div className="h-2 w-2 shrink-0 rounded-full bg-brand-primary" />
                       GPS Coordinates
                     </label>
                     {gpsError && (
-                      <div className="mb-3 rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700 flex items-center gap-2">
-                        <AlertCircle size={14} className="flex-shrink-0" />
-                        {gpsError}
+                      <div className="mb-3 rounded-lg bg-red-50 border border-red-200 p-2 sm:p-3 text-xs sm:text-sm text-red-700 flex items-center gap-2">
+                        <AlertCircle size={14} className="shrink-0" />
+                        <span>{gpsError}</span>
                       </div>
                     )}
-                    <div className="grid gap-3 md:grid-cols-2">
+                    <div className="grid gap-2 sm:gap-3 grid-cols-2 sm:grid-cols-2">
                       <div>
                         <label htmlFor="provider-gps-latitude" className="text-xs font-medium text-text-secondary">
                           Latitude <span className="text-red-500">*</span>
@@ -312,6 +334,9 @@ function ServiceProviderSection({
                           className={inputClass}
                           placeholder="e.g., 27.7172"
                         />
+                        {fieldErrors[LOCATION_FIELD_KEYS.gpsLatitude] && (
+                          <p className="mt-1 text-xs text-red-500">{fieldErrors[LOCATION_FIELD_KEYS.gpsLatitude]}</p>
+                        )}
                       </div>
                       <div>
                         <label htmlFor="provider-gps-longitude" className="text-xs font-medium text-text-secondary">
@@ -326,24 +351,29 @@ function ServiceProviderSection({
                           className={inputClass}
                           placeholder="e.g., 85.3240"
                         />
+                        {fieldErrors[LOCATION_FIELD_KEYS.gpsLongitude] && (
+                          <p className="mt-1 text-xs text-red-500">{fieldErrors[LOCATION_FIELD_KEYS.gpsLongitude]}</p>
+                        )}
                       </div>
                     </div>
                     <Button
                       type="button"
                       variant="secondary"
-                      className="mt-3 w-full"
+                      className="mt-3 w-full text-xs sm:text-sm"
                       onClick={captureGPSLocation}
                       disabled={isGpsLoading}
                     >
                       {isGpsLoading ? (
                         <>
-                          <Loader size={16} className="mr-2 animate-spin" />
-                          Capturing Location...
+                          <Loader size={14} className="sm:mr-2 mr-1 animate-spin" />
+                          <span className="hidden sm:inline">Capturing Location...</span>
+                          <span className="sm:hidden">Capturing...</span>
                         </>
                       ) : (
                         <>
-                          <MapPinned size={16} className="mr-2" />
-                          Use Current Location
+                          <MapPinned size={14} className="sm:mr-2 mr-1" />
+                          <span className="hidden sm:inline">Use Current Location</span>
+                          <span className="sm:hidden">Current Location</span>
                         </>
                       )}
                     </Button>
@@ -357,7 +387,7 @@ function ServiceProviderSection({
 
               return (
                 <label key={key} htmlFor={`provider-${key}`} className="block group">
-                  <span className="text-sm font-medium text-text-primary group-focus-within:text-brand-primary transition-colors">
+                  <span className="text-xs sm:text-sm font-medium text-text-primary group-focus-within:text-brand-primary transition-colors">
                     {fieldTranslations[language][field] || field}
                     <span className="text-red-500 ml-1">*</span>
                   </span>
@@ -367,8 +397,12 @@ function ServiceProviderSection({
                     value={values[key] || ""}
                     onChange={(value) => handleFieldChange(key, value)}
                     required={key === "spatial.email"}
+                    error={shouldShowError(key) ? fieldErrors[key] : null}
                     {...getLocationControlProps(key)}
                   />
+                  {shouldShowError(key) && fieldErrors[key] && (
+                    <p className="mt-1 text-xs text-red-500">{fieldErrors[key]}</p>
+                  )}
                 </label>
               );
             })}
