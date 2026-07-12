@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { X, CheckCircle2, Clock, CircleDot } from "lucide-react";
-import wateraidLogo from "../../../assets/wateraid.webp";
-import whhLogo from "../../../assets/weltwater.png";
+import wateraidLogo from "../../../assets/wateraid.svg";
+import whhLogo from "../../../assets/weltwater.svg";
 import rrnLogo from "../../../assets/rrn.webp";
 import unicefLogo from "../../../assets/unicef.png";
 import unhabitatLogo from "../../../assets/unhabitat.png";
@@ -92,7 +92,9 @@ export default function PhaseModal({ phase, isOpen, onClose }) {
         <div className={`${st.headerBg} p-6`}>
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
-              <div className={`flex items-center justify-center w-10 h-10 rounded-xl bg-white/80 shadow-sm`}>
+              <div
+                className={`flex items-center justify-center w-10 h-10 rounded-xl bg-white/80 shadow-sm`}
+              >
                 <StatusIcon size={22} className={st.iconColor} />
               </div>
               <div>
@@ -100,11 +102,15 @@ export default function PhaseModal({ phase, isOpen, onClose }) {
                   {phase.title}
                 </h2>
                 <div className="flex items-center gap-2 mt-1">
-                  <span className={`text-xs font-semibold ${st.headerText} opacity-75`}>
+                  <span
+                    className={`text-xs font-semibold ${st.headerText} opacity-75`}
+                  >
                     Phase {phase.id}
                   </span>
                   <span className={`w-1 h-1 rounded-full ${st.divider}`} />
-                  <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${st.badge}`}>
+                  <span
+                    className={`text-xs font-medium px-2 py-0.5 rounded-full ${st.badge}`}
+                  >
                     {st.label || phase.status}
                   </span>
                 </div>

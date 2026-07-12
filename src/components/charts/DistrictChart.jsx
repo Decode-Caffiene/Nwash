@@ -157,17 +157,19 @@ export default function DistrictChart({
 
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={provinceBarData} margin={{ bottom: 40, right: 20 }}>
+            <BarChart
+              data={provinceBarData}
+              layout="vertical"
+              margin={{ bottom: 40, right: 20 }}
+            >
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis
+              <XAxis type="number" tickLine={false} tick={{ fontSize: 12 }} />
+              <YAxis
+                type="category"
                 dataKey="name"
                 tickLine={false}
-                angle={-45}
-                textAnchor="end"
-                height={80}
-                tick={{ fontSize: 12 }}
+                width={130}
               />
-              <YAxis tickLine={false} />
               <Tooltip
                 cursor={{ fill: "rgba(13,148,136,0.08)" }}
                 content={<ProvinceTooltip />}

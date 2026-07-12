@@ -27,7 +27,6 @@ import {
   getFormData,
   rejectFormSubmission,
 } from "../../api/formApi";
-import { useAuth } from "../../hooks/useAuth";
 
 // ── Status config ─────────────────────────────────────────────────────────────
 
@@ -59,23 +58,65 @@ const STATUS_CFG = {
 };
 
 const TABS = [
-  { key: "all",      label: "All"      },
-  { key: "pending",  label: "Pending"  },
+  { key: "all", label: "All" },
+  { key: "pending", label: "Pending" },
   { key: "accepted", label: "Accepted" },
   { key: "rejected", label: "Rejected" },
 ];
 
 const STAT_CONFIG = [
-  { key: "total",    label: "Total",          icon: FileText,    color: "text-slate-600",   bg: "bg-slate-100"  },
-  { key: "pending",  label: "Pending Review", icon: Clock,       color: "text-amber-600",   bg: "bg-amber-100"  },
-  { key: "accepted", label: "Accepted",       icon: CheckCircle, color: "text-emerald-600", bg: "bg-emerald-100"},
-  { key: "rejected", label: "Rejected",       icon: XCircle,     color: "text-red-500",     bg: "bg-red-100"    },
+  {
+    key: "total",
+    label: "Total",
+    icon: FileText,
+    color: "text-slate-600",
+    bg: "bg-slate-100",
+  },
+  {
+    key: "pending",
+    label: "Pending Review",
+    icon: Clock,
+    color: "text-amber-600",
+    bg: "bg-amber-100",
+  },
+  {
+    key: "accepted",
+    label: "Accepted",
+    icon: CheckCircle,
+    color: "text-emerald-600",
+    bg: "bg-emerald-100",
+  },
+  {
+    key: "rejected",
+    label: "Rejected",
+    icon: XCircle,
+    color: "text-red-500",
+    bg: "bg-red-100",
+  },
 ];
 
 const TOAST_CFG = {
-  success: { icon: CheckCircle, bg: "bg-emerald-50", border: "border-emerald-200", text: "text-emerald-800", icon_color: "text-emerald-500" },
-  error:   { icon: XCircle,     bg: "bg-red-50",     border: "border-red-200",     text: "text-red-800",     icon_color: "text-red-500"     },
-  info:    { icon: AlertCircle, bg: "bg-amber-50",   border: "border-amber-200",   text: "text-amber-800",   icon_color: "text-amber-500"   },
+  success: {
+    icon: CheckCircle,
+    bg: "bg-emerald-50",
+    border: "border-emerald-200",
+    text: "text-emerald-800",
+    icon_color: "text-emerald-500",
+  },
+  error: {
+    icon: XCircle,
+    bg: "bg-red-50",
+    border: "border-red-200",
+    text: "text-red-800",
+    icon_color: "text-red-500",
+  },
+  info: {
+    icon: AlertCircle,
+    bg: "bg-amber-50",
+    border: "border-amber-200",
+    text: "text-amber-800",
+    icon_color: "text-amber-500",
+  },
 };
 
 function getStatus(sub) {
@@ -146,10 +187,11 @@ function ConfirmModal({ modal, onConfirm, onCancel, loading }) {
             <div
               className={`flex h-9 w-9 items-center justify-center rounded-xl ${isAccept ? "bg-emerald-100" : "bg-red-100"}`}
             >
-              {isAccept
-                ? <Check size={18} className="text-emerald-600" />
-                : <X size={18} className="text-red-600" />
-              }
+              {isAccept ? (
+                <Check size={18} className="text-emerald-600" />
+              ) : (
+                <X size={18} className="text-red-600" />
+              )}
             </div>
             <h2 className="text-base font-bold text-slate-800">
               {isAccept ? "Confirm Acceptance" : "Confirm Rejection"}
@@ -170,14 +212,19 @@ function ConfirmModal({ modal, onConfirm, onCancel, loading }) {
             {isAccept ? (
               <>
                 Are you sure you want to accept{" "}
-                <span className="font-semibold text-slate-800">{modal.wsucName}</span>?
-                {" "}The operator will be notified via email.
+                <span className="font-semibold text-slate-800">
+                  {modal.wsucName}
+                </span>
+                ? The operator will be notified via email.
               </>
             ) : (
               <>
                 You are about to reject{" "}
-                <span className="font-semibold text-slate-800">{modal.wsucName}</span>.
-                {" "}Please provide a reason — it will be sent to the operator via email.
+                <span className="font-semibold text-slate-800">
+                  {modal.wsucName}
+                </span>
+                . Please provide a reason — it will be sent to the operator via
+                email.
               </>
             )}
           </p>
@@ -296,19 +343,19 @@ function SkeletonRow() {
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function ViewUploadedDataPage() {
-  const { user }                            = useAuth();
-  const [submissions, setSubmissions]       = useState([]);
-  const [loading, setLoading]               = useState(true);
-  const [error, setError]                   = useState("");
-  const [search, setSearch]                 = useState("");
-  const [actionLoading, setActionLoading]   = useState({});
-  const [expandedId, setExpandedId]         = useState(null);
-  const [activeTab, setActiveTab]           = useState("all");
-  const [toast, setToast]                   = useState(null);
-  const [confirmModal, setConfirmModal]     = useState(null); // { id, action, wsucName } | null
-  const [page, setPage]                     = useState(1);
-  const toastTimer                          = useRef(null);
+  const [submissions, setSubmissions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
+  const [actionLoading, setActionLoading] = useState({});
+  const [expandedId, setExpandedId] = useState(null);
+  const [activeTab, setActiveTab] = useState("all");
+  const [toast, setToast] = useState(null);
+  const [confirmModal, setConfirmModal] = useState(null); // { id, action, wsucName } | null
+  const [page, setPage] = useState(1);
+  const toastTimer = useRef(null);
 
+  console.log("submissions", submissions);
   const showToast = useCallback((message, type = "success") => {
     clearTimeout(toastTimer.current);
     setToast({ message, type, id: Date.now() });
@@ -320,20 +367,27 @@ export default function ViewUploadedDataPage() {
     setError("");
     try {
       const data = await getFormData();
+
       const list = Array.isArray(data)
         ? data
         : Array.isArray(data?.message)
-        ? data.message
-        : [];
+          ? data.message
+          : [];
       setSubmissions(list);
     } catch (err) {
-      setError(err?.response?.data?.message ?? err?.message ?? "Failed to load submissions.");
+      setError(
+        err?.response?.data?.message ??
+          err?.message ??
+          "Failed to load submissions.",
+      );
     } finally {
       setLoading(false);
     }
   }, []);
 
-  useEffect(() => { fetchData(); }, [fetchData]);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   // Reset to page 1 and collapse any open row when the filter changes
   useEffect(() => {
@@ -342,15 +396,14 @@ export default function ViewUploadedDataPage() {
   }, [search, activeTab]);
 
   // Step 1: clicking Accept/Reject opens the confirmation modal
-  const requestAction = (id, action, wsucName, e) => {
+  const requestAction = (id, action, wsucName, userEmail, e) => {
     e.stopPropagation();
-    setConfirmModal({ id, action, wsucName });
+    setConfirmModal({ id, action, wsucName, userEmail });
   };
 
   // Step 2: user confirmed in modal — run the API call
   const confirmAction = async (reason) => {
-    const { id, action, wsucName } = confirmModal;
-    const userEmail = user?.email ?? user?.userEmail ?? "";
+    const { id, action, wsucName, userEmail } = confirmModal;
 
     setActionLoading((prev) => ({ ...prev, [id]: action }));
     setConfirmModal(null);
@@ -374,15 +427,18 @@ export default function ViewUploadedDataPage() {
         showToast(`${wsucName} has been rejected.`, "info");
       }
     } catch (err) {
-      showToast(err?.response?.data?.message ?? "Action failed. Please try again.", "error");
+      showToast(
+        err?.response?.data?.message ?? "Action failed. Please try again.",
+        "error",
+      );
     } finally {
       setActionLoading((prev) => ({ ...prev, [id]: undefined }));
     }
   };
 
   const counts = {
-    total:    submissions.length,
-    pending:  submissions.filter((s) => getStatus(s) === "pending").length,
+    total: submissions.length,
+    pending: submissions.filter((s) => getStatus(s) === "pending").length,
     accepted: submissions.filter((s) => getStatus(s) === "accepted").length,
     rejected: submissions.filter((s) => getStatus(s) === "rejected").length,
   };
@@ -401,16 +457,21 @@ export default function ViewUploadedDataPage() {
       );
     });
 
-  const PAGE_SIZE  = 7;
+  const PAGE_SIZE = 7;
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const safePage   = Math.min(page, totalPages);
-  const paginated  = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+  const safePage = Math.min(page, totalPages);
+  const paginated = filtered.slice(
+    (safePage - 1) * PAGE_SIZE,
+    safePage * PAGE_SIZE,
+  );
 
   // Page numbers to render: always first, last, current±1, ellipsis gaps
   const pageNumbers = (() => {
-    const nums = new Set([1, totalPages, safePage, safePage - 1, safePage + 1].filter(
-      (n) => n >= 1 && n <= totalPages,
-    ));
+    const nums = new Set(
+      [1, totalPages, safePage, safePage - 1, safePage + 1].filter(
+        (n) => n >= 1 && n <= totalPages,
+      ),
+    );
     const sorted = [...nums].sort((a, b) => a - b);
     const result = [];
     let prev = null;
@@ -446,7 +507,8 @@ export default function ViewUploadedDataPage() {
                 Submissions Review Portal
               </h1>
               <p className="mt-0.5 text-xs text-text-secondary">
-                Review WSUC registration submissions and approve or reject entries
+                Review WSUC registration submissions and approve or reject
+                entries
               </p>
             </div>
           </div>
@@ -468,14 +530,17 @@ export default function ViewUploadedDataPage() {
               key={key}
               className="rounded-2xl border border-surface-border bg-white p-4 shadow-sm"
             >
-              <div className={`flex h-9 w-9 items-center justify-center rounded-xl ${bg}`}>
+              <div
+                className={`flex h-9 w-9 items-center justify-center rounded-xl ${bg}`}
+              >
                 <Icon size={17} className={color} />
               </div>
               <p className="mt-3 text-2xl font-bold tabular-nums text-text-primary">
-                {loading
-                  ? <span className="inline-block h-7 w-10 animate-pulse rounded-md bg-slate-200" />
-                  : counts[key]
-                }
+                {loading ? (
+                  <span className="inline-block h-7 w-10 animate-pulse rounded-md bg-slate-200" />
+                ) : (
+                  counts[key]
+                )}
               </p>
               <p className="mt-0.5 text-xs text-text-secondary">{label}</p>
             </div>
@@ -522,9 +587,12 @@ export default function ViewUploadedDataPage() {
 
         {/* ── Submission list ───────────────────────────────────────── */}
         <div className="overflow-hidden rounded-2xl border border-surface-border bg-white shadow-sm">
-
           {loading && (
-            <div>{[...Array(5)].map((_, i) => <SkeletonRow key={i} />)}</div>
+            <div>
+              {[...Array(5)].map((_, i) => (
+                <SkeletonRow key={i} />
+              ))}
+            </div>
           )}
 
           {!loading && error && (
@@ -545,53 +613,71 @@ export default function ViewUploadedDataPage() {
               <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100">
                 <Database size={28} className="text-slate-400" />
               </div>
-              <p className="font-semibold text-text-primary">No submissions yet</p>
+              <p className="font-semibold text-text-primary">
+                No submissions yet
+              </p>
               <p className="max-w-xs text-center text-sm text-text-secondary">
-                When WSUC entities submit their registration data, entries will appear here for review.
+                When WSUC entities submit their registration data, entries will
+                appear here for review.
               </p>
             </div>
           )}
 
-          {!loading && !error && submissions.length > 0 && filtered.length === 0 && (
-            <div className="flex flex-col items-center gap-3 py-16">
-              <Search size={28} className="text-slate-300" />
-              <p className="text-sm text-text-secondary">No submissions match your current filters.</p>
-              <button
-                onClick={() => { setSearch(""); setActiveTab("all"); }}
-                className="text-sm text-blue-600 underline underline-offset-2"
-              >
-                Clear filters
-              </button>
-            </div>
-          )}
+          {!loading &&
+            !error &&
+            submissions.length > 0 &&
+            filtered.length === 0 && (
+              <div className="flex flex-col items-center gap-3 py-16">
+                <Search size={28} className="text-slate-300" />
+                <p className="text-sm text-text-secondary">
+                  No submissions match your current filters.
+                </p>
+                <button
+                  onClick={() => {
+                    setSearch("");
+                    setActiveTab("all");
+                  }}
+                  className="text-sm text-blue-600 underline underline-offset-2"
+                >
+                  Clear filters
+                </button>
+              </div>
+            )}
 
           {!loading && !error && filtered.length > 0 && (
             <div className="divide-y divide-surface-border">
               {paginated.map((sub) => {
-                const id       = sub._id ?? sub.id;
-                const status   = getStatus(sub);
-                const acting   = actionLoading[id];
-                const isDone   = status === "accepted" || status === "rejected";
+                const id = sub._id ?? sub.id;
+                const status = getStatus(sub);
+                const acting = actionLoading[id];
+                const isDone = status === "accepted" || status === "rejected";
                 const isExpanded = expandedId === id;
-                const cfg      = STATUS_CFG[status] ?? STATUS_CFG.pending;
+                const cfg = STATUS_CFG[status] ?? STATUS_CFG.pending;
                 const operator = sub.Operator_Info ?? {};
                 const location = sub.Location ?? {};
                 const locationBreadcrumb = [
                   location.Municipality_Name,
                   location.District_Name,
                   location.Province_Name,
-                ].filter(Boolean).join(" · ");
+                ]
+                  .filter(Boolean)
+                  .join(" · ");
 
                 return (
                   <div key={id} className="group relative">
-                    <div className={`absolute inset-y-0 left-0 w-1 ${cfg.accent} rounded-l-sm`} />
+                    <div
+                      className={`absolute inset-y-0 left-0 w-1 ${cfg.accent} rounded-l-sm`}
+                    />
 
                     {/* Collapsed row */}
                     <div
                       role="button"
                       tabIndex={0}
                       onClick={() => setExpandedId(isExpanded ? null : id)}
-                      onKeyDown={(e) => e.key === "Enter" && setExpandedId(isExpanded ? null : id)}
+                      onKeyDown={(e) =>
+                        e.key === "Enter" &&
+                        setExpandedId(isExpanded ? null : id)
+                      }
                       className="flex cursor-pointer flex-wrap items-center gap-4 py-4 pl-7 pr-6 transition-colors hover:bg-slate-50/70"
                     >
                       <Initials name={sub.WSUC_Name ?? operator.Name} />
@@ -609,8 +695,12 @@ export default function ViewUploadedDataPage() {
                       </div>
 
                       <div className="hidden min-w-[160px] md:block">
-                        <p className="text-sm font-medium text-text-primary">{operator.Name ?? "—"}</p>
-                        <p className="text-xs text-text-secondary">{operator.Designation ?? ""}</p>
+                        <p className="text-sm font-medium text-text-primary">
+                          {operator.Name ?? "—"}
+                        </p>
+                        <p className="text-xs text-text-secondary">
+                          {operator.Designation ?? ""}
+                        </p>
                       </div>
 
                       <StatusBadge status={status} />
@@ -621,32 +711,54 @@ export default function ViewUploadedDataPage() {
                       >
                         <button
                           type="button"
-                          onClick={(e) => requestAction(id, "accepted", sub.WSUC_Name ?? "this submission", e)}
+                          onClick={(e) =>
+                            requestAction(
+                              id,
+                              "accepted",
+                              sub.WSUC_Name ?? "this submission",
+                              operator.Email ?? "",
+                              e,
+                            )
+                          }
                           disabled={!!acting || isDone}
                           className="flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-40"
                         >
-                          {acting === "accepted"
-                            ? <RefreshCw size={11} className="animate-spin" />
-                            : <Check size={11} />
-                          }
+                          {acting === "accepted" ? (
+                            <RefreshCw size={11} className="animate-spin" />
+                          ) : (
+                            <Check size={11} />
+                          )}
                           Accept
                         </button>
                         <button
                           type="button"
-                          onClick={(e) => requestAction(id, "rejected", sub.WSUC_Name ?? "this submission", e)}
+                          onClick={(e) =>
+                            requestAction(
+                              id,
+                              "rejected",
+                              sub.WSUC_Name ?? "this submission",
+                              operator.Email ?? "",
+                              e,
+                            )
+                          }
                           disabled={!!acting || isDone}
                           className="flex items-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-40"
                         >
-                          {acting === "rejected"
-                            ? <RefreshCw size={11} className="animate-spin" />
-                            : <X size={11} />
-                          }
+                          {acting === "rejected" ? (
+                            <RefreshCw size={11} className="animate-spin" />
+                          ) : (
+                            <X size={11} />
+                          )}
                           Reject
                         </button>
                       </div>
 
                       <span className="text-text-secondary">
-                        {isExpanded ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
+                        {isExpanded ? (
+                          <ChevronUp size={15} />
+                        ) : (
+                          <ChevronDown size={15} />
+                        )}
                       </span>
                     </div>
 
@@ -658,18 +770,42 @@ export default function ViewUploadedDataPage() {
                             <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
                               Operator Info
                             </p>
-                            <DetailField icon={User}      label="Full Name"    value={operator.Name} />
-                            <DetailField icon={Mail}      label="Email"        value={operator.Email} />
-                            <DetailField icon={Briefcase} label="Designation"  value={operator.Designation} />
+                            <DetailField
+                              icon={User}
+                              label="Full Name"
+                              value={operator.Name}
+                            />
+                            <DetailField
+                              icon={Mail}
+                              label="Email"
+                              value={operator.Email}
+                            />
+                            <DetailField
+                              icon={Briefcase}
+                              label="Designation"
+                              value={operator.Designation}
+                            />
                           </div>
 
                           <div className="space-y-3 rounded-xl border border-surface-border bg-white p-4">
                             <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
                               Location Details
                             </p>
-                            <DetailField icon={Globe}     label="Province"     value={location.Province_Name} />
-                            <DetailField icon={Building2} label="District"     value={location.District_Name} />
-                            <DetailField icon={MapPin}    label="Municipality" value={location.Municipality_Name} />
+                            <DetailField
+                              icon={Globe}
+                              label="Province"
+                              value={location.Province_Name}
+                            />
+                            <DetailField
+                              icon={Building2}
+                              label="District"
+                              value={location.District_Name}
+                            />
+                            <DetailField
+                              icon={MapPin}
+                              label="Municipality"
+                              value={location.Municipality_Name}
+                            />
                           </div>
 
                           <div className="space-y-3 rounded-xl border border-surface-border bg-white p-4">
@@ -686,7 +822,10 @@ export default function ViewUploadedDataPage() {
                               }
                             />
                             <div className="flex items-start gap-2.5 text-sm">
-                              <Database size={13} className="mt-0.5 flex-shrink-0 text-slate-400" />
+                              <Database
+                                size={13}
+                                className="mt-0.5 flex-shrink-0 text-slate-400"
+                              />
                               <div className="min-w-0">
                                 <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                                   Submission ID
@@ -712,11 +851,14 @@ export default function ViewUploadedDataPage() {
               <p className="text-xs text-text-secondary">
                 Showing{" "}
                 <span className="font-semibold text-text-primary tabular-nums">
-                  {(safePage - 1) * PAGE_SIZE + 1}–{Math.min(safePage * PAGE_SIZE, filtered.length)}
-                </span>
-                {" "}of{" "}
-                <span className="font-semibold text-text-primary tabular-nums">{filtered.length}</span>
-                {" "}submissions
+                  {(safePage - 1) * PAGE_SIZE + 1}–
+                  {Math.min(safePage * PAGE_SIZE, filtered.length)}
+                </span>{" "}
+                of{" "}
+                <span className="font-semibold text-text-primary tabular-nums">
+                  {filtered.length}
+                </span>{" "}
+                submissions
               </p>
 
               {/* Page controls */}
@@ -725,7 +867,10 @@ export default function ViewUploadedDataPage() {
                   {/* Prev */}
                   <button
                     type="button"
-                    onClick={() => { setPage((p) => Math.max(1, p - 1)); setExpandedId(null); }}
+                    onClick={() => {
+                      setPage((p) => Math.max(1, p - 1));
+                      setExpandedId(null);
+                    }}
                     disabled={safePage === 1}
                     className="flex h-8 w-8 items-center justify-center rounded-lg border border-surface-border bg-white text-text-secondary transition hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed"
                   >
@@ -735,14 +880,20 @@ export default function ViewUploadedDataPage() {
                   {/* Page numbers */}
                   {pageNumbers.map((n, i) =>
                     n === "…" ? (
-                      <span key={`ellipsis-${i}`} className="flex h-8 w-8 items-center justify-center text-xs text-text-secondary select-none">
+                      <span
+                        key={`ellipsis-${i}`}
+                        className="flex h-8 w-8 items-center justify-center text-xs text-text-secondary select-none"
+                      >
                         …
                       </span>
                     ) : (
                       <button
                         key={n}
                         type="button"
-                        onClick={() => { setPage(n); setExpandedId(null); }}
+                        onClick={() => {
+                          setPage(n);
+                          setExpandedId(null);
+                        }}
                         className={`flex h-8 w-8 items-center justify-center rounded-lg border text-xs font-semibold transition tabular-nums ${
                           n === safePage
                             ? "border-blue-500 bg-blue-600 text-white"
@@ -757,7 +908,10 @@ export default function ViewUploadedDataPage() {
                   {/* Next */}
                   <button
                     type="button"
-                    onClick={() => { setPage((p) => Math.min(totalPages, p + 1)); setExpandedId(null); }}
+                    onClick={() => {
+                      setPage((p) => Math.min(totalPages, p + 1));
+                      setExpandedId(null);
+                    }}
                     disabled={safePage === totalPages}
                     className="flex h-8 w-8 items-center justify-center rounded-lg border border-surface-border bg-white text-text-secondary transition hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed"
                   >

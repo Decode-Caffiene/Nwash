@@ -8,7 +8,7 @@ import governmentLogo from "../../assets/govern.svg";
 
 // ── Status dot config ─────────────────────────────────────────────────────────
 const STATUS_DOT = {
-  pending:  { color: "#f59e0b", label: "Pending"  },
+  pending: { color: "#f59e0b", label: "Pending" },
   accepted: { color: "#10b981", label: "Accepted" },
   rejected: { color: "#ef4444", label: "Rejected" },
 };
@@ -34,9 +34,9 @@ function NotificationDropdown({ submissions, onNavigate }) {
   return (
     <div>
       {submissions.map((sub) => {
-        const id       = sub._id ?? sub.id;
-        const status   = getStatus(sub);
-        const dot      = STATUS_DOT[status] ?? STATUS_DOT.pending;
+        const id = sub._id ?? sub.id;
+        const status = getStatus(sub);
+        const dot = STATUS_DOT[status] ?? STATUS_DOT.pending;
         const operator = sub.Operator_Info ?? {};
         const location = sub.Location ?? {};
 
@@ -69,9 +69,7 @@ function NotificationDropdown({ submissions, onNavigate }) {
               </div>
 
               {operator.Name && (
-                <p className="mt-0.5 text-xs text-slate-500">
-                  {operator.Name}
-                </p>
+                <p className="mt-0.5 text-xs text-slate-500">{operator.Name}</p>
               )}
 
               {(location.District_Name || location.Municipality_Name) && (
@@ -106,9 +104,9 @@ function Navbar() {
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
 
-  const [submissions, setSubmissions]     = useState([]);
-  const [dropdownOpen, setDropdownOpen]   = useState(false);
-  const bellRef                           = useRef(null);
+  const [submissions, setSubmissions] = useState([]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const bellRef = useRef(null);
 
   // Fetch form data when authenticated
   useEffect(() => {
@@ -122,8 +120,8 @@ function Navbar() {
         const list = Array.isArray(result)
           ? result
           : Array.isArray(result?.message)
-          ? result.message
-          : [];
+            ? result.message
+            : [];
         setSubmissions(list);
       } catch {
         // Silently ignore — navbar badge is non-critical
@@ -131,7 +129,9 @@ function Navbar() {
     };
 
     load();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [isAuthenticated]);
 
   // Close dropdown on outside click
@@ -146,7 +146,9 @@ function Navbar() {
     return () => document.removeEventListener("mousedown", handler);
   }, [dropdownOpen]);
 
-  const pendingCount = submissions.filter((s) => getStatus(s) === "pending").length;
+  const pendingCount = submissions.filter(
+    (s) => getStatus(s) === "pending",
+  ).length;
 
   const handleAdminClick = () => {
     navigate(isAuthenticated ? "/view-data" : "/login");
@@ -168,7 +170,7 @@ function Navbar() {
         />
         <div className="ml-3 hidden sm:block">
           <p className="text-xs font-semibold uppercase tracking-widest text-text-secondary">
-            Ministry of Water Supply
+            Ministry of Infrastructures Development
           </p>
           <p className="text-sm font-bold text-text-primary">DWSSM Dashboard</p>
         </div>
@@ -176,7 +178,6 @@ function Navbar() {
 
       {/* Right: bell + admin + user */}
       <div className="flex flex-wrap items-center gap-3">
-
         {/* Bell with dropdown — admin only */}
         {isAuthenticated && (
           <div className="relative" ref={bellRef}>

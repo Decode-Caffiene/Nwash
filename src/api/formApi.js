@@ -6,11 +6,16 @@ export const getFormData = async () => {
 };
 
 export const acceptFormSubmission = async (id, userEmail) => {
-  const response = await axiosInstance.patch("/admin/approve", { id, userEmail });
+  const response = await axiosInstance.post(`/admin/approve/${id}`, {
+    userEmail,
+  });
   return response.data;
 };
 
 export const rejectFormSubmission = async (id, reason, userEmail) => {
-  const response = await axiosInstance.patch(`/admin/reject/${id}`, { reason, userEmail });
+  const response = await axiosInstance.post(`/admin/reject/${id}`, {
+    reason,
+    userEmail,
+  });
   return response.data;
 };

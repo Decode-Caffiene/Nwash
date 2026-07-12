@@ -1,7 +1,15 @@
 import { Link } from "react-router-dom";
-import { Youtube, Facebook, Phone, Mail, MapPin, ChevronRight } from "lucide-react";
-import agendaImg from "../../assets/agenda.jpeg";
-import wateraidLogo from "../../assets/wateraid.webp";
+import {
+  Youtube,
+  Facebook,
+  Phone,
+  Mail,
+  MapPin,
+  ChevronRight,
+} from "lucide-react";
+import a4cLogo from "../../assets/A4C.svg";
+import wateraidLogo from "../../assets/wateraid.svg";
+import weltwaterLogo from "../../assets/weltwater.svg";
 
 const quickLinks = [
   { label: "Overview", to: "/overview" },
@@ -13,61 +21,44 @@ const quickLinks = [
   { label: "Downloads", to: "/downloads" },
 ];
 
+const supporters = [
+  { src: a4cLogo, alt: "Agenda for Change" },
+  { src: wateraidLogo, alt: "WaterAid" },
+  { src: weltwaterLogo, alt: "Weltwater" },
+];
+
+const contactItems = [
+  { href: "tel:01-4211693", icon: Phone, label: "01-4211693" },
+  { href: "tel:+9779851405021", icon: Phone, label: "+977 9851405021" },
+  { href: "mailto:info@nwash.gov.np", icon: Mail, label: "info@nwash.gov.np" },
+];
+
 export default function Footer() {
   return (
     <footer>
       <div className="bg-[rgb(15,23,42)]">
-        {/* Top decorative gradient border */}
-        <div className="h-1 bg-gradient-to-r from-brand-primary via-blue-400 to-brand-primary" />
+        {/* Top accent line */}
+        <div className="h-[3px] bg-gradient-to-r from-brand-primary via-blue-400 to-brand-primary" />
 
         <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-            {/* Supported by */}
-            <div className="space-y-4">
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-text-secondary">
-                Supported by
-              </h3>
-              <div className="space-y-4">
-                <div className="group flex items-center gap-3">
-                  <div className="flex-shrink-0 overflow-hidden rounded-lg bg-white/10 p-1.5 transition group-hover:bg-white/20">
-                    <img
-                      src={agendaImg}
-                      alt="Agenda for Change"
-                      className="h-10 w-10 rounded object-cover"
-                    />
-                  </div>
-                  <span className="text-sm font-medium text-text-inverse transition group-hover:text-brand-primary">
-                    Agenda for Change
-                  </span>
-                </div>
-                <div className="group flex items-center gap-3">
-                  <div className="flex-shrink-0 overflow-hidden rounded-lg bg-white/10 p-1.5 transition group-hover:bg-white/20">
-                    <img
-                      src={wateraidLogo}
-                      alt="Water Aid"
-                      className="h-10 w-10 rounded object-cover"
-                    />
-                  </div>
-                  <span className="text-sm font-medium text-text-inverse transition group-hover:text-brand-primary">
-                    Water Aid
-                  </span>
-                </div>
-              </div>
-            </div>
-
+          {/* ── Three-column grid ─────────────────────────────── */}
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
             {/* Quick Links */}
-            <div className="space-y-4">
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-text-secondary">
+            <div>
+              <h3 className="mb-5 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                 Quick Links
               </h3>
-              <ul className="space-y-2.5">
+              <ul className="space-y-2">
                 {quickLinks.map((link) => (
                   <li key={link.to}>
                     <Link
                       to={link.to}
-                      className="group flex items-center gap-1.5 text-sm text-gray-300 transition hover:text-brand-primary"
+                      className="group flex items-center gap-1.5 py-0.5 text-sm text-slate-300 transition duration-150 hover:text-brand-primary"
                     >
-                      <ChevronRight size={14} className="transition group-hover:translate-x-0.5" />
+                      <ChevronRight
+                        size={13}
+                        className="flex-shrink-0 text-slate-500 transition duration-150 group-hover:translate-x-0.5 group-hover:text-brand-primary"
+                      />
                       <span>{link.label}</span>
                     </Link>
                   </li>
@@ -75,99 +66,97 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Contact Us */}
-            <div className="space-y-4">
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-text-secondary">
+            {/* Contact */}
+            <div>
+              <h3 className="mb-5 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                 Contact Us
               </h3>
-              <div className="space-y-3">
-                <a
-                  href="tel:01-4211693"
-                  className="group flex items-center gap-3 text-sm text-gray-300 transition hover:text-brand-primary"
-                >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 transition group-hover:bg-brand-primary/20">
-                    <Phone size={15} />
-                  </div>
-                  <span>01-4211693</span>
-                </a>
-                <a
-                  href="tel:+9779851405021"
-                  className="group flex items-center gap-3 text-sm text-gray-300 transition hover:text-brand-primary"
-                >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 transition group-hover:bg-brand-primary/20">
-                    <Phone size={15} />
-                  </div>
-                  <span>+977 9851405021</span>
-                </a>
-                <a
-                  href="mailto:info@nwash.gov.np"
-                  className="group flex items-center gap-3 text-sm text-gray-300 transition hover:text-brand-primary"
-                >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 transition group-hover:bg-brand-primary/20">
-                    <Mail size={15} />
-                  </div>
-                  <span>info@nwash.gov.np</span>
-                </a>
-                <div className="flex items-start gap-3 text-sm text-gray-300">
-                  <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-white/10">
-                    <MapPin size={15} />
-                  </div>
-                  <span>
-                    Ministry of Water Supply & Sanitation, <br /> Singhadurbar, Kathmandu, Nepal
+              <div className="flex flex-col gap-3">
+                {contactItems.map(({ href, icon: Icon, label }) => (
+                  <a
+                    key={href}
+                    href={href}
+                    className="group flex items-center gap-3 text-sm text-slate-300 transition duration-150 hover:text-brand-primary"
+                  >
+                    <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-white/8 ring-1 ring-white/10 transition duration-150 group-hover:bg-brand-primary/15 group-hover:ring-brand-primary/30">
+                      <Icon size={14} />
+                    </span>
+                    <span>{label}</span>
+                  </a>
+                ))}
+                <div className="flex items-start gap-3 text-sm text-slate-300">
+                  <span className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-white/8 ring-1 ring-white/10">
+                    <MapPin size={14} />
+                  </span>
+                  <span className="leading-relaxed">
+                    Ministry of Infrastructures Development
+                    <br />
+                    Singhadurbar, Kathmandu, Nepal
                   </span>
                 </div>
               </div>
             </div>
 
             {/* Follow Us */}
-            <div className="space-y-4">
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-text-secondary">
+            <div>
+              <h3 className="mb-5 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                 Follow Us
               </h3>
-              <div className="flex items-center gap-3">
+              <p className="mb-4 text-xs leading-relaxed text-slate-400">
+                Stay updated with the latest news, policy changes, and
+                announcements.
+              </p>
+              <div className="flex items-center gap-2.5">
                 <a
-                  href="https://www.youtube.com/@ministryofwatersupplyandsa4951"
+                  href="https://www.youtube.com/c/wateraidinnepal"
                   target="_blank"
                   rel="noreferrer"
-                  className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 text-text-inverse transition hover:bg-red-600 hover:text-white"
                   title="YouTube"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/8 text-slate-300 ring-1 ring-white/10 transition duration-150 hover:bg-red-600 hover:text-white hover:ring-red-600"
                 >
-                  <Youtube size={20} />
+                  <Youtube size={17} />
                 </a>
                 <a
                   href="https://www.facebook.com/pages/Ministry%20of%20Water%20Supply%20and%20Sanitation/1621986998091285/"
                   target="_blank"
                   rel="noreferrer"
-                  className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 text-text-inverse transition hover:bg-blue-600 hover:text-white"
                   title="Facebook"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/8 text-slate-300 ring-1 ring-white/10 transition duration-150 hover:bg-blue-600 hover:text-white hover:ring-blue-600"
                 >
-                  <Facebook size={20} />
+                  <Facebook size={17} />
                 </a>
               </div>
-              <p className="text-xs leading-relaxed text-gray-400">
-                Stay connected with us on social media for the latest updates and announcements.
-              </p>
+            </div>
+          </div>
+
+          {/* ── Supported By — subtle horizontal strip ─────────── */}
+          <div className="mt-10 pt-8">
+            <p className="mb-4 text-center text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+              Supported By
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              {supporters.map(({ src, alt }) => (
+                <div
+                  key={alt}
+                  className="flex h-10 items-center justify-center rounded-md bg-white/90 px-4 opacity-70 transition duration-200 hover:opacity-100"
+                >
+                  <img
+                    src={src}
+                    alt={alt}
+                    className="h-6 w-auto max-w-[100px] object-contain"
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Bottom bar */}
-        <div className="border-t border-white/10 px-6 py-5">
-          <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 text-center text-xs text-gray-400 lg:flex-row lg:text-left">
-            <p>
-              &copy; {new Date().getFullYear()} Ministry of Water Supply & Sanitation. All rights
-              reserved.
-            </p>
-            <p>
-              Designed &amp; Developed by{" "}
-              <a
-                href="https://www.nwash.gov.np"
-                target="_blank"
-                rel="noreferrer"
-                className="font-medium text-brand-primary transition hover:text-blue-300"
-              >
-                NWASH
-              </a>
+        {/* ── Bottom bar ───────────────────────────────────────── */}
+        <div className="border-t border-white/8">
+          <div className="mx-auto max-w-7xl px-6 py-4">
+            <p className="text-center text-[11px] tracking-wide text-slate-500">
+              National Water Supply &amp; Sanitation Regulatory Information
+              System
             </p>
           </div>
         </div>
