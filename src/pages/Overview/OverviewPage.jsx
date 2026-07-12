@@ -1,22 +1,49 @@
 import React, { useMemo } from "react";
-import { Building2, Users2, Droplet, TrendingUp, Search } from "lucide-react";
+import { Building2, Users2, Droplet, TrendingUp } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { getProviderSearchText, normalizeQuery } from "./overviewSearchUtils";
 
 import useFetch from "../../hooks/useFetch";
 import { getServiceProviders } from "../../api/serviceProviderApi";
+import { getFormData } from "../../api/formApi";
+import { PARTNERS } from "../DevelopmentPartners/data/partnersData";
 
 import StatCard from "../../components/overview-components/StatCard";
 import DistrictChart from "../../components/charts/DistrictChart";
 import RecentActivity from "../../components/overview-components/RecentActivity";
 import ErrorMessage from "../../components/common/ErrorMessage";
-import PartnerContributions from "../../components/overview-components/PartnerContributions";
 import ComplianceChart from "../../components/charts/ComplianceChart";
+import ProvinceComplianceDonut from "../../components/charts/ProvinceComplianceDonut";
 
-import {
-  recentActivities,
-  partnerContributions,
-} from "../../utils/overviewData";
+// Groups projects that have both valid OEI and SPI by province.
+// Returns data sorted descending by project count, ready for a donut chart.
+function buildProvinceComplianceData(projects) {
+  const groups = {};
+  for (const p of projects) {
+    const si = p.Summary_Index ?? {};
+    const oei = Number(si.OEI);
+    const spi = Number(si.SPI);
+    if (!Number.isFinite(oei) || !Number.isFinite(spi)) continue;
+
+    const province = p.Location?.Province_Name?.trim();
+    if (!province) continue;
+
+    if (!groups[province])
+      groups[province] = { oeiSum: 0, spiSum: 0, count: 0 };
+    groups[province].oeiSum += oei;
+    groups[province].spiSum += spi;
+    groups[province].count += 1;
+  }
+
+  return Object.entries(groups)
+    .map(([province, { oeiSum, spiSum, count }]) => ({
+      province,
+      projects: count,
+      averageOEI: oeiSum / count,
+      averageSPI: spiSum / count,
+    }))
+    .sort((a, b) => b.projects - a.projects);
+}
 import {
   buildAnalyticsPointData,
   categorizeProviders,
@@ -27,6 +54,51 @@ export default function OverviewPage() {
   const location = useLocation();
   const { data, loading, error } = useFetch(getServiceProviders, []);
   const list = Array.isArray(data) ? data : [];
+  console.log("data", data);
+  // Fetch real form submissions for Recent Activity
+  const { data: submissionsRaw } = useFetch(getFormData, []);
+  const recentActivities = useMemo(() => {
+    const raw = Array.isArray(submissionsRaw)
+      ? submissionsRaw
+      : Array.isArray(submissionsRaw?.message)
+        ? submissionsRaw.message
+        : [];
+
+    const statusColor = (status) => {
+      const s = (status ?? "").toLowerCase();
+      if (s === "accepted") return "bg-green-500";
+      if (s === "rejected") return "bg-red-500";
+      if (s === "pending") return "bg-amber-500";
+      return "bg-blue-500";
+    };
+
+    const formatTime = (ts) => {
+      if (!ts) return "";
+      const diff = Date.now() - new Date(ts).getTime();
+      const mins = Math.floor(diff / 60000);
+      if (mins < 60) return `${mins}m ago`;
+      const hrs = Math.floor(mins / 60);
+      if (hrs < 24) return `${hrs}h ago`;
+      return `${Math.floor(hrs / 24)}d ago`;
+    };
+
+    const sorted = raw.slice().sort((a, b) => {
+      if (!a.createdAt && !b.createdAt) return 0;
+      if (!a.createdAt) return 1;
+      if (!b.createdAt) return -1;
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+
+    return sorted.map((item) => ({
+      id: item._id,
+      title: item.WSUC_Name ?? item.Operator_Info?.Name ?? "Unnamed Submission",
+      desc: [item.Operator_Info?.Name, item.Location?.District_Name]
+        .filter(Boolean)
+        .join(" · "),
+      time: formatTime(item.createdAt),
+      color: statusColor(item.Status),
+    }));
+  }, [submissionsRaw]);
 
   const q = useMemo(() => {
     try {
@@ -93,16 +165,16 @@ export default function OverviewPage() {
     ];
   }, [categorized, allImproving]);
 
-  // 6. Total Households Covered - placeholder (0) until backend provides data
+  // Total Households Covered — checks Master_Sheet first (live API path)
   const totalHouseholdsCovered = useMemo(() => {
     return filteredList.reduce((sum, provider) => {
       const households =
-        provider.households_served ||
-        provider["Number of households served by the WSUC"] ||
-        provider.Service_Coverage?.Households_Served ||
-        provider.Households_Served ||
+        provider.Master_Sheet?.HH_Served ??
+        provider.households_served ??
+        provider["Number of households served by the WSUC"] ??
+        provider.Service_Coverage?.Households_Served ??
+        provider.Households_Served ??
         0;
-
       return sum + (Number(households) || 0);
     }, 0);
   }, [filteredList]);
@@ -149,6 +221,12 @@ export default function OverviewPage() {
     };
   }, [filteredList]);
 
+  // Province-wise distribution for donut chart — computed once per list change
+  const provinceComplianceData = useMemo(
+    () => buildProvinceComplianceData(list),
+    [list],
+  );
+
   // 5. Active Partners - count unique regulatory partners in provinces where providers exist
 
   // 6. Total Population Served - use direct backend population fields when available,
@@ -186,31 +264,23 @@ export default function OverviewPage() {
           <StatCard
             title="Total Operators"
             value={loading ? "—" : totalOperators}
-            subtitle="+12% growth"
             icon={Building2}
           />
 
           <StatCard
             title="Partners"
-            value={loading ? "—" : partnerContributions.length}
+            value={PARTNERS.length}
             subtitle="Active agencies"
             icon={Users2}
           />
 
           <StatCard
-            title="Population"
-            value={loading ? "—" : (populationServed ?? "N/A")}
-            subtitle={
-              populationServed === null ? "Data pending" : "Served users"
-            }
-            icon={Droplet}
-          />
-
-          <StatCard
-            title="Milestones"
-            value="8"
-            subtitle="1 completed"
-            icon={TrendingUp}
+            title="Household Covered"
+            value={loading ? "—" : totalHouseholdsCovered}
+            subtitle="Covered by WSUCs"
+            icon={Users2}
+            iconBg="bg-purple-50"
+            iconColor="text-purple-600"
           />
         </div>
 
@@ -241,15 +311,6 @@ export default function OverviewPage() {
             iconBg="bg-orange-50"
             iconColor="text-orange-600"
           />
-
-          <StatCard
-            title="Total Households"
-            value={loading ? "—" : totalHouseholdsCovered}
-            subtitle="Covered by WSUCs"
-            icon={Users2}
-            iconBg="bg-purple-50"
-            iconColor="text-purple-600"
-          />
         </div>
 
         <div className="space-y-6">
@@ -259,12 +320,12 @@ export default function OverviewPage() {
             totalOperators={totalOperators}
           />
 
-          <div className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(360px,0.85fr)]">
+          <div className="grid gap-6 xl:grid-cols-2">
             <ComplianceChart data={complianceData} />
-            <RecentActivity activities={recentActivities} />
+            <ProvinceComplianceDonut data={provinceComplianceData} />
           </div>
 
-          <PartnerContributions partners={partnerContributions} />
+          <RecentActivity activities={recentActivities} />
         </div>
       </div>
     </div>

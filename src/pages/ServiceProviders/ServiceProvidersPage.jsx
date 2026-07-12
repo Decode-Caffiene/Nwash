@@ -5,16 +5,20 @@ import {
   Building2,
   ChevronDown,
   ChevronUp,
+  Clock,
   Database,
+  Download,
   Droplets,
   FileText,
   Globe,
+  Home,
   Search,
   Shield,
   ShieldCheck,
   Star,
   TrendingDown,
   TrendingUp,
+  Users,
   X,
   Zap,
 } from "lucide-react";
@@ -34,6 +38,13 @@ const fmtScore = (v, decimals = 1) => {
   if (v === null || v === undefined || v === "") return null;
   const n = Number(v);
   return isNaN(n) ? null : n.toFixed(decimals);
+};
+
+const fmtNum = (v) => {
+  if (v === null || v === undefined) return null;
+  const n = Number(v);
+  if (isNaN(n)) return null;
+  return n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(Math.round(n));
 };
 
 const fmtLabel = (label) =>
@@ -63,14 +74,114 @@ function toPercent(v, max = 100) {
   return Math.min(100, Math.max(0, (n / max) * 100));
 }
 
-// ── Status logic ───────────────────────────────────────────────────────────
+// ── Rankings ───────────────────────────────────────────────────────────────
 
+// Builds a Map<projectId, { oeiRank, spiRank, oeiTotal, spiTotal }>.
+// Standard competition ranking: ties share the same rank, next rank skips.
+// Example: [95, 95, 91, 88] → ranks [1, 1, 3, 4]
+// Projects with null / undefined / NaN scores are excluded from that ranking
+// and receive rank: null for that field. Totals reflect only ranked projects.
+function computeRankings(providers) {
+  const result = new Map();
+  const idOf = (p) => p._id ?? p.WSUC_ID;
+
+  for (const p of providers) {
+    result.set(idOf(p), { oeiRank: null, spiRank: null, oeiTotal: 0, spiTotal: 0 });
+  }
+
+  const assignRanks = (scoreKey, rankKey, totalKey) => {
+    const valid = providers
+      .map((p) => ({ id: idOf(p), score: Number(p.Summary_Index?.[scoreKey]) }))
+      .filter(({ score }) => Number.isFinite(score));
+
+    const total = valid.length;
+    valid.sort((a, b) => b.score - a.score);
+
+    let currentRank = 0;
+    for (let i = 0; i < valid.length; i++) {
+      if (i === 0 || valid[i].score !== valid[i - 1].score) currentRank = i + 1;
+      const entry = result.get(valid[i].id);
+      entry[rankKey] = currentRank;
+      entry[totalKey] = total;
+    }
+  };
+
+  assignRanks("OEI", "oeiRank", "oeiTotal");
+  assignRanks("SPI", "spiRank", "spiTotal");
+
+  return result;
+}
+
+// ── Status / completeness logic ────────────────────────────────────────────
+
+// Returns true only if the value is genuinely present (non-null, non-empty)
+function hasVal(v) {
+  return v !== null && v !== undefined && v !== "" && v !== false;
+}
+
+// Map user-specified field names to actual data paths.
+// Live API stores fields inside project.Master_Sheet (ms).
+// Local mastersheet.json fallback stores computed scores inside Summary_Index (si).
+// Both paths are checked so either data source works.
+function checkDataCompleteness(provider) {
+  const ms = provider.Master_Sheet ?? {};
+  const si = provider.Summary_Index ?? {};
+
+  return (
+    // coverage_pct
+    hasVal(ms.Coverage_Pct ?? si.Service_Coverage_Score) &&
+    // build_volume / billed_volume
+    hasVal(
+      ms.Billed_Volume ?? provider.build_volume ?? provider.Build_Volume,
+    ) &&
+    // population_served
+    hasVal(ms.Population_Served ?? provider.Population_Served) &&
+    // wq-testing
+    hasVal(ms.WQ_Testing ?? provider["wq-testing"] ?? provider.wq_testing) &&
+    // wq-ecoll
+    hasVal(ms.WQ_EColi ?? provider["wq-ecoll"] ?? provider.wq_ecoll) &&
+    // wq-arsenic
+    hasVal(ms.WQ_Arsenic ?? provider["wq-arseneq"] ?? provider.wq_arseneq) &&
+    // hours_of_supply
+    hasVal(
+      ms.Hours_of_Supply ?? provider.hours_of_supply ?? si.Reliability_Score,
+    ) &&
+    // nrw — backend returns five boolean sub-fields; any one present satisfies this check
+    hasVal(
+      ms.NRW_DMA ??
+        ms.NRW_Flow_Measurement ??
+        ms.NRW_Flow_Meters ??
+        ms.NRW_Logbook ??
+        ms.NRW_Reservoir_Scale ??
+        si.NRW_Score,
+    ) &&
+    // expenditure
+    hasVal(ms.Expenditure ?? provider.expenditure) &&
+    // operating-ratio
+    hasVal(ms.Operating_Ratio ?? provider["operating-ratio"] ?? si.OM_Score) &&
+    // metering_pct
+    hasVal(
+      ms.Metering_Pct ?? provider.metering_pct ?? si.Metering_Ratio_Score,
+    ) &&
+    // grievance_logbook
+    hasVal(ms.Grievance_Logbook ?? provider.grievance_logbook) &&
+    // grievance_mechanism
+    hasVal(
+      ms.Grievance_Mechanism ??
+        provider.grievance_mechanism ??
+        si.Grievance_Score,
+    )
+  );
+}
+
+// Red   → any required field missing
+// Yellow → all fields present, no business plan
+// Green  → all fields + business plan
 function getCardStatus(provider) {
-  const s = provider.Summary_Index;
-  const hasSummary = s && (s.SPI != null || s.OEI != null);
-  if (!hasSummary) return "missing";
-  if (provider.Service_Coverage_Prerequisite === "Yes") return "complete";
-  return "partial";
+  const allDataPresent = checkDataCompleteness(provider);
+  if (!allDataPresent) return "missing";
+  const hasBP = provider.Business_Plan === "Yes";
+  return hasBP ? "complete" : "partial";
 }
 
 const STATUS = {
@@ -87,7 +198,7 @@ const STATUS = {
     border: "border-amber-200",
     stripe: "bg-amber-400",
     dot: "#fbbf24",
-    label: "Plan Missing",
+    label: "Business Plan Missing",
     badgeCls: "bg-amber-100 text-amber-700 border-amber-200",
   },
   complete: {
@@ -100,7 +211,7 @@ const STATUS = {
   },
 };
 
-// ── KPI config ─────────────────────────────────────────────────────────────
+// ── KPI config for detail modal ────────────────────────────────────────────
 
 const KPI_GRID = [
   {
@@ -125,7 +236,7 @@ const KPI_GRID = [
     icon: BarChart3,
   },
   {
-    key: "Metering_Ratio",
+    key: "Metering_Ratio_Score",
     label: "Metering Ratio",
     unit: "%",
     max: 100,
@@ -141,21 +252,169 @@ const KPI_GRID = [
     warn: true,
   },
   {
-    key: "Grievance_Redressal_Score",
-    label: "Grievance Redr.",
+    key: "Grievance_Score",
+    label: "Grievance Score",
     unit: "%",
     max: 100,
     icon: ShieldCheck,
   },
-  { key: "CWPI", label: "CWPI", unit: "", max: 100, icon: Award },
+  {
+    key: "Service_Coverage_Score",
+    label: "Coverage Score",
+    unit: "%",
+    max: 100,
+    icon: Award,
+  },
 ];
 
 const FILTER_TABS = [
   { key: "all", label: "All" },
   { key: "complete", label: "Complete" },
-  { key: "partial", label: "Plan Missing" },
+  { key: "partial", label: "BP Missing" },
   { key: "missing", label: "Missing Data" },
 ];
+
+// ── PDF Export ─────────────────────────────────────────────────────────────
+
+function exportToPDF(provider, e) {
+  e.stopPropagation();
+  const ms = provider.Master_Sheet ?? {};
+  const si = provider.Summary_Index ?? {};
+  const loc = provider.Location ?? {};
+  const status = getCardStatus(provider);
+  const sc = STATUS[status];
+
+  const kv = (label, value, unit = "") => {
+    const v = value !== null && value !== undefined ? value : null;
+    return `
+      <div class="kpi">
+        <div class="kpi-label">${label}</div>
+        <div class="kpi-value ${v === null ? "na" : ""}">${v !== null ? `${Number(v).toFixed(1)}${unit ? `<span class="kpi-unit"> ${unit}</span>` : ""}` : "N/A"}</div>
+        ${v !== null ? `<div class="kpi-bar"><div class="kpi-fill" style="width:${Math.min(100, Math.max(0, (Number(v) / 100) * 100)).toFixed(0)}%"></div></div>` : `<div class="kpi-bar"></div>`}
+      </div>`;
+  };
+
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8">
+<title>${provider.WSUC_Name ?? "WSUC Profile"}</title>
+<style>
+  @page { size: A5; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, Arial, sans-serif; font-size: 10px; color: #0f172a; background: #fff; }
+
+  .header { background: linear-gradient(135deg,#001d4a,#0047ab); color:#fff; border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; }
+  .header-eyebrow { font-size: 7px; letter-spacing: .12em; text-transform: uppercase; opacity: .65; font-family: monospace; margin-bottom: 3px; }
+  .header-name { font-size: 18px; font-weight: 800; line-height: 1.2; }
+  .header-badges { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .badge { display: inline-block; border-radius: 20px; padding: 2px 8px; font-size: 7px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-family: monospace; }
+  .badge-status { background: ${sc.dot}22; color: ${sc.dot}; border: 1px solid ${sc.dot}40; }
+  .badge-blue { background: rgba(255,255,255,.12); color: #bfdbfe; }
+
+  .section { margin-bottom: 10px; }
+  .section-divider { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .section-divider-line { flex: 1; height: 1px; background: #e2e8f0; }
+  .section-divider-label { font-size: 7px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #94a3b8; font-family: monospace; white-space: nowrap; }
+
+  .spatial { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; }
+  .spatial-item .s-label { font-size: 7px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #94a3b8; font-family: monospace; }
+  .spatial-item .s-value { font-size: 11px; font-weight: 700; color: #0f172a; margin-top: 2px; }
+
+  .indices { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .index-card { border-radius: 8px; padding: 12px; color: #fff; }
+  .index-card.spi { background: linear-gradient(135deg,#0047ab,#00327d); }
+  .index-card.oei { background: linear-gradient(135deg,#006195,#004a79); }
+  .index-label { font-size: 7px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; opacity: .65; font-family: monospace; }
+  .index-value { font-size: 34px; font-weight: 900; line-height: 1; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .index-bar { height: 2px; background: rgba(255,255,255,.15); border-radius: 2px; margin-top: 8px; }
+  .index-fill { height: 100%; background: rgba(255,255,255,.5); border-radius: 2px; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .kpi { background: #fff; border: 1px solid #f1f5f9; border-radius: 6px; padding: 6px 8px; }
+  .kpi-label { font-size: 7px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #94a3b8; font-family: monospace; line-height: 1.3; }
+  .kpi-value { font-size: 16px; font-weight: 900; color: #0f172a; margin-top: 2px; line-height: 1; font-variant-numeric: tabular-nums; }
+  .kpi-value.na { color: #cbd5e1; font-size: 12px; }
+  .kpi-unit { font-size: 8px; font-weight: 500; color: #94a3b8; }
+  .kpi-bar { height: 2px; background: #f1f5f9; border-radius: 2px; margin-top: 4px; }
+  .kpi-fill { height: 100%; background: #2563eb; border-radius: 2px; }
+
+  .metrics-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 10px; }
+  .metric-chip { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 7px 8px; }
+  .metric-chip .m-label { font-size: 7px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #94a3b8; font-family: monospace; }
+  .metric-chip .m-value { font-size: 14px; font-weight: 800; color: #0f172a; margin-top: 2px; font-variant-numeric: tabular-nums; }
+
+  .footer { border-top: 1px dashed #e2e8f0; margin-top: 10px; padding-top: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-text { font-size: 7px; color: #94a3b8; font-family: monospace; }
+</style>
+</head><body>
+
+<div class="header">
+  <div class="header-eyebrow">Water Supply Service Operator · NWASH Dashboard</div>
+  <div class="header-name">${provider.WSUC_Name ?? "Unnamed WSUC"}</div>
+  <div class="header-badges">
+    <span class="badge badge-status">${sc.label}</span>
+    ${dv(provider.WSUC_ID) ? `<span class="badge badge-blue">MIS: ${provider.WSUC_ID}</span>` : ""}
+    <span class="badge badge-blue">Business Plan: ${provider.Business_Plan ?? "N/A"}</span>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label">Spatial Identity</div><div class="section-divider-line"></div></div>
+  <div class="spatial">
+    <div class="spatial-item"><div class="s-label">Province</div><div class="s-value">${dv(loc.Province_Name) ?? "—"}</div></div>
+    <div class="spatial-item"><div class="s-label">District</div><div class="s-value">${dv(loc.District_Name) ?? "—"}</div></div>
+    <div class="spatial-item"><div class="s-label">Municipality</div><div class="s-value">${dv(loc.Municipality_Name) ?? "—"}</div></div>
+    <div class="spatial-item"><div class="s-label">Type</div><div class="s-value">${dv(loc.Municipality_Type) ?? "—"}</div></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label">Population & Coverage</div><div class="section-divider-line"></div></div>
+  <div class="metrics-row">
+    <div class="metric-chip"><div class="m-label">HH Served</div><div class="m-value">${(ms.HH_Served ?? provider.HH_Served) != null ? Number(ms.HH_Served ?? provider.HH_Served).toLocaleString() : "N/A"}</div></div>
+    <div class="metric-chip"><div class="m-label">Total HH</div><div class="m-value">${(ms.Total_HH ?? provider.Total_HH) != null ? Number(ms.Total_HH ?? provider.Total_HH).toLocaleString() : "N/A"}</div></div>
+    <div class="metric-chip"><div class="m-label">Population Served</div><div class="m-value">${(ms.Population_Served ?? provider.Population_Served) != null ? Number(ms.Population_Served ?? provider.Population_Served).toLocaleString() : "N/A"}</div></div>
+  </div>
+</div>
+
+<div class="indices">
+  <div class="index-card spi">
+    <div class="index-label">Service Performance Index</div>
+    <div class="index-value">${si.SPI != null ? Number(si.SPI).toFixed(0) : "—"}${si.SPI != null ? '<span style="font-size:16px;opacity:.5">%</span>' : ""}</div>
+    <div class="index-bar"><div class="index-fill" style="width:${si.SPI != null ? Math.min(100, Number(si.SPI)).toFixed(0) : 0}%"></div></div>
+  </div>
+  <div class="index-card oei">
+    <div class="index-label">Operational Efficiency Index</div>
+    <div class="index-value">${si.OEI != null ? Number(si.OEI).toFixed(0) : "—"}${si.OEI != null ? '<span style="font-size:16px;opacity:.5">%</span>' : ""}</div>
+    <div class="index-bar"><div class="index-fill" style="width:${si.OEI != null ? Math.min(100, Number(si.OEI)).toFixed(0) : 0}%"></div></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label">Detailed KPI Assessment</div><div class="section-divider-line"></div></div>
+  <div class="kpi-grid">
+    ${kv("Water Quality", si.Water_Quality_Score != null ? si.Water_Quality_Score * 100 : null)}
+    ${kv("Reliability", si.Reliability_Score != null ? Number(si.Reliability_Score) * (si.Reliability_Score <= 1 ? 24 : 1) : null, "hrs")}
+    ${kv("Adequacy", si.Adequacy_Score != null ? si.Adequacy_Score * 100 : null)}
+    ${kv("Metering", si.Metering_Ratio_Score != null ? si.Metering_Ratio_Score * 100 : null)}
+    ${kv("O&M Score", si.OM_Score != null ? si.OM_Score * 50 : null)}
+    ${kv("NRW Score", si.NRW_Score)}
+    ${kv("Grievance", si.Grievance_Score != null ? si.Grievance_Score * 100 : null)}
+    ${kv("Coverage", si.Service_Coverage_Score != null ? si.Service_Coverage_Score * 100 : null)}
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-text">NWASH MIS · DWSSM Dashboard · ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</div>
+  <div class="footer-text">Category: ${ms.Category_Level ?? si.Category_Level ?? "—"}</div>
+</div>
+
+<script>window.onload = function(){ window.print(); };<\/script>
+</body></html>`;
+
+  const win = window.open("", "_blank", "width=640,height=900");
+  if (!win) return;
+  win.document.write(html);
+  win.document.close();
+}
 
 // ── Shared UI atoms ────────────────────────────────────────────────────────
 
@@ -212,7 +471,7 @@ function Accordion({ title, icon: Icon, children, defaultOpen = false }) {
   );
 }
 
-// ── KPI grid card (used in modal) ──────────────────────────────────────────
+// ── KPI grid card (detail modal) ───────────────────────────────────────────
 
 function KpiCard({ item, value }) {
   const raw = value !== null && value !== undefined ? Number(value) : null;
@@ -238,9 +497,7 @@ function KpiCard({ item, value }) {
 
   return (
     <div
-      className={`rounded-xl border bg-white p-3 ${
-        item.warn ? "border-rose-100" : "border-slate-100"
-      }`}
+      className={`rounded-xl border bg-white p-3 ${item.warn ? "border-rose-100" : "border-slate-100"}`}
     >
       <div className="flex items-center justify-between">
         <span
@@ -254,7 +511,6 @@ function KpiCard({ item, value }) {
           className={item.warn ? "text-rose-300" : "text-slate-300"}
         />
       </div>
-
       <div
         className="mt-1 text-[22px] font-black leading-none tracking-tight"
         style={{
@@ -272,7 +528,6 @@ function KpiCard({ item, value }) {
           </span>
         )}
       </div>
-
       <div className="mt-2 h-[3px] w-full overflow-hidden rounded-full bg-slate-100">
         <div
           className="h-full rounded-full transition-all duration-700"
@@ -283,7 +538,7 @@ function KpiCard({ item, value }) {
   );
 }
 
-// ── Metric pill (used on cards) ────────────────────────────────────────────
+// ── Metric pill (list cards) ───────────────────────────────────────────────
 
 function MetricPill({ label, value }) {
   const hasValue = value !== null;
@@ -296,9 +551,7 @@ function MetricPill({ label, value }) {
         {label}
       </span>
       <span
-        className={`text-[13px] font-black leading-tight ${
-          hasValue ? "text-slate-800" : "text-slate-300"
-        }`}
+        className={`text-[13px] font-black leading-tight ${hasValue ? "text-slate-800" : "text-slate-300"}`}
         style={{ fontVariantNumeric: "tabular-nums" }}
       >
         {hasValue ? value : "—"}
@@ -313,9 +566,20 @@ function ProviderCard({ provider, onClick }) {
   const status = getCardStatus(provider);
   const sc = STATUS[status];
   const location = provider.Location ?? {};
-  const summary = provider.Summary_Index ?? {};
-  const spi = fmtScore(summary.SPI, 0);
-  const oei = fmtScore(summary.OEI, 0);
+  const ms = provider.Master_Sheet ?? {};
+  const si = provider.Summary_Index ?? {};
+
+  const spi = fmtScore(si.SPI, 0);
+  const oei = fmtScore(si.OEI, 0);
+  const hhServed = fmtNum(ms.HH_Served ?? provider.HH_Served);
+  const totalHH = fmtNum(ms.Total_HH ?? provider.Total_HH);
+  const hours =
+    ms.Hours_of_Supply ??
+    provider.hours_of_supply ??
+    provider.Hours_of_Supply ??
+    si.Reliability_Score;
+  const hoursDisplay = hours != null ? `${Number(hours).toFixed(0)}h` : null;
+
   const province = dv(location.Province_Name);
   const district = dv(location.District_Name);
   const breadcrumb = [province, district].filter(Boolean).join(" · ");
@@ -344,33 +608,75 @@ function ProviderCard({ provider, onClick }) {
 
       {/* Content */}
       <div className="flex min-w-0 flex-1 flex-col justify-between gap-2 px-3 py-3">
-        {/* Top: name + location */}
-        <div className="min-w-0">
-          <p className="truncate text-sm font-bold leading-snug text-slate-800 transition-colors group-hover:text-brand-primary">
-            {dv(provider.WSUC_Name) ?? "Unnamed WSUC"}
-          </p>
-          {breadcrumb ? (
-            <p
-              className="mt-0.5 truncate text-[10px] text-slate-400"
-              style={{ fontFamily: "monospace" }}
-            >
-              {breadcrumb}
+        {/* Top row: name + export button */}
+        <div className="flex min-w-0 items-start justify-between gap-1.5">
+          <div className="min-w-0">
+            <p className="truncate text-sm font-bold leading-snug text-slate-800 transition-colors group-hover:text-brand-primary">
+              {dv(provider.WSUC_Name) ?? "Unnamed WSUC"}
             </p>
-          ) : (
-            <p className="mt-0.5 text-[10px] italic text-slate-300">
-              No location
-            </p>
-          )}
+            {breadcrumb ? (
+              <p
+                className="mt-0.5 truncate text-[10px] text-slate-400"
+                style={{ fontFamily: "monospace" }}
+              >
+                {breadcrumb}
+              </p>
+            ) : (
+              <p className="mt-0.5 text-[10px] italic text-slate-300">
+                No location
+              </p>
+            )}
+          </div>
+
+          {/* Export button */}
+          <button
+            type="button"
+            onClick={(e) => exportToPDF(provider, e)}
+            title="Export as PDF"
+            className="flex-shrink-0 rounded-md p-1 text-slate-400 transition hover:bg-white/60 hover:text-slate-700"
+          >
+            <Download size={12} />
+          </button>
         </div>
 
-        {/* Bottom: metric pills + status badge */}
-        <div className="flex items-center justify-between gap-2">
+        {/* Bottom row: metric pills + extra stats + status */}
+        <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5">
+          {/* SPI / OEI */}
           <div className="flex items-center gap-1.5">
             <MetricPill label="SPI" value={spi} />
             <MetricPill label="OEI" value={oei} />
           </div>
+
+          {/* HH / Total HH / Hours */}
+          <div
+            className="flex items-center gap-2 text-[10px] text-slate-500"
+            style={{ fontFamily: "monospace" }}
+          >
+            {hhServed && (
+              <span className="flex items-center gap-0.5">
+                <Home size={9} className="text-slate-400" />
+                {hhServed}
+              </span>
+            )}
+            {totalHH && (
+              <span className="flex items-center gap-0.5 text-slate-400">
+                <Users size={9} />
+                {totalHH}
+              </span>
+            )}
+            {hoursDisplay && (
+              <span className="flex items-center gap-0.5 text-slate-400">
+                <Clock size={9} />
+                {hoursDisplay}
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Status badge row */}
+        <div className="flex justify-end">
           <span
-            className={`flex flex-shrink-0 items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide ${sc.badgeCls}`}
+            className={`flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide ${sc.badgeCls}`}
             style={{ fontFamily: "monospace" }}
           >
             <StatusDot status={status} />
@@ -384,23 +690,20 @@ function ProviderCard({ provider, onClick }) {
 
 // ── Provider detail modal ──────────────────────────────────────────────────
 
-function ProviderDetailModal({ provider, onClose }) {
+function ProviderDetailModal({ provider, rankings, onClose }) {
   if (!provider) return null;
 
   const status = getCardStatus(provider);
   const sc = STATUS[status];
   const location = provider.Location ?? {};
-  const summary = provider.Summary_Index ?? {};
-  const coverageReady = provider.Service_Coverage_Prerequisite === "Yes";
+  const ms = provider.Master_Sheet ?? {};
+  const si = provider.Summary_Index ?? {};
+  const hasBP = provider.Business_Plan === "Yes";
 
-  const spiPct = toPercent(summary.SPI, 100);
-  const oeiPct = toPercent(summary.OEI, 100);
+  const rank = rankings?.get(provider._id ?? provider.WSUC_ID) ?? null;
 
-  const docEntries =
-    provider.Documents && isObj(provider.Documents)
-      ? Object.entries(provider.Documents)
-      : [];
-  const hasGeometry = provider.geometry != null;
+  const spiPct = toPercent(si.SPI, 100);
+  const oeiPct = toPercent(si.OEI, 100);
 
   const skipped = new Set([
     "_id",
@@ -408,10 +711,12 @@ function ProviderDetailModal({ provider, onClose }) {
     "WSUC_Name",
     "WSUC_ID",
     "Service_Coverage_Prerequisite",
+    "Business_Plan",
     "Location",
     "Summary_Index",
-    "Documents",
-    "geometry",
+    "HH_Served",
+    "Total_HH",
+    "Population_Served",
   ]);
   const extraEntries = Object.entries(provider).filter(
     ([k, v]) => !skipped.has(k) && !isObj(v) && !Array.isArray(v),
@@ -423,27 +728,38 @@ function ProviderDetailModal({ provider, onClose }) {
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div className="flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
-        {/* ── Modal header ── */}
+        {/* Header */}
         <div
           className="relative flex-shrink-0 px-7 py-6 text-white"
           style={{
             background: "linear-gradient(135deg, #001d4a 0%, #0047ab 100%)",
           }}
         >
-          <button
-            type="button"
-            onClick={onClose}
-            className="absolute right-4 top-4 rounded-full p-1.5 transition-colors hover:bg-white/10"
-            aria-label="Close"
-          >
-            <X size={16} className="text-white/70" />
-          </button>
+          <div className="absolute right-4 top-4 flex items-center gap-2">
+            <button
+              type="button"
+              onClick={(e) => exportToPDF(provider, e)}
+              title="Export as PDF"
+              className="flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-[11px] font-semibold text-white/80 transition hover:bg-white/20"
+            >
+              <Download size={12} />
+              Export PDF
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-full p-1.5 transition-colors hover:bg-white/10"
+              aria-label="Close"
+            >
+              <X size={16} className="text-white/70" />
+            </button>
+          </div>
 
           <p
             className="text-[10px] font-bold uppercase tracking-widest text-blue-300"
             style={{ fontFamily: "monospace" }}
           >
-            Water Supply Service Provider
+            Water Supply Service Operator
           </p>
           <h2 className="mt-1 text-2xl font-bold leading-tight tracking-tight">
             {dv(provider.WSUC_Name) ?? "Unnamed WSUC"}
@@ -465,12 +781,12 @@ function ProviderDetailModal({ provider, onClose }) {
           </div>
         </div>
 
-        {/* ── Scrollable body ── */}
+        {/* Scrollable body */}
         <div className="flex-1 space-y-5 overflow-y-auto p-6">
-          {/* Spatial Identity */}
+          {/* Spatial identity */}
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
             <SectionDivider label="Spatial Identity" />
-            <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-3 lg:grid-cols-6">
+            <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-3 lg:grid-cols-3">
               {[
                 { label: "Province", value: location.Province_Name },
                 { label: "District", value: location.District_Name },
@@ -495,9 +811,64 @@ function ProviderDetailModal({ provider, onClose }) {
             </div>
           </div>
 
+          {/* Population & Coverage */}
+          <div>
+            <SectionDivider label="Population & Coverage" />
+            <div className="mt-3 grid grid-cols-3 gap-3">
+              {[
+                {
+                  label: "HH Served",
+                  icon: Home,
+                  value: ms.HH_Served ?? provider.HH_Served,
+                  fmt: (v) => Number(v).toLocaleString(),
+                },
+                {
+                  label: "Total Households",
+                  icon: Users,
+                  value: ms.Total_HH ?? provider.Total_HH,
+                  fmt: (v) => Number(v).toLocaleString(),
+                },
+                {
+                  label: "Population Served",
+                  icon: Users,
+                  value: ms.Population_Served ?? provider.Population_Served,
+                  fmt: (v) => Number(v).toLocaleString(),
+                },
+              ].map(({ label, icon: Icon, value, fmt }) => (
+                <div
+                  key={label}
+                  className="flex items-center gap-3 rounded-xl border border-slate-100 bg-white p-3"
+                >
+                  <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-blue-50">
+                    <Icon size={16} className="text-blue-500" />
+                  </div>
+                  <div>
+                    <div
+                      className="text-[9px] font-bold uppercase tracking-widest text-slate-400"
+                      style={{ fontFamily: "monospace" }}
+                    >
+                      {label}
+                    </div>
+                    <div
+                      className="mt-0.5 text-lg font-black leading-none text-slate-800"
+                      style={{ fontVariantNumeric: "tabular-nums" }}
+                    >
+                      {value != null ? (
+                        fmt(value)
+                      ) : (
+                        <span className="text-base font-normal text-slate-300">
+                          N/A
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* Composite Indices */}
           <div className="grid grid-cols-2 gap-4">
-            {/* SPI */}
             <div
               className="relative overflow-hidden rounded-xl p-5 text-white"
               style={{
@@ -514,8 +885,8 @@ function ProviderDetailModal({ provider, onClose }) {
                 className="mt-1 text-5xl font-black leading-none tracking-tight"
                 style={{ fontVariantNumeric: "tabular-nums" }}
               >
-                {fmtScore(summary.SPI, 0) ?? "—"}
-                {summary.SPI != null && (
+                {fmtScore(si.SPI, 0) ?? "—"}
+                {si.SPI != null && (
                   <span className="ml-1 text-2xl font-bold opacity-50">%</span>
                 )}
               </div>
@@ -525,13 +896,20 @@ function ProviderDetailModal({ provider, onClose }) {
                   style={{ width: `${spiPct}%` }}
                 />
               </div>
+              {rank?.spiRank != null && (
+                <p
+                  className="mt-3 text-[10px] font-bold opacity-70"
+                  style={{ fontFamily: "monospace", fontVariantNumeric: "tabular-nums" }}
+                >
+                  Rank {rank.spiRank} / {rank.spiTotal}
+                </p>
+              )}
               <Award
                 size={40}
                 className="absolute bottom-3 right-4 opacity-10"
               />
             </div>
 
-            {/* OEI */}
             <div
               className="relative overflow-hidden rounded-xl p-5 text-white"
               style={{
@@ -548,8 +926,8 @@ function ProviderDetailModal({ provider, onClose }) {
                 className="mt-1 text-5xl font-black leading-none tracking-tight"
                 style={{ fontVariantNumeric: "tabular-nums" }}
               >
-                {fmtScore(summary.OEI, 0) ?? "—"}
-                {summary.OEI != null && (
+                {fmtScore(si.OEI, 0) ?? "—"}
+                {si.OEI != null && (
                   <span className="ml-1 text-2xl font-bold opacity-50">%</span>
                 )}
               </div>
@@ -559,45 +937,29 @@ function ProviderDetailModal({ provider, onClose }) {
                   style={{ width: `${oeiPct}%` }}
                 />
               </div>
+              {rank?.oeiRank != null && (
+                <p
+                  className="mt-3 text-[10px] font-bold opacity-70"
+                  style={{ fontFamily: "monospace", fontVariantNumeric: "tabular-nums" }}
+                >
+                  Rank {rank.oeiRank} / {rank.oeiTotal}
+                </p>
+              )}
               <Zap size={40} className="absolute bottom-3 right-4 opacity-10" />
             </div>
           </div>
 
-          {/* KPI Assessment grid */}
+          {/* KPI grid */}
           <div>
             <SectionDivider label="Detailed KPI Assessment" />
             <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
               {KPI_GRID.map((item) => (
-                <KpiCard key={item.key} item={item} value={summary[item.key]} />
+                <KpiCard key={item.key} item={item} value={si[item.key]} />
               ))}
             </div>
           </div>
 
-          {/* Documents */}
-          {docEntries.length > 0 && (
-            <Accordion title="Documents" icon={FileText}>
-              <div className="grid gap-2 sm:grid-cols-2">
-                {docEntries.map(([k, v]) => (
-                  <div
-                    key={k}
-                    className="rounded-lg border border-slate-100 bg-slate-50 px-3 py-2"
-                  >
-                    <div
-                      className="text-[9px] font-bold uppercase tracking-wider text-slate-400"
-                      style={{ fontFamily: "monospace" }}
-                    >
-                      {fmtLabel(k)}
-                    </div>
-                    <div className="mt-0.5 break-all text-xs font-medium text-slate-700">
-                      {fmtAny(v)}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Accordion>
-          )}
-
-          {/* Additional fields */}
+          {/* Additional */}
           {extraEntries.length > 0 && (
             <Accordion title="Additional Information" icon={Database}>
               <div className="grid gap-2 sm:grid-cols-2">
@@ -659,8 +1021,11 @@ function ServiceProvidersPage() {
 
   const { data, loading, error } = useFetch(getServiceProviders, []);
   const providers = Array.isArray(data) ? data : [];
+  console.log("data service provider", data);
 
-  console.log("service provider data", data);
+  // Computed once per provider list load; never recalculated when a card is opened.
+  const rankings = useMemo(() => computeRankings(providers), [providers]);
+
   const stats = useMemo(() => {
     const provinceCount = new Set(
       providers.map((p) => p.Location?.Province_Name?.trim()).filter(Boolean),
@@ -674,33 +1039,30 @@ function ServiceProvidersPage() {
         cls: "text-blue-600 bg-blue-50",
       },
       {
-        label: "Provinces Covered",
+        label: "Provinces",
         value: provinceCount,
         icon: Globe,
         cls: "text-violet-600 bg-violet-50",
       },
       {
-        label: "With SPI Data",
-        value: providers.filter((p) => p.Summary_Index?.SPI != null).length,
-        icon: BarChart3,
-        cls: "text-teal-600 bg-teal-50",
-      },
-      {
-        label: "Complete Records",
+        label: "Complete",
         value: providers.filter((p) => getCardStatus(p) === "complete").length,
         icon: ShieldCheck,
         cls: "text-emerald-600 bg-emerald-50",
+      },
+      {
+        label: "Business Plan Missing",
+        value: providers.filter((p) => getCardStatus(p) === "partial").length,
+        icon: FileText,
+        cls: "text-amber-600 bg-amber-50",
       },
     ];
   }, [providers]);
 
   const filtered = useMemo(() => {
     let list = providers;
-
-    if (filterStatus !== "all") {
+    if (filterStatus !== "all")
       list = list.filter((p) => getCardStatus(p) === filterStatus);
-    }
-
     if (search.trim()) {
       const q = search.toLowerCase();
       list = list.filter((p) => {
@@ -713,7 +1075,6 @@ function ServiceProvidersPage() {
         );
       });
     }
-
     return list;
   }, [providers, search, filterStatus]);
 
@@ -737,7 +1098,6 @@ function ServiceProvidersPage() {
       </div>
 
       {loading && <Loader text="Loading service providers…" />}
-
       {error && (
         <div className="rounded-xl border border-red-200 bg-red-50 p-4">
           <p className="text-sm font-semibold text-red-700">
@@ -749,7 +1109,7 @@ function ServiceProvidersPage() {
 
       {!loading && !error && (
         <>
-          {/* Stats row */}
+          {/* Stats */}
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             {stats.map(({ label, value, icon: Icon, cls }) => (
               <div key={label} className="stat-card flex items-center gap-4">
@@ -771,11 +1131,10 @@ function ServiceProvidersPage() {
             ))}
           </div>
 
-          {/* Registry card */}
+          {/* Registry */}
           <div className="stat-card">
             {/* Toolbar */}
             <div className="flex flex-wrap items-center gap-3">
-              {/* Search */}
               <div className="flex min-w-48 flex-1 items-center gap-2 rounded-lg border border-surface-border bg-surface px-3 py-2">
                 <Search
                   size={14}
@@ -793,14 +1152,13 @@ function ServiceProvidersPage() {
                     type="button"
                     onClick={() => setSearch("")}
                     className="flex-shrink-0 text-text-secondary hover:text-text-primary"
-                    aria-label="Clear search"
+                    aria-label="Clear"
                   >
                     <X size={12} />
                   </button>
                 )}
               </div>
 
-              {/* Status filter tabs */}
               <div className="flex items-center gap-1 rounded-lg border border-surface-border bg-surface p-1">
                 {FILTER_TABS.map(({ key, label }) => (
                   <button
@@ -819,7 +1177,6 @@ function ServiceProvidersPage() {
                 ))}
               </div>
 
-              {/* Result count */}
               <span
                 className="flex-shrink-0 text-[11px] text-text-secondary"
                 style={{ fontFamily: "monospace" }}
@@ -829,7 +1186,7 @@ function ServiceProvidersPage() {
             </div>
 
             {/* Legend */}
-            <div className="mt-3 flex flex-wrap items-center gap-4">
+            <div className="mt-3 flex flex-wrap items-center gap-5">
               {Object.entries(STATUS).map(([key, sc]) => (
                 <div key={key} className="flex items-center gap-1.5">
                   <span
@@ -844,6 +1201,13 @@ function ServiceProvidersPage() {
                   </span>
                 </div>
               ))}
+              <span
+                className="ml-auto text-[10px] text-slate-400"
+                style={{ fontFamily: "monospace" }}
+              >
+                Click card to view details ·{" "}
+                <Download size={9} className="inline" /> to export PDF
+              </span>
             </div>
 
             {/* Cards grid */}
@@ -882,6 +1246,7 @@ function ServiceProvidersPage() {
       {selectedProvider && (
         <ProviderDetailModal
           provider={selectedProvider}
+          rankings={rankings}
           onClose={() => setSelectedProvider(null)}
         />
       )}
