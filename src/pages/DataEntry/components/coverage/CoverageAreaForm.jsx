@@ -31,8 +31,6 @@ const LOCATION_FIELD_KEYS = {
   municipalityType: "spatial.municipality-type",
   municipalityName: "spatial.municipality-name",
   coverageArea: "spatial.coverage-area-geojson",
-  gpsLatitude: "spatial.gps-latitude",
-  gpsLongitude: "spatial.gps-longitude",
 };
 
 export default function CoverageAreaForm({
@@ -59,8 +57,6 @@ export default function CoverageAreaForm({
     points: 0,
   });
   const [coverageAreaInfo, setCoverageAreaInfo] = useState(null);
-  const [isGpsLoading, setIsGpsLoading] = useState(false);
-  const [gpsError, setGpsError] = useState(null);
   const [mapError, setMapError] = useState(null);
   const [drawingStats, setDrawingStats] = useState({ lines: 0, points: 0 });
   const [mapReady, setMapReady] = useState(false);
@@ -90,13 +86,14 @@ export default function CoverageAreaForm({
   useEffect(() => {
     if (coverageAreaGeoJson) {
       try {
-        const coverage = typeof coverageAreaGeoJson === "string"
-          ? JSON.parse(coverageAreaGeoJson)
-          : coverageAreaGeoJson;
+        const coverage =
+          typeof coverageAreaGeoJson === "string"
+            ? JSON.parse(coverageAreaGeoJson)
+            : coverageAreaGeoJson;
 
         if (coverage && coverage.features && coverage.features.length > 0) {
           setCoverageAreaInfo(
-            `✓ Coverage area saved for ${municipalityName} (${coverage.features.length} area(s))`
+            `✓ Coverage area saved for ${municipalityName} (${coverage.features.length} area(s))`,
           );
         } else {
           setCoverageAreaInfo(null);
@@ -108,7 +105,6 @@ export default function CoverageAreaForm({
       setCoverageAreaInfo(null);
     }
   }, [coverageAreaGeoJson, municipalityName]);
-
 
   // Initialize map when drawing mode starts
   useEffect(() => {
@@ -137,13 +133,10 @@ export default function CoverageAreaForm({
 
         map.current = L.map(mapContainer.current).setView([28.3949, 84.124], 6);
 
-        L.tileLayer(
-          "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
-          {
-            maxZoom: 20,
-            attribution: "Google",
-          },
-        ).addTo(map.current);
+        L.tileLayer("https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}", {
+          maxZoom: 20,
+          attribution: "Google",
+        }).addTo(map.current);
 
         // Load and display selected boundary, then zoom to it
         const municipalityGeoJSON = await getMunicipalityBoundaryAsync(
@@ -472,34 +465,6 @@ export default function CoverageAreaForm({
     }
   };
 
-  const captureGPSLocation = () => {
-    setIsGpsLoading(true);
-    setGpsError(null);
-
-    if (!navigator.geolocation) {
-      setGpsError("Geolocation is not supported by your browser");
-      setIsGpsLoading(false);
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        onFieldChange(LOCATION_FIELD_KEYS.gpsLatitude, latitude.toString());
-        onFieldChange(LOCATION_FIELD_KEYS.gpsLongitude, longitude.toString());
-        setIsGpsLoading(false);
-      },
-      (error) => {
-        const errorMsg =
-          error.code === 1
-            ? "Permission denied. Please enable location access."
-            : "Unable to retrieve location. Please try again.";
-        setGpsError(errorMsg);
-        setIsGpsLoading(false);
-      },
-    );
-  };
-
   // Drawing mode view
   if (isDrawing) {
     if (drawingComplete) {
@@ -555,9 +520,6 @@ export default function CoverageAreaForm({
       canOpenMap={canOpenMap}
       coverageAreaInfo={coverageAreaInfo}
       onDrawClick={() => canOpenMap && setIsDrawing(true)}
-      isGpsLoading={isGpsLoading}
-      gpsError={gpsError}
-      onCaptureGPS={captureGPSLocation}
       onValidationChange={onValidationChange}
     />
   );

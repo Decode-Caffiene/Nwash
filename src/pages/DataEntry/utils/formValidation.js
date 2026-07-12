@@ -10,19 +10,27 @@ export const LOCATION_FIELD_KEYS = {
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const phoneRegex = /^[0-9+\-\s()]*$/;
+const nepalPhoneRegex = /^(97|98)\d{8}$/;
 
 export const validateEmail = (email) => {
-  if (!email) return "Email is required";
+  if (!email) return null;
   if (!emailRegex.test(email)) return "Invalid email format";
   return null;
 };
 
 export const validatePhone = (phone) => {
-  if (!phone) return "Phone number is required";
+  if (!phone) return null;
   if (!phoneRegex.test(phone)) return "Invalid phone number format";
-  if (phone.replace(/\D/g, "").length < 7) {
-    return "Phone number should have at least 7 digits";
+  
+  const digitsOnly = phone.replace(/\D/g, "");
+  if (digitsOnly.length !== 10) {
+    return "Phone number must be exactly 10 digits";
   }
+  
+  if (!nepalPhoneRegex.test(digitsOnly)) {
+    return "Phone number must start with 97 or 98 (Nepal format)";
+  }
+  
   return null;
 };
 
@@ -84,7 +92,7 @@ export const validateServiceProviderForm = (values, fields) => {
   Object.assign(errors, locationErrors);
 
   // Validate wards covered if any location field is filled
-  const hasLocationData = Object.values(locationErrors).length === 0;
+  const hasLocationData = Object.keys(locationErrors).length === 0;
   if (hasLocationData && !values[LOCATION_FIELD_KEYS.wardsCovered]) {
     errors[LOCATION_FIELD_KEYS.wardsCovered] = "Ward numbers are required";
   }
@@ -109,7 +117,7 @@ export const validateServiceProviderForm = (values, fields) => {
     }
   }
 
-  // Validate other fields based on field type
+  // Validate other fields based on field type (only format validation)
   fields.forEach((field) => {
     const key = `spatial.${field.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`;
 

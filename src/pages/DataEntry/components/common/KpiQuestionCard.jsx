@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   questionTranslations,
   fieldTranslations,
@@ -38,7 +39,18 @@ function KpiQuestionCard({
       ?.name || null;
   const usesFileSource = Boolean(documentFieldName);
   const descriptionKey = documentFieldName || "documents";
-  const showSourceExplanation = isGateKeepingQuestion || usesFileSource;
+
+  const currentAnswer = values[key];
+  const isNoAnswer = currentAnswer === "No" || currentAnswer === "होइन";
+  const showSourceExplanation = (isGateKeepingQuestion || usesFileSource) && !isNoAnswer;
+
+  // Clear file when answer changes to "No"
+  useEffect(() => {
+    if (isNoAnswer && usesFileSource && values[descriptionKey]) {
+      onFieldChange(descriptionKey, "");
+    }
+  }, [isNoAnswer, usesFileSource, descriptionKey, onFieldChange]);
+
 
   // Detect if this is a yes/no question
   const isNumberInput =
@@ -116,6 +128,9 @@ function KpiQuestionCard({
                 id={descriptionKey}
                 type="file"
                 name={descriptionKey}
+
+                accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+
                 onChange={(event) => {
                   const file = event.target.files?.[0];
                   onFieldChange(descriptionKey, file || "");
