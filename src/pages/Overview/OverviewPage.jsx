@@ -153,7 +153,12 @@ export default function OverviewPage() {
 
   // Compliance data derived from zone categorization
   const complianceData = useMemo(() => {
-    const compliant = allImproving;
+    const compliant =
+      (categorized.IMPROVING?.length || 0) +
+      (categorized.IMPROVED?.length || 0) +
+      (categorized.JUST_EFFICIENT?.length || 0) +
+      (categorized.MODERATELY_EFFICIENT?.length || 0) +
+      (categorized.HIGHLY_EFFICIENT?.length || 0);
     const partial =
       (categorized.INACTIVE?.length || 0) + (categorized.ACTIVE?.length || 0);
     const nonCompliant =
@@ -178,7 +183,14 @@ export default function OverviewPage() {
       return sum + (Number(households) || 0);
     }, 0);
   }, [filteredList]);
+  console.log("Providers with valid OEI/SPI:", chartDataForZones.length);
 
+  const totalInChart = complianceData.reduce(
+    (sum, item) => sum + item.value,
+    0,
+  );
+
+  console.log("Total represented in chart:", totalInChart);
   // 3. District Data - calculated from provider locations
   const { districtData, excludedCount } = useMemo(() => {
     const districtMap = {};
