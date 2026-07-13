@@ -172,7 +172,9 @@ function Navbar() {
           <p className="text-xs font-semibold uppercase tracking-widest text-text-secondary">
             Ministry of Infrastructures Development
           </p>
-          <p className="text-sm font-bold text-text-primary">DWSSM Dashboard</p>
+          <p className="text-sm font-bold text-text-primary">
+            Department of Water and Sewerage Management
+          </p>
         </div>
       </div>
 

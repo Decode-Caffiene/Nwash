@@ -86,7 +86,12 @@ function computeRankings(providers) {
   const idOf = (p) => p._id ?? p.WSUC_ID;
 
   for (const p of providers) {
-    result.set(idOf(p), { oeiRank: null, spiRank: null, oeiTotal: 0, spiTotal: 0 });
+    result.set(idOf(p), {
+      oeiRank: null,
+      spiRank: null,
+      oeiTotal: 0,
+      spiTotal: 0,
+    });
   }
 
   const assignRanks = (scoreKey, rankKey, totalKey) => {
@@ -112,94 +117,46 @@ function computeRankings(providers) {
   return result;
 }
 
-// ── Status / completeness logic ────────────────────────────────────────────
+// ── Status logic ───────────────────────────────────────────────────────────
+//
+// Decision tree (evaluated top-to-bottom, first match wins):
+//
+//   1. RED   ("noScore")  — OEI or SPI is absent / non-finite. Highest priority.
+//                           Both BP presence and value are irrelevant at this tier.
+//   2. ORANGE ("noBP")   — OEI & SPI are present, but SCP !== "Yes".
+//   3. GREEN  ("complete")— SCP === "Yes" AND OEI AND SPI all present.
+//
+// Every provider falls into exactly one tier because:
+//   - "noScore" catches all records missing either index first.
+//   - Of the remaining (both indexes present), "noBP" catches SCP !== "Yes".
+//   - "complete" is what's left: both indexes present AND SCP === "Yes".
 
-// Returns true only if the value is genuinely present (non-null, non-empty)
-function hasVal(v) {
-  return v !== null && v !== undefined && v !== "" && v !== false;
-}
-
-// Map user-specified field names to actual data paths.
-// Live API stores fields inside project.Master_Sheet (ms).
-// Local mastersheet.json fallback stores computed scores inside Summary_Index (si).
-// Both paths are checked so either data source works.
-function checkDataCompleteness(provider) {
-  const ms = provider.Master_Sheet ?? {};
-  const si = provider.Summary_Index ?? {};
-
-  return (
-    // coverage_pct
-    hasVal(ms.Coverage_Pct ?? si.Service_Coverage_Score) &&
-    // build_volume / billed_volume
-    hasVal(
-      ms.Billed_Volume ?? provider.build_volume ?? provider.Build_Volume,
-    ) &&
-    // population_served
-    hasVal(ms.Population_Served ?? provider.Population_Served) &&
-    // wq-testing
-    hasVal(ms.WQ_Testing ?? provider["wq-testing"] ?? provider.wq_testing) &&
-    // wq-ecoll
-    hasVal(ms.WQ_EColi ?? provider["wq-ecoll"] ?? provider.wq_ecoll) &&
-    // wq-arsenic
-    hasVal(ms.WQ_Arsenic ?? provider["wq-arseneq"] ?? provider.wq_arseneq) &&
-    // hours_of_supply
-    hasVal(
-      ms.Hours_of_Supply ?? provider.hours_of_supply ?? si.Reliability_Score,
-    ) &&
-    // nrw — backend returns five boolean sub-fields; any one present satisfies this check
-    hasVal(
-      ms.NRW_DMA ??
-        ms.NRW_Flow_Measurement ??
-        ms.NRW_Flow_Meters ??
-        ms.NRW_Logbook ??
-        ms.NRW_Reservoir_Scale ??
-        si.NRW_Score,
-    ) &&
-    // expenditure
-    hasVal(ms.Expenditure ?? provider.expenditure) &&
-    // operating-ratio
-    hasVal(ms.Operating_Ratio ?? provider["operating-ratio"] ?? si.OM_Score) &&
-    // metering_pct
-    hasVal(
-      ms.Metering_Pct ?? provider.metering_pct ?? si.Metering_Ratio_Score,
-    ) &&
-    // grievance_logbook
-    hasVal(ms.Grievance_Logbook ?? provider.grievance_logbook) &&
-    // grievance_mechanism
-    hasVal(
-      ms.Grievance_Mechanism ??
-        provider.grievance_mechanism ??
-        si.Grievance_Score,
-    )
-  );
-}
-
-// Red   → any required field missing
-// Yellow → all fields present, no business plan
-// Green  → all fields + business plan
 function getCardStatus(provider) {
-  const allDataPresent = checkDataCompleteness(provider);
-  if (!allDataPresent) return "missing";
-  const hasBP = provider.Business_Plan === "Yes";
-  return hasBP ? "complete" : "partial";
+  const si = provider.Summary_Index ?? {};
+  const hasOEI = Number.isFinite(Number(si.OEI));
+  const hasSPI = Number.isFinite(Number(si.SPI));
+
+  if (!hasOEI || !hasSPI) return "noScore";
+  if (provider.Service_Coverage_Prerequisite !== "Yes") return "noBP";
+  return "complete";
 }
 
 const STATUS = {
-  missing: {
+  noScore: {
     gradient: "bg-gradient-to-br from-red-50 to-rose-100",
     border: "border-red-200",
     stripe: "bg-red-400",
     dot: "#f87171",
-    label: "Missing Data",
+    label: "Score Missing",
     badgeCls: "bg-red-100 text-red-700 border-red-200",
   },
-  partial: {
-    gradient: "bg-gradient-to-br from-amber-50 to-yellow-100",
-    border: "border-amber-200",
-    stripe: "bg-amber-400",
-    dot: "#fbbf24",
+  noBP: {
+    gradient: "bg-gradient-to-br from-orange-50 to-amber-100",
+    border: "border-orange-200",
+    stripe: "bg-orange-400",
+    dot: "#fb923c",
     label: "Business Plan Missing",
-    badgeCls: "bg-amber-100 text-amber-700 border-amber-200",
+    badgeCls: "bg-orange-100 text-orange-700 border-orange-200",
   },
   complete: {
     gradient: "bg-gradient-to-br from-emerald-50 to-green-100",
@@ -270,8 +227,8 @@ const KPI_GRID = [
 const FILTER_TABS = [
   { key: "all", label: "All" },
   { key: "complete", label: "Complete" },
-  { key: "partial", label: "BP Missing" },
-  { key: "missing", label: "Missing Data" },
+  { key: "noBP", label: "BP Missing" },
+  { key: "noScore", label: "Score Missing" },
 ];
 
 // ── PDF Export ─────────────────────────────────────────────────────────────
@@ -294,7 +251,8 @@ function exportToPDF(provider, e, rank = null) {
 
   const kv = (label, value, unit = "") => {
     const v = value !== null && value !== undefined ? value : null;
-    const pct = v !== null ? Math.min(100, Math.max(0, Number(v))).toFixed(0) : 0;
+    const pct =
+      v !== null ? Math.min(100, Math.max(0, Number(v))).toFixed(0) : 0;
     return `
       <div class="kpi">
         <div class="kpi-label">${label}</div>
@@ -789,7 +747,7 @@ function ProviderDetailModal({ provider, rankings, onClose }) {
 
   const spiPct = toPercent(si.SPI, 100);
   const oeiPct = toPercent(si.OEI, 100);
-
+  console.log("providerr data", provider);
   const skipped = new Set([
     "_id",
     "__v",
@@ -1004,7 +962,10 @@ function ProviderDetailModal({ provider, rankings, onClose }) {
               {rank?.spiRank != null && (
                 <p
                   className="mt-3 text-[10px] font-bold opacity-70"
-                  style={{ fontFamily: "monospace", fontVariantNumeric: "tabular-nums" }}
+                  style={{
+                    fontFamily: "monospace",
+                    fontVariantNumeric: "tabular-nums",
+                  }}
                 >
                   Rank {rank.spiRank} / {rank.spiTotal}
                 </p>
@@ -1045,7 +1006,10 @@ function ProviderDetailModal({ provider, rankings, onClose }) {
               {rank?.oeiRank != null && (
                 <p
                   className="mt-3 text-[10px] font-bold opacity-70"
-                  style={{ fontFamily: "monospace", fontVariantNumeric: "tabular-nums" }}
+                  style={{
+                    fontFamily: "monospace",
+                    fontVariantNumeric: "tabular-nums",
+                  }}
                 >
                   Rank {rank.oeiRank} / {rank.oeiTotal}
                 </p>
@@ -1157,9 +1121,9 @@ function ServiceProvidersPage() {
       },
       {
         label: "Business Plan Missing",
-        value: providers.filter((p) => getCardStatus(p) === "partial").length,
+        value: providers.filter((p) => getCardStatus(p) === "noBP").length,
         icon: FileText,
-        cls: "text-amber-600 bg-amber-50",
+        cls: "text-orange-600 bg-orange-50",
       },
     ];
   }, [providers]);

@@ -288,7 +288,9 @@ export default function OverviewPage() {
 
           <StatCard
             title="Household Covered"
-            value={loading ? "—" : totalHouseholdsCovered}
+            value={
+              loading ? "—" : Number(totalHouseholdsCovered).toLocaleString()
+            }
             subtitle="Covered by WSUCs"
             icon={Users2}
             iconBg="bg-purple-50"
