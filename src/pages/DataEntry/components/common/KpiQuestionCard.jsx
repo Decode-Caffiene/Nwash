@@ -8,6 +8,9 @@ import FormControl, { inputClass } from "./FormControl";
 const YES_NO_OPTIONS_ENG = ["Yes", "No"];
 const YES_NO_OPTIONS_NEP = ["हो", "होइन"];
 
+const SCHEME_TYPE_OPTIONS_ENG = ["Gravity Flow", "Pumping"];
+const SCHEME_TYPE_OPTIONS_NEP = ["गुरुत्वाकर्षण प्रवाह ", "पम्पिङ"];
+
 // Upload field names expected by the backend (multer upload.fields config),
 // matched against the question text.
 const DOCUMENT_FIELDS = [
@@ -72,6 +75,10 @@ function KpiQuestionCard({
   const yesNoOptions =
     language === "nep" ? YES_NO_OPTIONS_NEP : YES_NO_OPTIONS_ENG;
 
+  const isSchemeTypeQuestion = normalizedQuestion.includes("type of scheme");
+  const schemeTypeOptions =
+    language === "nep" ? SCHEME_TYPE_OPTIONS_NEP : SCHEME_TYPE_OPTIONS_ENG;
+
   return (
     <div
       className={`rounded-lg border bg-white p-4 transition-shadow hover:shadow-sm ${
@@ -111,6 +118,11 @@ function KpiQuestionCard({
             options: yesNoOptions,
             placeholder:
               language === "nep" ? "छनोट गरनुहोस्" : "Select Yes or No",
+          })}
+          {...(isSchemeTypeQuestion && {
+            options: schemeTypeOptions,
+            placeholder:
+              language === "nep" ? "छनोट गरनुहोस्" : "Select scheme type",
           })}
           type={isNumberInput ? "number" : undefined}
         />

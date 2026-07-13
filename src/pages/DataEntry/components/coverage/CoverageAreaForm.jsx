@@ -7,6 +7,7 @@ import DrawingSuccess from "./DrawingSuccess";
 import LocationFields from "./LocationFields";
 import { setupCanvasDrawing } from "./drawingUtils";
 import { setupPolygonDrawing } from "./polygonDrawingUtils";
+import { countGeometryPoints } from "../../utils/geoUtils";
 import {
   getMunicipalityBoundaryAsync,
   getDistrictBoundaryAsync,
@@ -230,8 +231,7 @@ export default function CoverageAreaForm({
                   lines: drawnItems.current.length,
                   points: drawnItems.current.reduce((sum, item) => {
                     try {
-                      const coords = item.toGeoJSON().geometry.coordinates;
-                      return sum + coords.length;
+                      return sum + countGeometryPoints(item.toGeoJSON().geometry);
                     } catch {
                       return sum;
                     }
@@ -247,8 +247,7 @@ export default function CoverageAreaForm({
           lines: drawnItems.current.length,
           points: drawnItems.current.reduce((sum, item) => {
             try {
-              const coords = item.toGeoJSON().geometry.coordinates;
-              return sum + coords.length;
+              return sum + countGeometryPoints(item.toGeoJSON().geometry);
             } catch {
               return sum;
             }
@@ -351,23 +350,10 @@ export default function CoverageAreaForm({
       onFieldChange(LOCATION_FIELD_KEYS.coverageArea, normalizedGeoJson);
       const nextDrawingStats = {
         lines: normalizedGeoJson.features.length,
-        points: normalizedGeoJson.features.reduce((total, feature) => {
-          const { type, coordinates } = feature.geometry;
-          if (type === "Polygon") {
-            return total + (coordinates[0]?.length || 0);
-          }
-          if (type === "MultiPolygon") {
-            return (
-              total +
-              coordinates.reduce(
-                (polygonTotal, polygon) =>
-                  polygonTotal + (polygon[0]?.length || 0),
-                0,
-              )
-            );
-          }
-          return total;
-        }, 0),
+        points: normalizedGeoJson.features.reduce(
+          (total, feature) => total + countGeometryPoints(feature.geometry),
+          0,
+        ),
       };
       setSavedDrawingStats(nextDrawingStats);
       setCoverageAreaInfo(

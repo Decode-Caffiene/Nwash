@@ -19,6 +19,34 @@ function getDistance(lat1, lon1, lat2, lon2) {
   return EARTH_RADIUS_KM * c;
 }
 
+export function countRingPoints(ring) {
+  if (!Array.isArray(ring) || ring.length === 0) return 0;
+
+  const first = ring[0];
+  const last = ring[ring.length - 1];
+  const isClosed =
+    ring.length > 1 && first[0] === last[0] && first[1] === last[1];
+
+  return isClosed ? ring.length - 1 : ring.length;
+}
+
+export function countGeometryPoints(geometry) {
+  if (!geometry) return 0;
+
+  if (geometry.type === "Polygon") {
+    return countRingPoints(geometry.coordinates[0]);
+  }
+
+  if (geometry.type === "MultiPolygon") {
+    return geometry.coordinates.reduce(
+      (total, polygonCoords) => total + countRingPoints(polygonCoords[0]),
+      0,
+    );
+  }
+
+  return 0;
+}
+
 function calculatePolygonPerimeter(coordinates) {
   let perimeter = 0;
   const ring = coordinates[0];

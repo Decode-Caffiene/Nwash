@@ -1,6 +1,8 @@
 import { useMemo } from "react";
+import { Loader, Send } from "lucide-react";
 
 import Modal from "../../../../components/common/Modal";
+import Button from "../../../../components/common/Button";
 import { formatNumber } from "../../../../utils/formatNumber";
 
 function flattenValues(values) {
@@ -18,11 +20,42 @@ function flattenValues(values) {
     });
 }
 
-function PreviewModal({ isOpen, onClose, formTitle, values }) {
+function PreviewModal({
+  isOpen,
+  onClose,
+  formTitle,
+  values,
+  onConfirm,
+  submitting = false,
+}) {
   const items = useMemo(() => flattenValues(values), [values]);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={`Preview: ${formTitle}`}>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={`Preview: ${formTitle}`}
+      footer={
+        <>
+          <Button variant="secondary" onClick={onClose} disabled={submitting}>
+            Edit
+          </Button>
+          <Button onClick={onConfirm} disabled={submitting}>
+            {submitting ? (
+              <>
+                <Loader size={16} className="mr-2 animate-spin" />
+                Submitting...
+              </>
+            ) : (
+              <>
+                <Send size={16} className="mr-2" />
+                Confirm & Submit
+              </>
+            )}
+          </Button>
+        </>
+      }
+    >
       <div className="space-y-3">
         {items.length === 0 ? (
           <p className="text-sm text-text-secondary">No data entered yet.</p>

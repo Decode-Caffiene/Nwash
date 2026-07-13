@@ -2,7 +2,7 @@ import { X } from "lucide-react";
 import Button from "./Button";
 import { cn } from "../../utils/helpers";
 
-function Modal({ isOpen, onClose, title, children, className = "" }) {
+function Modal({ isOpen, onClose, title, children, footer, className = "" }) {
   if (!isOpen) return null;
 
   return (
@@ -26,10 +26,12 @@ function Modal({ isOpen, onClose, title, children, className = "" }) {
         <div className="max-h-[calc(90vh-9rem)] overflow-y-auto pr-1">
           {children}
         </div>
-        <div className="mt-6 flex justify-end">
-          <Button variant="secondary" onClick={onClose}>
-            Close
-          </Button>
+        <div className="mt-6 flex justify-end gap-3">
+          {footer || (
+            <Button variant="secondary" onClick={onClose}>
+              Close
+            </Button>
+          )}
         </div>
       </div>
     </div>

@@ -34,6 +34,7 @@ export const dataEntryForms = [
         title: "Kpi 2",
         sectionKey: "adequacy",
         questions: [
+          "Type of Scheme? (Gravity Flow/Pumping)",
           "Total volume of water billed to residential customers?",
           "Total number of population served?",
         ],
@@ -129,6 +130,7 @@ export const dataEntryForms = [
         title: "Kpi 2",
         sectionKey: "adequacy",
         questions: [
+          "Type of Scheme? (Gravity Flow/Pumping)",
           "Total volume of water billed to residential customers?",
           "Total number of population served?",
         ],

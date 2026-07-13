@@ -438,7 +438,7 @@ export default function LocationFields({
                             <button
                               type="button"
                               onClick={() => {
-                                handleFieldChange(key, "");
+                                handleFieldChange(LOCATION_FIELD_KEYS.coverageArea, "");
                               }}
                               className="inline-flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 text-xs font-medium rounded-md bg-red-50 text-red-700 hover:bg-red-100 transition border border-red-200"
                               title="Delete coverage area"
