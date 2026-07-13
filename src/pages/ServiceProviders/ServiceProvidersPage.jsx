@@ -131,12 +131,14 @@ function computeRankings(providers) {
 //   - Of the remaining (both indexes present), "noBP" catches SCP !== "Yes".
 //   - "complete" is what's left: both indexes present AND SCP === "Yes".
 
+function isValidScore(v) {
+  return v != null && v !== "" && Number.isFinite(Number(v));
+}
+
 function getCardStatus(provider) {
   const si = provider.Summary_Index ?? {};
-  const hasOEI = Number.isFinite(Number(si.OEI));
-  const hasSPI = Number.isFinite(Number(si.SPI));
 
-  if (!hasOEI || !hasSPI) return "noScore";
+  if (!isValidScore(si.OEI) || !isValidScore(si.SPI)) return "noScore";
   if (provider.Service_Coverage_Prerequisite !== "Yes") return "noBP";
   return "complete";
 }
@@ -174,28 +176,28 @@ const KPI_GRID = [
   {
     key: "Water_Quality_Score",
     label: "Water Quality",
-    unit: "%",
+
     max: 100,
     icon: Droplets,
   },
   {
     key: "Reliability_Score",
-    label: "Reliability",
-    unit: "hrs",
+    label: "Hours Of Supply",
+    unit: "hrs/day",
     max: 24,
     icon: Shield,
   },
   {
     key: "Adequacy_Score",
     label: "Adequacy Score",
-    unit: "%",
+
     max: 100,
     icon: BarChart3,
   },
   {
     key: "Metering_Ratio_Score",
     label: "Metering Ratio",
-    unit: "%",
+
     max: 100,
     icon: Database,
   },
@@ -203,7 +205,7 @@ const KPI_GRID = [
   {
     key: "NRW_Score",
     label: "NRW Score",
-    unit: "%",
+
     max: 100,
     icon: TrendingDown,
     warn: true,
@@ -211,14 +213,14 @@ const KPI_GRID = [
   {
     key: "Grievance_Score",
     label: "Grievance Score",
-    unit: "%",
+
     max: 100,
     icon: ShieldCheck,
   },
   {
     key: "Service_Coverage_Score",
     label: "Coverage Score",
-    unit: "%",
+
     max: 100,
     icon: Award,
   },
@@ -373,7 +375,7 @@ function exportToPDF(provider, e, rank = null) {
   <div class="header-badges">
     <span class="badge badge-status">${sc.label}</span>
     ${dv(provider.WSUC_ID) ? `<span class="badge badge-blue">MIS: ${provider.WSUC_ID}</span>` : ""}
-    <span class="badge badge-blue">Business Plan: ${provider.Business_Plan ?? "N/A"}</span>
+    <span class="badge badge-blue">Business Plan: ${provider.Service_Coverage_Prerequisite ?? "N/A"}</span>
   </div>
   ${rankHtml}
 </div>
@@ -423,7 +425,7 @@ function exportToPDF(provider, e, rank = null) {
   <div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label">Detailed KPI Assessment</div><div class="section-divider-line"></div></div>
   <div class="kpi-grid">
     ${kv("Water Quality", si.Water_Quality_Score != null ? si.Water_Quality_Score * 100 : null)}
-    ${kv("Reliability", si.Reliability_Score != null ? Number(si.Reliability_Score) * (si.Reliability_Score <= 1 ? 24 : 1) : null, "hrs")}
+    ${kv("Reliability", ms.Hours_of_Supply ?? provider.Hours_of_Supply ?? null, "hrs/day")}
     ${kv("Adequacy", si.Adequacy_Score != null ? si.Adequacy_Score * 100 : null)}
     ${kv("Metering", si.Metering_Ratio_Score != null ? si.Metering_Ratio_Score * 100 : null)}
     ${kv("O&M Score", si.OM_Score != null ? si.OM_Score * 50 : null)}
@@ -513,7 +515,8 @@ function KpiCard({ item, value }) {
 
   let displayVal = null;
   if (isValid) {
-    if (item.unit === "hrs") displayVal = `${raw.toFixed(0)}`;
+    if (item.unit === "hrs" || item.unit === "hrs/day")
+      displayVal = `${raw.toFixed(0)}`;
     else if (item.max === 2) displayVal = raw.toFixed(2);
     else displayVal = raw.toFixed(1);
   }
@@ -606,12 +609,9 @@ function ProviderCard({ provider, onClick }) {
   const oei = fmtScore(si.OEI, 0);
   const hhServed = fmtNum(ms.HH_Served ?? provider.HH_Served);
   const totalHH = fmtNum(ms.Total_HH ?? provider.Total_HH);
-  const hours =
-    ms.Hours_of_Supply ??
-    provider.hours_of_supply ??
-    provider.Hours_of_Supply ??
-    si.Reliability_Score;
-  const hoursDisplay = hours != null ? `${Number(hours).toFixed(0)}h` : null;
+  const hours = ms.Hours_of_Supply ?? provider.Hours_of_Supply ?? null;
+  const hoursDisplay =
+    hours != null ? `${Number(hours).toFixed(0)} hrs/day` : null;
 
   const province = dv(location.Province_Name);
   const district = dv(location.District_Name);
@@ -741,8 +741,6 @@ function ProviderDetailModal({ provider, rankings, onClose }) {
   const location = provider.Location ?? {};
   const ms = provider.Master_Sheet ?? {};
   const si = provider.Summary_Index ?? {};
-  const hasBP = provider.Business_Plan === "Yes";
-
   const rank = rankings?.get(provider._id ?? provider.WSUC_ID) ?? null;
 
   const spiPct = toPercent(si.SPI, 100);
@@ -1023,7 +1021,15 @@ function ProviderDetailModal({ provider, rankings, onClose }) {
             <SectionDivider label="Detailed KPI Assessment" />
             <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
               {KPI_GRID.map((item) => (
-                <KpiCard key={item.key} item={item} value={si[item.key]} />
+                <KpiCard
+                  key={item.key}
+                  item={item}
+                  value={
+                    item.key === "Reliability_Score"
+                      ? (ms.Hours_of_Supply ?? provider.Hours_of_Supply ?? null)
+                      : si[item.key]
+                  }
+                />
               ))}
             </div>
           </div>
