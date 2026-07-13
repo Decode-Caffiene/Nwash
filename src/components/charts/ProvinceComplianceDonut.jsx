@@ -42,10 +42,7 @@ const CustomTooltip = ({ active, payload }) => {
 };
 
 export default function ProvinceComplianceDonut({ data }) {
-  const total = useMemo(
-    () => data.reduce((s, d) => s + d.projects, 0),
-    [data],
-  );
+  const total = useMemo(() => data.reduce((s, d) => s + d.projects, 0), [data]);
 
   const chartData = useMemo(
     () => data.map((d) => ({ ...d, name: d.province, value: d.projects })),
@@ -70,8 +67,7 @@ export default function ProvinceComplianceDonut({ data }) {
               outerRadius={85}
               innerRadius={40}
               label={({ value }) => {
-                const pct =
-                  total > 0 ? ((value / total) * 100).toFixed(0) : 0;
+                const pct = total > 0 ? ((value / total) * 100).toFixed(0) : 0;
                 return `${pct}%`;
               }}
               labelLine

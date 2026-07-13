@@ -13,7 +13,7 @@ const geodesicArea = (latlngs) => {
     const p2 = latlngs[j];
     area += rad(p2.lng - p1.lng) * (2 + Math.sin(rad(p1.lat)) + Math.sin(rad(p2.lat)));
   }
-  return (area * WGS84_RADIUS * WGS84_RADIUS) / 2;
+  return Math.abs((area * WGS84_RADIUS * WGS84_RADIUS) / 2);
 };
 
 export const setupPolygonDrawing = (
