@@ -1,7 +1,8 @@
 
 import { useMemo, useState, useEffect, useRef } from "react";
 
-import { Send, Loader, AlertCircle, CheckCircle } from "lucide-react";
+import { Send, AlertCircle } from "lucide-react";
+import { toast } from "react-toastify";
 
 import Button from "../../components/common/Button";
 import DataEntryHeader from "./components/common/DataEntryHeader";
@@ -184,9 +185,12 @@ function DataEntryPage() {
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleOpenPreview = (event) => {
     event.preventDefault();
+    setIsPreviewOpen(true);
+  };
 
+  const handleConfirmSubmit = async () => {
     setSubmitting(true);
     setSubmitStatus(null);
     setSubmitMessage("");
@@ -198,33 +202,28 @@ function DataEntryPage() {
 
       const response = await saveServiceProviderForm(payload, currentValues);
 
-      setSubmitStatus("success");
-      setSubmitMessage(
-        response?.message || "Form submitted successfully!"
-      );
+      setIsPreviewOpen(false);
+      toast.success(response?.message || "Data sent successfully!");
 
       // Reset form after success
-      setTimeout(() => {
-        setFormValues({});
-        if (formRef.current) {
-          formRef.current.reset();
-        }
-        setSubmitStatus(null);
-        setSubmitMessage("");
-      }, 2000);
+      setFormValues({});
+      if (formRef.current) {
+        formRef.current.reset();
+      }
     } catch (error) {
       console.error("=== FORM SUBMIT ERROR ===", {
         status: error?.response?.status,
         data: error?.response?.data,
         message: error?.message,
       });
-      setSubmitStatus("error");
-      setSubmitMessage(
+      const message =
         error?.response?.data?.message ||
         error?.response?.data?.error ||
         error?.message ||
-        "Failed to submit form. Please try again."
-      );
+        "Failed to submit form. Please try again.";
+      setSubmitStatus("error");
+      setSubmitMessage(message);
+      toast.error(message);
     } finally {
       setSubmitting(false);
     }
@@ -242,10 +241,6 @@ function DataEntryPage() {
     setSubmitMessage("");
   }, []);
 
-  const openPreview = () => {
-    setIsPreviewOpen(true);
-  };
-
   const handleDrawStart = () => {
     setSubmitStatus(null);
     setSubmitMessage("");
@@ -261,43 +256,17 @@ function DataEntryPage() {
         setLanguage={setLanguage}
       />
 
-      {submitStatus && (
-        <div
-          className={`rounded-lg p-4 flex items-start gap-3 ${
-            submitStatus === "success"
-              ? "bg-emerald-50 border border-emerald-200"
-              : "bg-red-50 border border-red-200"
-          }`}
-        >
-          {submitStatus === "success" ? (
-            <CheckCircle className="text-emerald-600 flex-shrink-0 mt-0.5" size={20} />
-          ) : (
-            <AlertCircle className="text-red-600 flex-shrink-0 mt-0.5" size={20} />
-          )}
+      {submitStatus === "error" && (
+        <div className="rounded-lg p-4 flex items-start gap-3 bg-red-50 border border-red-200">
+          <AlertCircle className="text-red-600 flex-shrink-0 mt-0.5" size={20} />
           <div>
-            <p
-              className={`font-semibold ${
-                submitStatus === "success"
-                  ? "text-emerald-900"
-                  : "text-red-900"
-              }`}
-            >
-              {submitStatus === "success" ? "Success" : "Error"}
-            </p>
-            <p
-              className={`text-sm mt-1 ${
-                submitStatus === "success"
-                  ? "text-emerald-800"
-                  : "text-red-800"
-              }`}
-            >
-              {submitMessage}
-            </p>
+            <p className="font-semibold text-red-900">Error</p>
+            <p className="text-sm mt-1 text-red-800">{submitMessage}</p>
           </div>
         </div>
       )}
 
-      <form ref={formRef} onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-6">
+      <form ref={formRef} onSubmit={handleOpenPreview} encType="multipart/form-data" className="space-y-6">
         {activeForm.useMapSection ? (
           <CoverageAreaForm
             title={activeForm.detailsTitle}
@@ -328,27 +297,9 @@ function DataEntryPage() {
         />
 
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-          <Button
-            variant="secondary"
-            type="button"
-            onClick={openPreview}
-            disabled={submitting}
-          >
-            Preview
-          </Button>
-
           <Button type="submit" disabled={submitting}>
-            {submitting ? (
-              <>
-                <Loader size={16} className="mr-2 animate-spin" />
-                Submitting...
-              </>
-            ) : (
-              <>
-                <Send size={16} className="mr-2" />
-                Submit Form
-              </>
-            )}
+            <Send size={16} className="mr-2" />
+            Submit Form
           </Button>
         </div>
       </form>
@@ -358,6 +309,8 @@ function DataEntryPage() {
         onClose={() => setIsPreviewOpen(false)}
         formTitle={activeForm.title}
         values={currentValues}
+        onConfirm={handleConfirmSubmit}
+        submitting={submitting}
       />
     </div>
   );

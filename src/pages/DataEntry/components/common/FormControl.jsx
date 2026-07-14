@@ -89,8 +89,9 @@ function FormControl({
   return (
     <input
       id={id}
-      type={type}
-      min={type === "number" ? "0" : undefined}
+      type={type === "float" ? "number" : type}
+      min={type === "number" || type === "float" ? "0" : undefined}
+      step={type === "float" ? "any" : undefined}
       value={value}
       onChange={(event) => onChange(event.target.value)}
       className={inputClass}

@@ -1,4 +1,5 @@
 import L from "leaflet";
+import { countGeometryPoints } from "../../utils/geoUtils";
 
 const WGS84_RADIUS = 6378137;
 
@@ -223,8 +224,7 @@ export const setupPolygonDrawing = (
       lines: drawnItems.current.length,
       points: drawnItems.current.reduce((sum, item) => {
         try {
-          const coords = item.toGeoJSON().geometry.coordinates;
-          return sum + (Array.isArray(coords[0]) ? coords.length : 0);
+          return sum + countGeometryPoints(item.toGeoJSON().geometry);
         } catch {
           return sum;
         }
