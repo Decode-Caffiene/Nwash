@@ -5,7 +5,7 @@ import { getProviderSearchText, normalizeQuery } from "./overviewSearchUtils";
 
 import useFetch from "../../hooks/useFetch";
 import { getServiceProviders } from "../../api/serviceProviderApi";
-import { getFormData } from "../../api/formApi";
+// import { getFormData } from "../../api/formApi";
 import { PARTNERS } from "../DevelopmentPartners/data/partnersData";
 
 import StatCard from "../../components/overview-components/StatCard";
@@ -14,6 +14,7 @@ import RecentActivity from "../../components/overview-components/RecentActivity"
 import ErrorMessage from "../../components/common/ErrorMessage";
 import ComplianceChart from "../../components/charts/ComplianceChart";
 import ProvinceComplianceDonut from "../../components/charts/ProvinceComplianceDonut";
+import TopHouseholdsChart from "../../components/charts/TopHouseholdsChart";
 
 // Groups projects that have both valid OEI and SPI by province.
 // Returns data sorted descending by project count, ready for a donut chart.
@@ -56,49 +57,49 @@ export default function OverviewPage() {
   const list = Array.isArray(data) ? data : [];
   console.log("data", data);
   // Fetch real form submissions for Recent Activity
-  const { data: submissionsRaw } = useFetch(getFormData, []);
-  const recentActivities = useMemo(() => {
-    const raw = Array.isArray(submissionsRaw)
-      ? submissionsRaw
-      : Array.isArray(submissionsRaw?.message)
-        ? submissionsRaw.message
-        : [];
+  // const { data: submissionsRaw } = useFetch(getFormData, []);
+  // const recentActivities = useMemo(() => {
+  //   const raw = Array.isArray(submissionsRaw)
+  //     ? submissionsRaw
+  //     : Array.isArray(submissionsRaw?.message)
+  //       ? submissionsRaw.message
+  //       : [];
 
-    const statusColor = (status) => {
-      const s = (status ?? "").toLowerCase();
-      if (s === "accepted") return "bg-green-500";
-      if (s === "rejected") return "bg-red-500";
-      if (s === "pending") return "bg-amber-500";
-      return "bg-blue-500";
-    };
+  //   const statusColor = (status) => {
+  //     const s = (status ?? "").toLowerCase();
+  //     if (s === "accepted") return "bg-green-500";
+  //     if (s === "rejected") return "bg-red-500";
+  //     if (s === "pending") return "bg-amber-500";
+  //     return "bg-blue-500";
+  //   };
 
-    const formatTime = (ts) => {
-      if (!ts) return "";
-      const diff = Date.now() - new Date(ts).getTime();
-      const mins = Math.floor(diff / 60000);
-      if (mins < 60) return `${mins}m ago`;
-      const hrs = Math.floor(mins / 60);
-      if (hrs < 24) return `${hrs}h ago`;
-      return `${Math.floor(hrs / 24)}d ago`;
-    };
+  //   const formatTime = (ts) => {
+  //     if (!ts) return "";
+  //     const diff = Date.now() - new Date(ts).getTime();
+  //     const mins = Math.floor(diff / 60000);
+  //     if (mins < 60) return `${mins}m ago`;
+  //     const hrs = Math.floor(mins / 60);
+  //     if (hrs < 24) return `${hrs}h ago`;
+  //     return `${Math.floor(hrs / 24)}d ago`;
+  //   };
 
-    const sorted = raw.slice().sort((a, b) => {
-      if (!a.createdAt && !b.createdAt) return 0;
-      if (!a.createdAt) return 1;
-      if (!b.createdAt) return -1;
-      return new Date(b.createdAt) - new Date(a.createdAt);
-    });
+  //   const sorted = raw.slice().sort((a, b) => {
+  //     if (!a.createdAt && !b.createdAt) return 0;
+  //     if (!a.createdAt) return 1;
+  //     if (!b.createdAt) return -1;
+  //     return new Date(b.createdAt) - new Date(a.createdAt);
+  //   });
 
-    return sorted.map((item) => ({
-      id: item._id,
-      title: item.WSUC_Name ?? item.Operator_Info?.Name ?? "Unnamed Submission",
-      desc: [item.Operator_Info?.Name, item.Location?.District_Name]
-        .filter(Boolean)
-        .join(" · "),
-      time: formatTime(item.createdAt),
-      color: statusColor(item.Status),
-    }));
-  }, [submissionsRaw]);
+  //   return sorted.map((item) => ({
+  //     id: item._id,
+  //     title: item.WSUC_Name ?? item.Operator_Info?.Name ?? "Unnamed Submission",
+  //     desc: [item.Operator_Info?.Name, item.Location?.District_Name]
+  //       .filter(Boolean)
+  //       .join(" · "),
+  //     time: formatTime(item.createdAt),
+  //     color: statusColor(item.Status),
+  //   }));
+  // }, [submissionsRaw]);
 
   const q = useMemo(() => {
     try {
@@ -233,6 +234,18 @@ export default function OverviewPage() {
     };
   }, [filteredList]);
 
+  // Top 5 service providers ranked by HH_Served
+  const topHHProviders = useMemo(() => {
+    return filteredList
+      .map((p) => ({
+        name: p.WSUC_Name || "Unknown",
+        value: Number(p.Master_Sheet?.HH_Served),
+      }))
+      .filter(({ value }) => Number.isFinite(value) && value > 0)
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 5);
+  }, [filteredList]);
+
   // Province-wise distribution for donut chart — computed once per list change
   const provinceComplianceData = useMemo(
     () => buildProvinceComplianceData(list),
@@ -339,7 +352,9 @@ export default function OverviewPage() {
             <ProvinceComplianceDonut data={provinceComplianceData} />
           </div>
 
-          <RecentActivity activities={recentActivities} />
+          <TopHouseholdsChart data={topHHProviders} />
+          {/* 
+          <RecentActivity activities={recentActivities} /> */}
         </div>
       </div>
     </div>
