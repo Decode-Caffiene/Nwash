@@ -40,12 +40,15 @@ export default function GISMapPage() {
   const [mapType, setMapType] = useState("default");
   const [showDensity, setShowDensity] = useState(false);
 
-  const { wardFeatures, wardLoading, wardError } = useWardData({
+  const { wardFeatures, wardLoading, wardError, wardKey } = useWardData({
     selectedProject,
     projectLocations,
   });
 
   const handleSelectProject = useCallback((project) => {
+    console.log("====================================");
+    console.log("CLICK", project._id, project.Project_Name);
+    console.log("====================================");
     setSelectedProject(project);
     setMuniZoomFeatures([]);
   }, []);
@@ -55,7 +58,11 @@ export default function GISMapPage() {
     const loc = projectLocations[selectedProject._id];
     return [loc?.lat ?? NEPAL_CENTER[0], loc?.lng ?? NEPAL_CENTER[1]];
   }, [projectLocations, selectedProject]);
+  console.log("Rendering wardFeatures");
 
+  console.log(wardFeatures);
+
+  console.log(wardFeatures[0]?.geometry);
   return (
     <div
       className="relative -mx-6 -my-6 overflow-hidden"
@@ -73,6 +80,7 @@ export default function GISMapPage() {
             selectedProject={selectedProject}
             showProjects={showProjects}
             wardFeatures={wardFeatures}
+            wardKey={wardKey}
             muniZoomFeatures={muniZoomFeatures}
             selectedCentroid={selectedCentroid}
             onSelectProject={handleSelectProject}

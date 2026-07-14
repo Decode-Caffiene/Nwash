@@ -290,6 +290,7 @@ export default function MapCanvas({
   selectedProject,
   showProjects,
   wardFeatures,
+  wardKey,
   muniZoomFeatures,
   selectedCentroid,
   onSelectProject,
@@ -325,7 +326,7 @@ export default function MapCanvas({
 
       {wardFeatures.length > 0 && (
         <GeoJSON
-          key={`wards-${selectedProject?._id}-${wardFeatures.length}`}
+          key={`wards-${wardKey}`}
           data={{ type: "FeatureCollection", features: wardFeatures }}
           style={wardStyle}
           onEachFeature={onEachWard}

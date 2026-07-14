@@ -14,26 +14,52 @@ import {
 // Fetches GeoJSON ward boundaries for the currently selected project.
 //
 // Re-runs whenever selectedProject or projectLocations changes.
-// Exposes clearWards so the parent can reset when the user dismisses a project.
+// A `cancelled` flag inside each effect run prevents stale filterWards
+// responses (including the extra call React Strict Mode triggers on mount)
+// from overwriting wardFeatures after the user has switched projects.
 //
-// Returns { wardFeatures, wardLoading, wardError, clearWards }
+// wardKey increments only when real features are committed, so MapCanvas
+// uses it as the <GeoJSON> key — the layer remounts only when the data
+// actually changes, not on every intermediate render.
 export function useWardData({ selectedProject, projectLocations }) {
   const [wardFeatures, setWardFeatures] = useState([]);
   const [wardLoading, setWardLoading] = useState(false);
   const [wardError, setWardError] = useState("");
+  const [wardKey, setWardKey] = useState(0);
 
   const clearWards = useCallback(() => setWardFeatures([]), []);
-  console.log("selected project", selectedProject);
-  const fetchWardData = useCallback(
-    async (project) => {
-      if (!project) {
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const run = async () => {
+      if (!selectedProject) {
         setWardFeatures([]);
         return;
       }
 
-      const loc = projectLocations[project._id];
+      // New project: geometry is already the service area — render it directly,
+      // skip the backend ward request entirely.
+      const hasPolygon =
+        selectedProject.geometry?.type === "Polygon" &&
+        selectedProject.geometry.coordinates?.[0]?.length >= 3;
+
+      if (hasPolygon) {
+        setWardFeatures([
+          {
+            type: "Feature",
+            geometry: selectedProject.geometry,
+            properties: { WARD_NO: 0 },
+          },
+        ]);
+        setWardKey((k) => k + 1);
+        return;
+      }
+
+      const loc = projectLocations[selectedProject._id];
       const rawDistrict =
-        loc?.district ?? cleanDistrict(project.Location?.District_Name);
+        loc?.district ??
+        cleanDistrict(selectedProject.Location?.District_Name);
 
       // 8 districts have different spellings between the DB and the wards
       // GeoJSON (e.g. "Makwanpur" in the DB vs "MAKAWANPUR" in the dataset).
@@ -42,7 +68,7 @@ export function useWardData({ selectedProject, projectLocations }) {
       // cleanMunicipality trims and applies MUNI_CORRECTIONS, the same path
       // used by resolveMuni() for marker placement — keeps both in sync.
       const municipality = cleanMunicipality(
-        project.Location?.Municipality_Name ?? "",
+        selectedProject.Location?.Municipality_Name ?? "",
       );
 
       if (!municipality || !district) {
@@ -50,10 +76,10 @@ export function useWardData({ selectedProject, projectLocations }) {
         return;
       }
 
-      const wards = parseWardList(project.Location?.Wards_Covered);
+      const wards = parseWardList(selectedProject.Location?.Wards_Covered);
       const province =
         PROVINCE_NAME_TO_NO[
-          normalizeText(project.Location?.Province_Name ?? "")
+          normalizeText(selectedProject.Location?.Province_Name ?? "")
         ] ?? null;
 
       setWardLoading(true);
@@ -68,22 +94,27 @@ export function useWardData({ selectedProject, projectLocations }) {
           ...(province != null && { province }),
         });
 
-        console.log("data feature leangth", data.features.length);
-        setWardFeatures(data?.features || []);
+        if (!cancelled) {
+          setWardFeatures(data?.features || []);
+          setWardKey((k) => k + 1);
+        }
       } catch (err) {
-        setWardError(err.message);
-        setWardFeatures([]);
+        if (!cancelled) {
+          setWardError(err.message);
+          setWardFeatures([]);
+        }
       } finally {
-        setWardLoading(false);
+        if (!cancelled) {
+          setWardLoading(false);
+        }
       }
-    },
+    };
 
-    [projectLocations],
-  );
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedProject, projectLocations]);
 
-  useEffect(() => {
-    fetchWardData(selectedProject);
-  }, [selectedProject, fetchWardData]);
-
-  return { wardFeatures, wardLoading, wardError, clearWards };
+  return { wardFeatures, wardLoading, wardError, clearWards, wardKey };
 }
