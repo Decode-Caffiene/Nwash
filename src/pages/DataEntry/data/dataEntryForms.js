@@ -35,7 +35,7 @@ export const dataEntryForms = [
         sectionKey: "adequacy",
         questions: [
           "Type of Scheme? (Gravity Flow/Pumping)",
-          "Total volume of water billed to residential customers?",
+          "Total volume of water billed to residential customers per day?",
           "Total number of population served?",
         ],
       },
@@ -131,7 +131,7 @@ export const dataEntryForms = [
         sectionKey: "adequacy",
         questions: [
           "Type of Scheme? (Gravity Flow/Pumping)",
-          "Total volume of water billed to residential customers?",
+          "Total volume of water billed to residential customers per day?",
           "Total number of population served?",
         ],
       },
