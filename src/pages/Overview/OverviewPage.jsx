@@ -195,14 +195,14 @@ export default function OverviewPage() {
       return sum + (Number(households) || 0);
     }, 0);
   }, [filteredList]);
-  console.log("Providers with valid OEI/SPI:", chartDataForZones.length);
+ 
 
   const totalInChart = complianceData.reduce(
     (sum, item) => sum + item.value,
     0,
   );
 
-  console.log("Total represented in chart:", totalInChart);
+ 
   // 3. District Data - calculated from provider locations
   const { districtData, excludedCount } = useMemo(() => {
     const districtMap = {};

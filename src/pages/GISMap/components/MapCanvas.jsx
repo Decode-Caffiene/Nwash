@@ -16,7 +16,7 @@ import {
   defaultMarkerIcon,
   selectedMarkerIcon,
 } from "../utils/mapConstants";
-import { parseWardList } from "../utils/geoHelpers";
+import { getProjectType, parseWardList } from "../utils/geoHelpers";
 
 import MuniBoundsController from "./controllers/MuniBoundsController";
 import ProjectFlyController from "./controllers/ProjectFlyController";
@@ -110,6 +110,7 @@ function ScoreCell({ label, pct }) {
 function ProjectPopup({ project }) {
   const summary = project.Summary_Index || {};
   const location = project.Location || {};
+  const type = getProjectType(project);
   const wardCount = parseWardList(location.Wards_Covered).length;
 
   const oeiPct = summary.OEI != null ? Number(summary.OEI) : null;
@@ -201,20 +202,22 @@ function ProjectPopup({ project }) {
           </div>
         </div>
 
-        {/* Ward coverage */}
-        <p
-          style={{
-            margin: "10px 0 0",
-            paddingTop: 8,
-            borderTop: "1px solid #f1f5f9",
-            fontSize: 11,
-            color: "#64748b",
-          }}
-        >
-          {wardCount > 0
-            ? `Covers ${wardCount} ward${wardCount !== 1 ? "s" : ""}`
-            : "Ward coverage not recorded"}
-        </p>
+        {/* Ward coverage — hidden for form projects, which use their own polygon */}
+        {type !== "FORM" && (
+          <p
+            style={{
+              margin: "10px 0 0",
+              paddingTop: 8,
+              borderTop: "1px solid #f1f5f9",
+              fontSize: 11,
+              color: "#64748b",
+            }}
+          >
+            {wardCount > 0
+              ? `Covers ${wardCount} ward${wardCount !== 1 ? "s" : ""}`
+              : "Ward coverage not recorded"}
+          </p>
+        )}
       </div>
     </div>
   );
@@ -287,7 +290,6 @@ export default function MapCanvas({
   projects,
   projectLocations,
   selectedProject,
-  showProjects,
   wardFeatures,
   wardKey,
   muniZoomFeatures,
@@ -340,31 +342,29 @@ export default function MapCanvas({
         />
       )}
 
-      {showProjects && (
-        <MarkerClusterGroup
-          disableClusteringAtZoom={12}
-          showCoverageOnHover={false}
-          maxClusterRadius={60}
-        >
-          {projects.map((project) => {
-            const { lat, lng } = projectLocations[project._id] || {};
-            const isSelected = selectedProject?._id === project._id;
-            return (
-              <Marker
-                key={project._id}
-                position={[lat ?? NEPAL_CENTER[0], lng ?? NEPAL_CENTER[1]]}
-                icon={isSelected ? selectedMarkerIcon : defaultMarkerIcon}
-                zIndexOffset={isSelected ? 1000 : 0}
-                eventHandlers={{ click: () => onSelectProject(project) }}
-              >
-                <Popup>
-                  <ProjectPopup project={project} />
-                </Popup>
-              </Marker>
-            );
-          })}
-        </MarkerClusterGroup>
-      )}
+      <MarkerClusterGroup
+        disableClusteringAtZoom={12}
+        showCoverageOnHover={false}
+        maxClusterRadius={60}
+      >
+        {projects.map((project) => {
+          const { lat, lng } = projectLocations[project._id] || {};
+          const isSelected = selectedProject?._id === project._id;
+          return (
+            <Marker
+              key={project._id}
+              position={[lat ?? NEPAL_CENTER[0], lng ?? NEPAL_CENTER[1]]}
+              icon={isSelected ? selectedMarkerIcon : defaultMarkerIcon}
+              zIndexOffset={isSelected ? 1000 : 0}
+              eventHandlers={{ click: () => onSelectProject(project) }}
+            >
+              <Popup>
+                <ProjectPopup project={project} />
+              </Popup>
+            </Marker>
+          );
+        })}
+      </MarkerClusterGroup>
     </MapContainer>
   );
 }
