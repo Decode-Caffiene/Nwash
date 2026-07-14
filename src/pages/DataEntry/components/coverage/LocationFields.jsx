@@ -313,10 +313,10 @@ export default function LocationFields({
         <div>
           <h3 className="mb-3 sm:mb-4 flex items-center gap-2 text-xs sm:text-sm font-semibold text-text-primary">
             <div className="h-1 w-1 shrink-0 rounded-full bg-brand-primary" />
-            <span>Contact Information</span>
+            <span>Contact Information of Focal Person</span>
           </h3>
           <div className="grid gap-3 sm:gap-4 rounded-lg sm:rounded-xl border border-surface-border bg-white/50 p-3 sm:p-5 grid-cols-1 sm:grid-cols-2">
-            {fields.filter(f => !['Coverage Area', 'Province Name', 'District', 'Municipality Name', 'GPS Latitude', 'GPS Longitude'].includes(f)).map((field) => {
+            {fields.filter(f => !['Coverage Area', 'Province Name', 'District', 'Municipality Name', 'GPS Latitude', 'GPS Longitude', 'Name of Service Provider'].includes(f)).map((field) => {
               const key = `spatial.${slugify(field)}`;
               return (
                 <label key={key} htmlFor={`coverage-${key}`} className="block group">
@@ -351,7 +351,7 @@ export default function LocationFields({
             <div className="grid gap-3 sm:gap-4 rounded-lg sm:rounded-xl border border-surface-border bg-white/50 p-3 sm:p-5 grid-cols-1 sm:grid-cols-2">
               {fields.map((field) => {
                 const key = `spatial.${slugify(field)}`;
-                const isLocationField = ['Province Name', 'District', 'Municipality Name'].includes(field);
+                const isLocationField = ['Name of Service Provider', 'Province Name', 'District', 'Municipality Name'].includes(field);
                 const isCoverageAreaField = field.toLowerCase().includes("coverage");
 
                 if (isCoverageAreaField || !isLocationField) {
