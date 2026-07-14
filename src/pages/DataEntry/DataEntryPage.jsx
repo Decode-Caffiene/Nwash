@@ -8,7 +8,6 @@ import Button from "../../components/common/Button";
 import DataEntryHeader from "./components/common/DataEntryHeader";
 import KpiFormSection from "./components/common/KpiFormSection";
 import PreviewModal from "./components/common/PreviewModal";
-import ServiceProviderSection from "./components/service-provider/ServiceProviderSection";
 import CoverageAreaForm from "./components/coverage/CoverageAreaForm";
 import { dataEntryForms } from "./data/dataEntryForms";
 import { saveServiceProviderForm } from "../../api/serviceProviderApi";
@@ -267,27 +266,15 @@ function DataEntryPage() {
       )}
 
       <form ref={formRef} onSubmit={handleOpenPreview} encType="multipart/form-data" className="space-y-6">
-        {activeForm.useMapSection ? (
-          <CoverageAreaForm
-            title={activeForm.detailsTitle}
-            subtitle={activeForm.detailsSubtitle}
-            fields={activeForm.detailFields}
-            values={currentValues}
-            onFieldChange={updateField}
-            language={language}
-            onDrawStart={handleDrawStart}
-          />
-
-        ) : (
-          <ServiceProviderSection
-            title={activeForm.detailsTitle}
-            subtitle={activeForm.detailsSubtitle}
-            fields={activeForm.detailFields}
-            values={currentValues}
-            onFieldChange={updateField}
-            language={language}
-          />
-        )}
+        <CoverageAreaForm
+          title={activeForm.detailsTitle}
+          subtitle={activeForm.detailsSubtitle}
+          fields={activeForm.detailFields}
+          values={currentValues}
+          onFieldChange={updateField}
+          language={language}
+          onDrawStart={handleDrawStart}
+        />
 
         <KpiFormSection
           form={activeForm}
