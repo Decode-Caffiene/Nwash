@@ -13,7 +13,7 @@ import {
 const TEAL = "#0d9488";
 
 // Opacity steps give a visual ranking cue (brightest = #1).
-const BAR_OPACITIES = [1, 0.82, 0.66, 0.52, 0.40];
+const BAR_OPACITIES = [1, 0.82, 0.66, 0.52, 0.4];
 
 function HHTooltip({ active, payload }) {
   if (!active || !payload?.length) return null;
@@ -82,7 +82,10 @@ export default function TopHouseholdsChart({ data }) {
               cursor={{ fill: "rgba(13,148,136,0.07)" }}
               content={<HHTooltip />}
             />
-            <Bar dataKey="value" barSize={26} radius={[0, 4, 4, 0]}
+            <Bar
+              dataKey="value"
+              barSize={26}
+              radius={[0, 4, 4, 0]}
               label={{
                 position: "right",
                 formatter: (v) => Number(v).toLocaleString(),

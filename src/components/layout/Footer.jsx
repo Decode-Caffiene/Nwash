@@ -29,7 +29,7 @@ const supporters = [
 
 const contactItems = [
   { href: "tel:+977-1-4311732", icon: Phone, label: "+977-1-4311732" },
-  { href: "tel:+977-9851431060.", icon: Phone, label: "+977-9851431060." },
+  { href: "tel:+977-9851431060.", icon: Phone, label: "+977-9851431060" },
   {
     href: "mailto:info@nwash.gov.np",
     icon: Mail,

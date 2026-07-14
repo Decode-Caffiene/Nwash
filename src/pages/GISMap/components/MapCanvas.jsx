@@ -112,7 +112,7 @@ function ProjectPopup({ project }) {
   const location = project.Location || {};
   const wardCount = parseWardList(location.Wards_Covered).length;
 
-  const omPct = summary.OM_Score != null ? toPercent(summary.OM_Score) : null;
+  const oeiPct = summary.OEI != null ? Number(summary.OEI) : null;
   const spiPct = summary.SPI != null ? Number(summary.SPI) : null;
   const relPct =
     summary.Reliability_Score != null
@@ -192,13 +192,12 @@ function ProjectPopup({ project }) {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr 1fr 1fr",
+              gridTemplateColumns: "1fr 1fr",
               gap: 8,
             }}
           >
-            <ScoreCell label="OM Score" pct={omPct} />
-            <ScoreCell label="SPI" pct={spiPct} />
-            <ScoreCell label="Reliability" pct={relPct} />
+            <ScoreCell label="OEI " pct={oeiPct} />
+            <ScoreCell label="SPI " pct={spiPct} />
           </div>
         </div>
 
