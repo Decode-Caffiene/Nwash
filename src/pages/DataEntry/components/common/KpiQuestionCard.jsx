@@ -59,6 +59,9 @@ function KpiQuestionCard({
   const isNumberInput =
     sectionKey === "non_revenue_water" && (index === 1 || index === 2);
 
+  const isFloatInput =
+    sectionKey === "operating_ratio" && (index === 1 || index === 2);
+
   const isYesNoQuestion =
     question.includes("(Y/N)") ||
     question.includes("(Yes/No)") ||
@@ -124,7 +127,7 @@ function KpiQuestionCard({
             placeholder:
               language === "nep" ? "छनोट गरनुहोस्" : "Select scheme type",
           })}
-          type={isNumberInput ? "number" : undefined}
+          type={isNumberInput ? "number" : isFloatInput ? "float" : undefined}
         />
       </label>
 
