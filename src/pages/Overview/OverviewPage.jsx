@@ -26,7 +26,18 @@ function buildProvinceComplianceData(projects) {
     const spi = Number(si.SPI);
     if (!Number.isFinite(oei) || !Number.isFinite(spi)) continue;
 
-    const province = p.Location?.Province_Name?.trim();
+    const rawProvince = p.Location?.Province_Name;
+
+    if (typeof rawProvince !== "string") {
+      console.error(
+        "Non-string Province_Name:",
+        rawProvince,
+        typeof rawProvince,
+        p,
+      );
+    }
+
+    const province = String(rawProvince ?? "").trim();
     if (!province) continue;
 
     if (!groups[province])
