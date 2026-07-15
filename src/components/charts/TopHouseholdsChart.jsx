@@ -46,9 +46,6 @@ export default function TopHouseholdsChart({ data }) {
       <h3 className="text-base font-bold text-slate-900">
         Top 5 Service Providers by Households Served
       </h3>
-      <p className="text-xs text-slate-500 mb-6">
-        Ranked by Master Sheet HH Served — top five WSUCs
-      </p>
 
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">

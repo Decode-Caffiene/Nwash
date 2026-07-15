@@ -1,24 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   AlertCircle,
-  Briefcase,
-  Building2,
   Check,
   CheckCircle,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
-  ChevronUp,
   Clock,
   Database,
   FileText,
-  Globe,
-  Mail,
   MapPin,
   MessageSquare,
   RefreshCw,
   Search,
-  User,
   X,
   XCircle,
 } from "lucide-react";
@@ -27,6 +20,7 @@ import {
   getFormData,
   rejectFormSubmission,
 } from "../../api/formApi";
+import SubmissionDetailModal from "./components/SubmissionDetailModal";
 
 // ── Status config ─────────────────────────────────────────────────────────────
 
@@ -309,20 +303,6 @@ function Initials({ name }) {
   );
 }
 
-function DetailField({ icon: Icon, label, value }) {
-  return (
-    <div className="flex items-start gap-2.5 text-sm">
-      <Icon size={13} className="mt-0.5 flex-shrink-0 text-slate-400" />
-      <div className="min-w-0">
-        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
-          {label}
-        </p>
-        <p className="mt-0.5 break-all text-text-primary">{value || "—"}</p>
-      </div>
-    </div>
-  );
-}
-
 function SkeletonRow() {
   return (
     <div className="flex animate-pulse items-center gap-4 border-b border-surface-border px-6 py-5">
@@ -348,10 +328,10 @@ export default function ViewUploadedDataPage() {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [actionLoading, setActionLoading] = useState({});
-  const [expandedId, setExpandedId] = useState(null);
   const [activeTab, setActiveTab] = useState("all");
   const [toast, setToast] = useState(null);
   const [confirmModal, setConfirmModal] = useState(null); // { id, action, wsucName } | null
+  const [detailRecord, setDetailRecord] = useState(null); // submission | null
   const [page, setPage] = useState(1);
   const toastTimer = useRef(null);
 
@@ -389,10 +369,9 @@ export default function ViewUploadedDataPage() {
     fetchData();
   }, [fetchData]);
 
-  // Reset to page 1 and collapse any open row when the filter changes
+  // Reset to page 1 when the filter changes
   useEffect(() => {
     setPage(1);
-    setExpandedId(null);
   }, [search, activeTab]);
 
   // Step 1: clicking Accept/Reject opens the confirmation modal
@@ -651,7 +630,6 @@ export default function ViewUploadedDataPage() {
                 const status = getStatus(sub);
                 const acting = actionLoading[id];
                 const isDone = status === "accepted" || status === "rejected";
-                const isExpanded = expandedId === id;
                 const cfg = STATUS_CFG[status] ?? STATUS_CFG.pending;
                 const operator = sub.Operator_Info ?? {};
                 const location = sub.Location ?? {};
@@ -669,17 +647,7 @@ export default function ViewUploadedDataPage() {
                       className={`absolute inset-y-0 left-0 w-1 ${cfg.accent} rounded-l-sm`}
                     />
 
-                    {/* Collapsed row */}
-                    <div
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => setExpandedId(isExpanded ? null : id)}
-                      onKeyDown={(e) =>
-                        e.key === "Enter" &&
-                        setExpandedId(isExpanded ? null : id)
-                      }
-                      className="flex cursor-pointer flex-wrap items-center gap-4 py-4 pl-7 pr-6 transition-colors hover:bg-slate-50/70"
-                    >
+                    <div className="flex flex-wrap items-center gap-4 py-4 pl-7 pr-6">
                       <Initials name={sub.WSUC_Name ?? operator.Name} />
 
                       <div className="min-w-0 flex-1">
@@ -705,10 +673,15 @@ export default function ViewUploadedDataPage() {
 
                       <StatusBadge status={status} />
 
-                      <div
-                        className="flex items-center gap-2"
-                        onClick={(e) => e.stopPropagation()}
-                      >
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setDetailRecord(sub)}
+                          className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:bg-slate-50"
+                        >
+                          <FileText size={11} />
+                          Details
+                        </button>
                         <button
                           type="button"
                           onClick={(e) =>
@@ -752,93 +725,7 @@ export default function ViewUploadedDataPage() {
                           Reject
                         </button>
                       </div>
-
-                      <span className="text-text-secondary">
-                        {isExpanded ? (
-                          <ChevronUp size={15} />
-                        ) : (
-                          <ChevronDown size={15} />
-                        )}
-                      </span>
                     </div>
-
-                    {/* Expanded detail panel */}
-                    {isExpanded && (
-                      <div className="border-t border-surface-border bg-slate-50/60 py-5 pl-7 pr-6">
-                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-                          <div className="space-y-3 rounded-xl border border-surface-border bg-white p-4">
-                            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                              Operator Info
-                            </p>
-                            <DetailField
-                              icon={User}
-                              label="Full Name"
-                              value={operator.Name}
-                            />
-                            <DetailField
-                              icon={Mail}
-                              label="Email"
-                              value={operator.Email}
-                            />
-                            <DetailField
-                              icon={Briefcase}
-                              label="Designation"
-                              value={operator.Designation}
-                            />
-                          </div>
-
-                          <div className="space-y-3 rounded-xl border border-surface-border bg-white p-4">
-                            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                              Location Details
-                            </p>
-                            <DetailField
-                              icon={Globe}
-                              label="Province"
-                              value={location.Province_Name}
-                            />
-                            <DetailField
-                              icon={Building2}
-                              label="District"
-                              value={location.District_Name}
-                            />
-                            <DetailField
-                              icon={MapPin}
-                              label="Municipality"
-                              value={location.Municipality_Name}
-                            />
-                          </div>
-
-                          <div className="space-y-3 rounded-xl border border-surface-border bg-white p-4">
-                            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                              Submission
-                            </p>
-                            <DetailField
-                              icon={FileText}
-                              label="Documents"
-                              value={
-                                sub.Documents?.length
-                                  ? `${sub.Documents.length} file${sub.Documents.length !== 1 ? "s" : ""} attached`
-                                  : "No documents attached"
-                              }
-                            />
-                            <div className="flex items-start gap-2.5 text-sm">
-                              <Database
-                                size={13}
-                                className="mt-0.5 flex-shrink-0 text-slate-400"
-                              />
-                              <div className="min-w-0">
-                                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
-                                  Submission ID
-                                </p>
-                                <p className="mt-0.5 break-all font-mono text-[11px] text-text-secondary">
-                                  {id}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 );
               })}
@@ -867,10 +754,7 @@ export default function ViewUploadedDataPage() {
                   {/* Prev */}
                   <button
                     type="button"
-                    onClick={() => {
-                      setPage((p) => Math.max(1, p - 1));
-                      setExpandedId(null);
-                    }}
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
                     disabled={safePage === 1}
                     className="flex h-8 w-8 items-center justify-center rounded-lg border border-surface-border bg-white text-text-secondary transition hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed"
                   >
@@ -890,10 +774,7 @@ export default function ViewUploadedDataPage() {
                       <button
                         key={n}
                         type="button"
-                        onClick={() => {
-                          setPage(n);
-                          setExpandedId(null);
-                        }}
+                        onClick={() => setPage(n)}
                         className={`flex h-8 w-8 items-center justify-center rounded-lg border text-xs font-semibold transition tabular-nums ${
                           n === safePage
                             ? "border-blue-500 bg-blue-600 text-white"
@@ -908,10 +789,7 @@ export default function ViewUploadedDataPage() {
                   {/* Next */}
                   <button
                     type="button"
-                    onClick={() => {
-                      setPage((p) => Math.min(totalPages, p + 1));
-                      setExpandedId(null);
-                    }}
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                     disabled={safePage === totalPages}
                     className="flex h-8 w-8 items-center justify-center rounded-lg border border-surface-border bg-white text-text-secondary transition hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed"
                   >
@@ -930,6 +808,10 @@ export default function ViewUploadedDataPage() {
         onConfirm={confirmAction}
         onCancel={() => setConfirmModal(null)}
         loading={!!confirmModal && !!actionLoading[confirmModal?.id]}
+      />
+      <SubmissionDetailModal
+        submission={detailRecord}
+        onClose={() => setDetailRecord(null)}
       />
       <Toast toast={toast} onClose={() => setToast(null)} />
     </>

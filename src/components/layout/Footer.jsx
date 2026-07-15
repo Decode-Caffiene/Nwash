@@ -31,9 +31,9 @@ const contactItems = [
   { href: "tel:+977-1-4311732", icon: Phone, label: "+977-1-4311732" },
   { href: "tel:+977-9851431060.", icon: Phone, label: "+977-9851431060" },
   {
-    href: "mailto:info@nwash.gov.np",
+    href: "mailto:nmip.nwash@gmail.com",
     icon: Mail,
-    label: "ministry@mopit.gov.np ",
+    label: "nmip.nwash@gmail.com ",
   },
 ];
 
@@ -93,7 +93,7 @@ export default function Footer() {
                     <MapPin size={14} />
                   </span>
                   <span className="leading-relaxed">
-                    Ministry of Infrastructures Development
+                    Department of Water and Sewerage Management
                     <br />
                     Singhadurbar, Kathmandu, Nepal
                   </span>

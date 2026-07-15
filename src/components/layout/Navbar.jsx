@@ -175,6 +175,9 @@ function Navbar() {
           <p className="text-sm font-bold text-text-primary">
             Department of Water and Sewerage Management
           </p>
+          <p className="text-sm font-light text-gray-500">
+            service regulation and infromation management section
+          </p>
         </div>
       </div>
 

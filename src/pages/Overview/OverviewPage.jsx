@@ -163,24 +163,20 @@ export default function OverviewPage() {
     return filteredList.length - chartDataForZones.length;
   }, [filteredList, chartDataForZones]);
 
-  // Compliance data derived from zone categorization
-  const complianceData = useMemo(() => {
-    const compliant =
-      (categorized.IMPROVING?.length || 0) +
-      (categorized.IMPROVED?.length || 0) +
-      (categorized.JUST_EFFICIENT?.length || 0) +
-      (categorized.MODERATELY_EFFICIENT?.length || 0) +
-      (categorized.HIGHLY_EFFICIENT?.length || 0);
-    const partial =
-      (categorized.INACTIVE?.length || 0) + (categorized.ACTIVE?.length || 0);
-    const nonCompliant =
-      (categorized.VERY_POOR?.length || 0) + (categorized.POOR?.length || 0);
+  // Business Plan Presence — counts providers where Service_Coverage_Prerequisite is "Yes" or "No"
+  const businessPlanData = useMemo(() => {
+    let hasPlan = 0;
+    let noPlan = 0;
+    for (const p of filteredList) {
+      const val = p.Service_Coverage_Prerequisite;
+      if (val === "Yes") hasPlan++;
+      else if (val === "No") noPlan++;
+    }
     return [
-      { name: "Compliant", value: compliant, color: "#0d9488" },
-      { name: "Partial", value: partial, color: "#3b82f6" },
-      { name: "Non-Compliant", value: nonCompliant, color: "#dc2626" },
+      { name: "Have Business Plan", value: hasPlan, color: "#0d9488" },
+      { name: "Do Not Have Business Plan", value: noPlan, color: "#dc2626" },
     ];
-  }, [categorized, allImproving]);
+  }, [filteredList]);
 
   // Total Households Covered — checks Master_Sheet first (live API path)
   const totalHouseholdsCovered = useMemo(() => {
@@ -195,14 +191,7 @@ export default function OverviewPage() {
       return sum + (Number(households) || 0);
     }, 0);
   }, [filteredList]);
- 
 
-  const totalInChart = complianceData.reduce(
-    (sum, item) => sum + item.value,
-    0,
-  );
-
- 
   // 3. District Data - calculated from provider locations
   const { districtData, excludedCount } = useMemo(() => {
     const districtMap = {};
@@ -359,7 +348,11 @@ export default function OverviewPage() {
           />
 
           <div className="grid gap-6 xl:grid-cols-2">
-            <ComplianceChart data={complianceData} />
+            <ComplianceChart
+              data={businessPlanData}
+              title="Business Plan Presence"
+              subtitle="Distribution by business plan submission"
+            />
             <ProvinceComplianceDonut data={provinceComplianceData} />
           </div>
 
