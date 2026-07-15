@@ -294,10 +294,11 @@ function DataEntryPage() {
       <PreviewModal
         isOpen={isPreviewOpen}
         onClose={() => setIsPreviewOpen(false)}
-        formTitle={activeForm.title}
+        form={activeForm}
         values={currentValues}
         onConfirm={handleConfirmSubmit}
         submitting={submitting}
+        language={language}
       />
     </div>
   );
