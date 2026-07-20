@@ -15,24 +15,11 @@ import axiosInstance from "../../../api/axiosInstance";
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-// Fetches a document through the authenticated Axios client, creates a
-// temporary blob URL, and opens it in a new tab. Using Axios instead of a
-// plain <a href> means the session cookie / auth headers are sent, avoiding
-// the 401 that a direct cross-site browser navigation would trigger.
-async function openDocument(path) {
-  try {
-    const response = await axiosInstance.get("/form/fetchDocument", {
-      params: { key: path },
-    });
-    const { success, url } = response.data ?? {};
-    if (!success || !url) {
-      console.error("fetchDocument returned unexpected response:", response.data);
-      return;
-    }
-    window.open(url, "_blank", "noopener,noreferrer");
-  } catch (err) {
-    console.error("Failed to open document:", err);
-  }
+function openDocument(path) {
+  window.open(
+    `${axiosInstance.defaults.baseURL}/form/fetchDocument?key=${encodeURIComponent(path)}`,
+    "_blank",
+  );
 }
 
 const scoreColor = (pct) => {
@@ -217,7 +204,6 @@ const SI_SUB_SCORES = [
 
 export default function SubmissionDetailModal({ submission: sub, onClose }) {
   if (!sub) return null;
-  console.log("sub", sub);
 
   const status = ((sub.Status ?? sub.status) || "pending").toLowerCase();
   const sc = STATUS_STYLE[status] ?? STATUS_STYLE.pending;
