@@ -15,19 +15,6 @@ export const getServiceProviders = async () => {
   return Array.isArray(mastersheetData) ? mastersheetData : [];
 };
 
-export const getServiceProviderDashboard = async () => {
-  const response = await axiosInstance.get("/service-providers/dashboard");
-  // Normalize possible backend shapes:
-  // - response.data
-  // - response.data.data
-  return response.data?.data ?? response.data;
-};
-
-export const getProviderPerformance = async () => {
-  const response = await axiosInstance.get("/service-providers/performance");
-  return response.data;
-};
-
 export const saveServiceProviderForm = async (payload) => {
   const formData = new FormData();
 
@@ -47,7 +34,6 @@ export const saveServiceProviderForm = async (payload) => {
       } catch (error) {
         console.warn(`Failed to stringify ${key}:`, error);
       }
-
     } else {
       const strValue = String(value);
       if (strValue !== "undefined") {

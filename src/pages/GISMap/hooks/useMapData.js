@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { getMapData, getMuniGeojson } from "../../../api/mapService";
-import { cleanDistrict } from "../utils/geoHelpers";
+import { calculateCentroid, cleanDistrict } from "../utils/geoHelpers";
 import { buildMuniIndex, resolveMuni } from "../utils/muniResolver";
 import { MUNI_DISTRICT_CORRECTIONS } from "../utils/mapConstants";
 import { NEPAL_CENTER } from "../utils/mapConstants";
@@ -56,13 +56,24 @@ export function useMapData() {
       // used in nepal_municipalities.json, which differs only for ILLAM.
       // rawDist is stored unchanged so useWardData can apply its own correction.
       const muniDist = MUNI_DISTRICT_CORRECTIONS[rawDist] ?? rawDist;
-      const resolved = resolveMuni(rawMuni, muniDist, muniIndex);
-      acc[project._id] = {
-        lat: resolved.lat,
-        lng: resolved.lng,
-        canonicalMunicipality: resolved.canonical,
-        district: rawDist,
-      };
+      const hasPolygon =
+        project.geometry?.type === "Polygon" &&
+        project.geometry.coordinates?.[0]?.length >= 3;
+
+      if (hasPolygon) {
+        // New project: centroid comes from the drawn polygon, not from muniIndex.
+        const [lat, lng] = calculateCentroid([{ geometry: project.geometry }]);
+        acc[project._id] = { lat, lng, canonicalMunicipality: null, district: rawDist };
+      } else {
+        // Legacy project: resolve municipality centroid as before.
+        const resolved = resolveMuni(rawMuni, muniDist, muniIndex);
+        acc[project._id] = {
+          lat: resolved.lat,
+          lng: resolved.lng,
+          canonicalMunicipality: resolved.canonical,
+          district: rawDist,
+        };
+      }
       return acc;
     }, {});
 

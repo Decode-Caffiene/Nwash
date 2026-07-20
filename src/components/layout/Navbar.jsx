@@ -175,6 +175,9 @@ function Navbar() {
           <p className="text-sm font-bold text-text-primary">
             Department of Water and Sewerage Management
           </p>
+          <p className="text-sm font-light text-gray-500">
+            service regulation and infromation management section
+          </p>
         </div>
       </div>
 
@@ -271,11 +274,7 @@ function Navbar() {
               <LogOut size={18} />
             </button>
           </div>
-        ) : (
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-surface text-text-secondary">
-            <ShieldCheck size={18} />
-          </div>
-        )}
+        ) : null}
       </div>
     </header>
   );

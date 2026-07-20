@@ -25,7 +25,11 @@ const CustomTooltip = ({ active, payload }) => {
   return null;
 };
 
-export default function ComplianceChart({ data }) {
+export default function ComplianceChart({
+  data,
+  title = "Compliance Status",
+  subtitle = "Overall compliance distribution",
+}) {
   const totalOperators = useMemo(() => {
     return data.reduce((sum, item) => sum + (item.value || 0), 0);
   }, [data]);
@@ -49,11 +53,9 @@ export default function ComplianceChart({ data }) {
 
   return (
     <div className="bg-white p-6 rounded-xl border shadow-sm w-full">
-      <h3 className="text-base font-bold text-slate-900">Compliance Status</h3>
+      <h3 className="text-base font-bold text-slate-900">{title}</h3>
 
-      <p className="text-xs text-slate-500 mb-4">
-        Overall compliance distribution
-      </p>
+      <p className="text-xs text-slate-500 mb-4">{subtitle}</p>
 
       <div className="h-72 w-full">
         <ResponsiveContainer width="100%" height="100%">

@@ -83,3 +83,23 @@ export const parseWardList = (value) => {
     .map((entry) => Number.parseInt(entry.trim(), 10))
     .filter(Number.isFinite);
 };
+
+// ─── Project classification ───────────────────────────────────────────────────
+
+// Single source of truth for project type across filters, popups, and any
+// future consumers. Does not validate coordinate count — presence of the
+// geometry type is sufficient to identify a form project.
+export const getProjectType = (project) => {
+  const geom = project?.geometry;
+  // Legacy projects may carry a placeholder geometry entry with type "Polygon"
+  // but no real coordinate rings. The coordinates check matches the identical
+  // guard used in useMapData.js and useWardData.js, which are the ground truth
+  // for what constitutes a real drawn polygon in this codebase.
+  const isFormPolygon =
+    geom?.type === "Polygon" && geom.coordinates?.[0]?.length >= 3;
+  const isFormMultiPolygon =
+    geom?.type === "MultiPolygon" && geom.coordinates?.length > 0;
+  if (isFormPolygon || isFormMultiPolygon) return "FORM";
+  const wards = parseWardList(project?.Location?.Wards_Covered);
+  return wards.length > 0 ? "LEGACY_WITH_WARDS" : "LEGACY_WITHOUT_WARDS";
+};
