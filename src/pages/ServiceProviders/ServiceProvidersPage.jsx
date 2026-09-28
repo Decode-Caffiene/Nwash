@@ -16,6 +16,8 @@ import { FILTER_TABS, STATUS } from "./constants/providerConstants";
 import ProviderCard from "./components/ProviderCard";
 import ProviderDetailModal from "./components/ProviderDetailModal";
 
+const asText = (value) => (value == null ? "" : String(value));
+
 export default function ServiceProvidersPage() {
   const [selectedProvider, setSelectedProvider] = useState(null);
   const [search, setSearch] = useState("");
@@ -28,7 +30,9 @@ export default function ServiceProvidersPage() {
 
   const stats = useMemo(() => {
     const provinceCount = new Set(
-      providers.map((p) => p.Location?.Province_Name?.trim()).filter(Boolean),
+      providers
+        .map((p) => asText(p.Location?.Province_Name).trim())
+        .filter(Boolean),
     ).size;
 
     return [
@@ -68,10 +72,10 @@ export default function ServiceProvidersPage() {
       list = list.filter((p) => {
         const loc = p.Location ?? {};
         return (
-          (p.WSUC_Name ?? "").toLowerCase().includes(q) ||
-          (loc.Province_Name ?? "").toLowerCase().includes(q) ||
-          (loc.District_Name ?? "").toLowerCase().includes(q) ||
-          (loc.Municipality_Name ?? "").toLowerCase().includes(q)
+          asText(p.WSUC_Name).toLowerCase().includes(q) ||
+          asText(loc.Province_Name).toLowerCase().includes(q) ||
+          asText(loc.District_Name).toLowerCase().includes(q) ||
+          asText(loc.Municipality_Name).toLowerCase().includes(q)
         );
       });
     }

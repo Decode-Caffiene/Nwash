@@ -1,7 +1,9 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://dashboardbackend-1-zbud.onrender.com",
+  // Use the Vite proxy in development (configured by VITE_API_BASE_URL=/api)
+  // so API requests do not depend on cross-origin browser access.
+  baseURL: import.meta.env.VITE_API_BASE_URL || "/api",
   timeout: 80000,
   withCredentials: true,
   headers: { "Content-Type": "application/json" },

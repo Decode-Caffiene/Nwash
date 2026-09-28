@@ -9,9 +9,14 @@ export const getServiceProviders = async () => {
       return backendData;
     }
   } catch (error) {
-    console.warn("Falling back to local mastersheet data for analytics", error);
+    console.warn(
+      "Service-provider API unavailable; using local mastersheet data",
+      error?.message || error,
+    );
   }
 
+  // Keep analytics and the registry usable when the remote API is unavailable
+  // (for example, while the backend deployment or route is being restored).
   return Array.isArray(mastersheetData) ? mastersheetData : [];
 };
 
